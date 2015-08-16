@@ -1,0 +1,17 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
+
+    <item
+        android:id="@+id/action_locate"
+        android:title="locate"
+        android:icon="@drawable/ic_locate"
+        android:orderInCategory="10"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/action_search"
+        android:title="search"
+        android:icon="@drawable/ic_search"
+        android:orderInCategory="10"
+        app:showAsAction="always"/>
+</menu>
