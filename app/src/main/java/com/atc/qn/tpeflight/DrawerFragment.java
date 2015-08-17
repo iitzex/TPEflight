@@ -95,9 +95,10 @@ public class DrawerFragment extends Fragment
 
     public List<DrawerItem> getMenu() {
         List<DrawerItem> items = new ArrayList<>();
-        items.add(new DrawerItem("出境航班", getResources().getDrawable(R.drawable.takeoff)));
-        items.add(new DrawerItem("入境航班", getResources().getDrawable(R.drawable.land)));
-        items.add(new DrawerItem("機場資訊", getResources().getDrawable(R.drawable.ic_menu_check)));
+        items.add(new DrawerItem("出境航班", getResources().getDrawable(R.drawable.v_takeoff)));
+        items.add(new DrawerItem("入境航班", getResources().getDrawable(R.drawable.v_landing)));
+        items.add(new DrawerItem("航空公司資訊", getResources().getDrawable(R.drawable.v_info)));
+
         return items;
     }
 

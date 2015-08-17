@@ -217,27 +217,23 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHold
 
         //clean holder
         holder.mIconText.setText("");
-        holder.mExpectTime.getPaint().setFlags(0);
+        Paint paint = holder.mExpectTime.getPaint();
+        paint.setFlags(0);
+        paint.setAntiAlias(true);
 
-        if (target.getStatus().contains("CANCELLED")){
+        if (target.getStatus().contains("CANCELLED")) {
+            paint.setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+
             holder.mIconStaus.setImageResource(R.drawable.ic_cancel);
         }else if (target.getStatus().contains("DELAY")) {
-            Paint paint = holder.mExpectTime.getPaint();
             paint.setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-            paint.setAntiAlias(true);
-
-            LogD.out("delay " + String.valueOf(position));
 
             holder.mIconText.setText(target.getActualTime());
             holder.mIconStaus.setImageResource(R.drawable.ic_delay);
         }else if (target.getStatus().contains("ON TIME")) {
             holder.mIconStaus.setImageResource(R.drawable.ic_ontime);
         }else if (target.getStatus().contains("SCHEDULE CHANGE")) {
-            Paint paint = holder.mExpectTime.getPaint();
             paint.setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-            paint.setAntiAlias(true);
-
-            LogD.out("change " + String.valueOf(position));
 
             holder.mIconText.setText(target.getActualTime());
             holder.mIconStaus.setImageResource(R.drawable.ic_delay);
