@@ -58,8 +58,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
-                android:visibility="invisible"
-                android:id="@+id/status"/>
+                android:text=""
+                android:id="@+id/share"/>
         </LinearLayout>
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:orientation="horizontal"
@@ -92,6 +92,12 @@
                 android:textSize="14sp"
                 android:paddingLeft="5dp"
                 android:id="@+id/counter"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:paddingLeft="5dp"
+                android:id="@+id/baggage"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

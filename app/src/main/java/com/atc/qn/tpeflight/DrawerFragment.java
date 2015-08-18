@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -42,7 +43,6 @@ public class DrawerFragment extends Fragment
      * Helper component that ties the action bar to the navigation drawer.
      */
     private ActionBarDrawerToggle mActionBarDrawerToggle;
-
     private DrawerLayout mDrawerLayout;
     private RecyclerView mDrawerList;
     private View mFragmentContainerView;
@@ -81,6 +81,7 @@ public class DrawerFragment extends Fragment
         adapter.setNavigationDrawerCallbacks(this);
         mDrawerList.setAdapter(adapter);
         selectItem(mCurrentSelectedPosition);
+
         return view;
     }
 
@@ -95,9 +96,13 @@ public class DrawerFragment extends Fragment
 
     public List<DrawerItem> getMenu() {
         List<DrawerItem> items = new ArrayList<>();
-        items.add(new DrawerItem("出境航班", getResources().getDrawable(R.drawable.v_takeoff)));
-        items.add(new DrawerItem("入境航班", getResources().getDrawable(R.drawable.v_landing)));
-        items.add(new DrawerItem("航空公司資訊", getResources().getDrawable(R.drawable.v_info)));
+
+        items.add(new DrawerItem("出境航班",
+                ContextCompat.getDrawable(getActivity(), R.drawable.v_takeoff)));
+        items.add(new DrawerItem("入境航班",
+                ContextCompat.getDrawable(getActivity(), R.drawable.v_landing)));
+        items.add(new DrawerItem("航空公司資訊",
+                ContextCompat.getDrawable(getActivity(), R.drawable.v_info)));
 
         return items;
     }
@@ -133,6 +138,8 @@ public class DrawerFragment extends Fragment
                     SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
                     sp.edit().putBoolean(PREF_USER_LEARNED_DRAWER, true).apply();
                 }
+
+                getActivity().setTitle("桃園機場航班資訊");
                 getActivity().invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
             }
         };
@@ -179,7 +186,7 @@ public class DrawerFragment extends Fragment
         try {
             mCallback = (DrawerCallback) activity;
         } catch (ClassCastException e) {
-            throw new ClassCastException("Activity must implement NavigationDrawerCallbacks.");
+            throw new ClassCastException("Activity must implement DrawerCallbacks.");
         }
     }
 

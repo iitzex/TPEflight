@@ -10,7 +10,6 @@ import android.view.Menu;
 public class MainActivity extends AppCompatActivity implements DrawerCallback {
     private DrawerFragment mDrawerFragment;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,18 +30,31 @@ public class MainActivity extends AppCompatActivity implements DrawerCallback {
         // update the main_menu content by replacing fragments
 
         FragmentManager fragMgr = getSupportFragmentManager();
-        FlightFragment depFrag = new FlightFragment();
-        Bundle args = new Bundle();
-        if (position == 0) {
-            args.putString("FlightAction", "D");
-        }else if (position == 1) {
-            args.putString("FlightAction", "A");
-        }
-        depFrag.setArguments(args);
+        FlightFragment departureFrag = new FlightFragment();
+        Bundle depArgs = new Bundle();
+        depArgs.putString("FlightAction", "D");
+        departureFrag.setArguments(depArgs);
 
-        fragMgr.beginTransaction()
-                .replace(R.id.container, depFrag)
-                .commit();
+        FlightFragment landingFrag = new FlightFragment();
+        Bundle arrArgs = new Bundle();
+        arrArgs.putString("FlightAction", "A");
+        landingFrag.setArguments(arrArgs);
+
+        AirlinesFragment infoFrag = new AirlinesFragment();
+
+        if (position == 0) {
+            fragMgr.beginTransaction()
+                    .replace(R.id.container, departureFrag)
+                    .commit();
+        }else if (position == 1) {
+            fragMgr.beginTransaction()
+                    .replace(R.id.container, landingFrag)
+                    .commit();
+        }else{
+            fragMgr.beginTransaction()
+                    .replace(R.id.container, infoFrag)
+                    .commit();
+        }
     }
 
     @Override
