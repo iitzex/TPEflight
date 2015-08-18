@@ -10,4 +10,8 @@ public class LogD {
         if(DEBUG)
             Log.d(TAG, msg);
     }
+    static public void out(int msg) {
+        if(DEBUG)
+            Log.d(TAG, String.valueOf(msg));
+    }
 }
