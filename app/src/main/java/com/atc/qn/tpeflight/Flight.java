@@ -5,7 +5,7 @@ public class Flight {
     private String flightNO;
     private String airlines;
     private String airlinesTW;
-    private String bay;
+    private String gate;
     private String terminal;
     private String expectDay;
     private String expectTime;
@@ -35,8 +35,8 @@ public class Flight {
         return airlines;
     }
 
-    public String getBay() {
-        return bay;
+    public String getGate() {
+        return gate;
     }
 
     public String getTerminal() {
@@ -103,8 +103,8 @@ public class Flight {
         this.airlines = airlines;
     }
 
-    public void setBay(String bay) {
-        this.bay = bay;
+    public void setGate(String gate) {
+        this.gate = gate;
     }
 
     public void setTerminal(String terminal) {

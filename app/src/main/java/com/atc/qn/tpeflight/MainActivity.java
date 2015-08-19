@@ -7,7 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 
-public class MainActivity extends AppCompatActivity implements DrawerCallback {
+public class MainActivity extends AppCompatActivity
+        implements DrawerCallback, onFlightClickListener {
     private DrawerFragment mDrawerFragment;
 
     @Override
@@ -22,7 +23,6 @@ public class MainActivity extends AppCompatActivity implements DrawerCallback {
 
         // Set up the drawer.
         mDrawerFragment.setup(R.id.fragment_drawer, (DrawerLayout) findViewById(R.id.drawer), mToolbar);
-
     }
 
     @Override
@@ -72,5 +72,44 @@ public class MainActivity extends AppCompatActivity implements DrawerCallback {
             return true;
         }
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public void onFlightItemClick(Flight info) {
+        FragmentManager fragMgr = getSupportFragmentManager();
+
+        InfoFragment infoFrag = new InfoFragment();
+        Bundle infoArgs = new Bundle();
+        infoArgs.putString("AirlinesTW", info.getAirlinesTW());
+        infoArgs.putString("Airlines", info.getAirlines());
+        infoArgs.putString("NO", info.getFlightNO());
+        infoArgs.putString("Action", info.getAction());
+
+        infoArgs.putString("ExpectDay", info.getExpectDay());
+        infoArgs.putString("ExpectTime", info.getExpectTime());
+        infoArgs.putString("ActualDay", info.getExpectDay());
+        infoArgs.putString("ActualTime", info.getExpectTime());
+        infoArgs.putString("Terminal", info.getTerminal());
+        infoArgs.putString("Counter", info.getCounter());
+        infoArgs.putString("Baggage", info.getBaggage());
+        infoArgs.putString("Gate", info.getGate());
+
+        infoArgs.putString("ExpectDay", info.getExpectDay());
+        infoArgs.putString("ExpectTime", info.getExpectTime());
+        infoArgs.putString("ActualDay", info.getActualDay());
+        infoArgs.putString("ActualTime", info.getActualTime());
+
+        infoArgs.putString("Status", info.getStatus());
+        infoArgs.putString("Destination", info.getDestination());
+        infoArgs.putString("DestinationTW", info.getDestinationTW());
+        infoArgs.putString("Type", info.getType());
+//        infoArgs.putString("Phone", info.getPhone());
+
+        infoFrag.setArguments(infoArgs);
+
+        fragMgr.beginTransaction()
+                .replace(R.id.container, infoFrag)
+                .addToBackStack(null)
+                .commit();
     }
 }

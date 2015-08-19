@@ -1,12 +1,12 @@
 package com.atc.qn.tpeflight;
 
+import android.content.Context;
 import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -14,15 +14,17 @@ import java.util.Calendar;
 
 public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHolder>{
     private ArrayList<Flight> mFlightAll;
-    private String mAction = "";
+    private String mClass = "";
+    private onFlightClickListener mContext;
 
-    public FlightAdapter(ArrayList<String> mFlightAllStr, String mAction) {
+    public FlightAdapter(ArrayList<String> mFlightAllStr, String mClass, Context mContext) {
         mFlightAll = new ArrayList<>();
-        this.mAction = mAction;
+        this.mClass = mClass;
+        this.mContext = (onFlightClickListener) mContext;
+
         Calendar timeInst = Calendar.getInstance();
         SimpleDateFormat day = new SimpleDateFormat("yyyy/MM/dd");
         String dayStr = day.format(timeInst.getTime());
-//        dayStr = "2015/08/16";
 
         for(String item : mFlightAllStr) {
             String[] info = item.split(",");
@@ -35,12 +37,12 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHold
             target.setAction(info[1].trim());
             target.setTerminal("第" + info[0].trim() + "航廈");
 
-            target.setBay(info[5].trim());
+            target.setGate(info[5].trim());
             target.setExpectDay(info[6].trim());
             target.setExpectTime(info[7].trim().substring(0, 5));
             target.setActualDay(info[8].trim());
             target.setActualTime(info[9].trim().substring(0, 5));
-//            target.setDestination(airlines[11].trim());
+            target.setDestination(info[11].trim());
             target.setDestinationTW(info[12].trim());
 
             target.setStatus(info[13].trim());
@@ -49,7 +51,7 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHold
             target.setBaggage(info[18].trim());
             target.setCounter(info[19].trim());
 
-            if (target.getAction().equals(mAction) && target.getExpectDay().equals(dayStr))
+            if (target.getAction().equals(mClass) && target.getExpectDay().equals(dayStr))
                 mFlightAll.add(target);
         }
     }
@@ -72,10 +74,15 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHold
     }
 
     @Override
-    public FlightHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public FlightHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.flight_row, parent, false);
-        FlightHolder holder = new FlightHolder(v);
+        FlightHolder holder = new FlightHolder(v, mContext);
 
+        v.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
         return holder;
     }
 
@@ -198,9 +205,18 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHold
     }
     @Override
     public void onBindViewHolder(FlightHolder holder, int position) {
-        Flight target = mFlightAll.get(position);
+        final Flight target = mFlightAll.get(position);
         LogD.out(String.valueOf(position));
         setAirlineLogo(holder, target);
+
+//        LogD.out(holder.itemView.toString());
+//        LogD.out(getPosition());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mContext.onFlightItemClick(target);
+            }
+        });
 
         holder.mAirlines.setText(target.getAirlines());
         holder.mAirlines_TW.setText(target.getAirlinesTW());
@@ -210,17 +226,16 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHold
 //        holder.mActualTime.setText(target.getActualTime());
         holder.mDestinationTW.setText(target.getDestinationTW());
 
-        if (mAction.equals("D")) {
+        if (mClass.equals("D")) {
             holder.mCounter.setText(target.getCounter());
             holder.mBaggage.setVisibility(View.GONE);
-        }else if (mAction.equals("A")) {
+        }else if (mClass.equals("A")) {
             holder.mCounter.setVisibility(View.GONE);
             holder.mBaggage.setText(target.getBaggage());
         }
 
-        holder.mBay.setText(target.getBay());
+        holder.mGate.setText(target.getGate());
         holder.mTerminal.setText(target.getTerminal());
-
         holder.mType.setText(target.getType());
 
         //clean holder
@@ -257,18 +272,21 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHold
         return mFlightAll == null ? 0 : mFlightAll.size();
     }
 
-    public static class FlightHolder extends RecyclerView.ViewHolder {
+    public static class FlightHolder extends RecyclerView.ViewHolder
+    {
+        private onFlightClickListener mContext;
+
         ImageView mLogo;
         TextView mAirlines, mAirlines_TW, mFlightNO, mShare;
         TextView mExpectDay, mExpectTime, mActualDay, mActualTime;
-        TextView mBay, mTerminal, mDestination, mDestinationIATA, mDestinationTW;
-        TextView mCounter, mBaggage, mStatus, mType;
+        TextView mGate, mTerminal, mDestination, mDestinationIATA, mDestinationTW;
+        TextView mCounter, mBaggage, mType;
         TextView mIconText;
         ImageView mIconStaus;
-        LinearLayout mLayout;
 
-        FlightHolder(View view) {
+        FlightHolder(View view, onFlightClickListener mContext) {
             super(view);
+            this.mContext = mContext;
             mLogo = (ImageView) view.findViewById(R.id.logo);
 
             mAirlines = (TextView) view.findViewById(R.id.airlines);
@@ -276,19 +294,17 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHold
 
             mFlightNO = (TextView) view.findViewById(R.id.flightNO);
             mExpectTime = (TextView) view.findViewById(R.id.expecttime);
-            //mExpectDay = (TextView) view.findViewById(R.id.expectday);
+//            mExpectDay = (TextView) view.findViewById(R.id.expectday);
 //            mActualTime = (TextView) view.findViewById(R.id.actualtime);
-            //mActualDay = (TextView) view.findViewById(R.id.actualday);
-            //mDestination = (TextView) view.findViewById(R.id.destination);
+//            mActualDay = (TextView) view.findViewById(R.id.actualday);
+//            mDestination = (TextView) view.findViewById(R.id.destination);
             mDestinationTW = (TextView) view.findViewById(R.id.destinationTW);
             mShare = (TextView) view.findViewById(R.id.share);
 
             mCounter = (TextView) view.findViewById(R.id.counter);
             mBaggage = (TextView) view.findViewById(R.id.baggage);
-
-            mBay = (TextView) view.findViewById(R.id.bay);
+            mGate = (TextView) view.findViewById(R.id.gate);
             mTerminal = (TextView) view.findViewById(R.id.terminal);
-
             mType = (TextView) view.findViewById(R.id.type);
 
             mIconText = (TextView) view.findViewById(R.id.icontext);

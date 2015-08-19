@@ -1,7 +1,9 @@
 package com.atc.qn.tpeflight;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.TypedArray;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -9,57 +11,62 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 
 public class AirlinesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
+
+        getActivity().setTitle("航空公司資訊");
+
         return inflater.inflate(R.layout.airlines, container, false);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        setHasOptionsMenu(true);
-
-        getActivity().setTitle("航空公司資訊");
 
         LinearLayout airlinesTable = (LinearLayout) getActivity().findViewById(R.id.airlinestable);
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         LinearLayout rowView;
 
-        TypedArray logo = getResources().obtainTypedArray(R.array.airlines_logo);
-        String [] airlines_TW = getResources().getStringArray(R.array.airlines_TW);
-        String [] airlines_place = getResources().getStringArray(R.array.airlines_place);
-        String [] airlines_phone = getResources().getStringArray(R.array.airlines_phone);
+        TypedArray arrayLogo = getResources().obtainTypedArray(R.array.arrayLogo);
+        String [] airlinesTWList = getResources().getStringArray(R.array.arrayAirlinesTW);
+        String [] airlinesPlaceList = getResources().getStringArray(R.array.arrayPlace);
+        String [] airlinesPhoneList = getResources().getStringArray(R.array.airlinesPhone);
 
-        for (int i = 0; i < airlines_TW.length; i++){
+        for (int i = 0; i < airlinesTWList.length; i++){
             rowView = (LinearLayout) inflater.inflate(R.layout.airlines_row, null);
 
-            String name = airlines_TW[i];
-            String place = airlines_place[i];
-            String phone = airlines_phone[i];
+            final String name = airlinesTWList[i];
+            final String place = airlinesPlaceList[i];
+            final String phone = airlinesPhoneList[i];
 
             ImageView logoImgView = (ImageView) rowView.findViewById(R.id.logo);
             TextView nameTxtView = (TextView) rowView.findViewById(R.id.name);
             TextView placeTxtView = (TextView) rowView.findViewById(R.id.place);
-            TextView phoneTxtView = (TextView) rowView.findViewById(R.id.phone);
+            Button phoneBtn = (Button) rowView.findViewById(R.id.phone);
 
-            logoImgView.setImageResource(logo.getResourceId(i, 0));
+            logoImgView.setImageResource(arrayLogo.getResourceId(i, 0));
             nameTxtView.setText(name);
             placeTxtView.setText(place);
-            phoneTxtView.setText(phone);
+            phoneBtn.setText(phone);
+            phoneBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phone));
+                    startActivity(intent);
+                }
+            });
 
             airlinesTable.addView(rowView);
         }
+        arrayLogo.recycle();
     }
-
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {

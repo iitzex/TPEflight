@@ -2,9 +2,8 @@
     <string name="app_name">桃園機場航班資訊</string>
     <string name="drawer_open">Menu opened</string>
     <string name="drawer_close">Menu closed</string>
-    <string name="action_settings">Settings</string>
 
-    <string-array name="airlines_logo">
+    <string-array name="arrayLogo">
         <item>@drawable/l_oz</item>
         <item>@drawable/l_ua</item>
         <item>@drawable/l_7c</item>
@@ -28,6 +27,7 @@
         <item>@drawable/l_dg</item>
         <item>@drawable/l_cx</item>
         <item>@drawable/l_mh</item>
+        <item>@drawable/l_ak</item>
         <item>@drawable/l_bx</item>
         <item>@drawable/l_hu</item>
         <item>@drawable/l_tg</item>
@@ -57,7 +57,61 @@
         <item>@drawable/l_ho</item>
     </string-array>
 
-    <string-array name="airlines_TW">
+    <string-array name="arrayIATA">
+        <item>oz</item>
+        <item>ua</item>
+        <item>7c</item>
+        <item>nx</item>
+        <item>mm</item>
+        <item>tz</item>
+        <item>fe</item>
+        <item>dl</item>
+        <item>sq</item>
+        <item>mf</item>
+        <item>vj</item>
+        <item>vn</item>
+        <item>pr</item>
+        <item>ae</item>
+        <item>ka</item>
+        <item>ge</item>
+        <item>kl</item>
+        <item>zh</item>
+        <item>3k</item>
+        <item>5j</item>
+        <item>dg</item>
+        <item>cx</item>
+        <item>mh</item>
+        <item>ak</item>
+        <item>bx</item>
+        <item>hu</item>
+        <item>tg</item>
+        <item>hx</item>
+        <item>jw</item>
+        <item>9c</item>
+
+        <item>zv</item>
+        <item>ek</item>
+        <item>br</item>
+        <item>tr</item>
+        <item>xt</item>
+        <item>d7</item>
+        <item>nh</item>
+        <item>b7</item>
+        <item>3u</item>
+        <item>it</item>
+        <item>jl</item>
+        <item>ci</item>
+        <item>ci</item>
+        <item>ca</item>
+        <item>cz</item>
+        <item>mu</item>
+        <item>sc</item>
+        <item>ke</item>
+        <item>tk</item>
+        <item>ho</item>
+    </string-array>
+
+    <string-array name="arrayAirlinesTW">
         <item>韓亞航空</item>
         <item>聯合航空</item>
         <item>濟州航空</item>
@@ -81,6 +135,7 @@
         <item>宿翱航空</item>
         <item>國泰航空</item>
         <item>馬來西亞航空</item>
+        <item>馬亞洲航空</item>
         <item>釜山航空</item>
         <item>海南航空</item>
         <item>泰國航空</item>
@@ -110,7 +165,7 @@
         <item>上海吉祥航空</item>
     </string-array>
 
-    <string-array name="airlines_place">
+    <string-array name="arrayPlace">
         <item>第二航廈3樓</item>
         <item>第二航廈3樓</item>
         <item>第一航廈1樓</item>
@@ -165,7 +220,7 @@
 
     </string-array>
 
-    <string-array name="airlines_phone">
+    <string-array name="airlinesPhone">
         <item>03-3986010</item>
         <item>03-3982781</item>
         <item>0</item>

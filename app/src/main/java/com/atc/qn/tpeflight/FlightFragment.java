@@ -1,6 +1,5 @@
 package com.atc.qn.tpeflight;
 
-import android.app.Activity;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -8,7 +7,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +26,7 @@ public class FlightFragment extends Fragment
     static RecyclerView mRecyclerView;
     static FlightAdapter mAdapter;
     static LinearLayoutManager mManager;
-    static String mAction, mUpdateTime;
+    static String mClass, mUpdateTime;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -37,7 +35,7 @@ public class FlightFragment extends Fragment
 
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mAction = getArguments().getString("FlightAction", "D");
+        mClass = getArguments().getString("FlightAction", "D");
 
         mManager = new LinearLayoutManager(getActivity());
         mManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -62,7 +60,7 @@ public class FlightFragment extends Fragment
     public void onResume() {
         super.onResume();
         String mTitle;
-        if (mAction.equals("D"))
+        if (mClass.equals("D"))
             mTitle = "出境航班";
         else
             mTitle = "入境航班";
@@ -75,7 +73,7 @@ public class FlightFragment extends Fragment
         new FlightAsyncTask().execute(addr, null, null);
 
         Calendar timeInst = Calendar.getInstance();
-        SimpleDateFormat day = new SimpleDateFormat("yyyy/MM/dd, HH:mm:ss");
+        SimpleDateFormat day = new SimpleDateFormat("yyyy/MM/dd, HH:mm");
         mUpdateTime = day.format(timeInst.getTime());
     }
 
@@ -83,7 +81,7 @@ public class FlightFragment extends Fragment
         TextView mUpdateTextView = (TextView) getActivity().findViewById(R.id.updatetime);
         mUpdateTextView.setText("最近更新：" + mUpdateTime);
 
-        mAdapter = new FlightAdapter(mFlightAll, mAction);
+        mAdapter = new FlightAdapter(mFlightAll, mClass, getActivity());
         mManager.scrollToPositionWithOffset(mAdapter.getPosition(), 0);
         mRecyclerView.setAdapter(mAdapter);
     }
@@ -93,7 +91,6 @@ public class FlightFragment extends Fragment
         int id = item.getItemId();
 
         if (id == R.id.action_locate) {
-//            LogD.out("locating");
             mManager.scrollToPositionWithOffset(mAdapter.getPosition(), 0);
             return true;
         }else if (id == R.id.action_refresh) {

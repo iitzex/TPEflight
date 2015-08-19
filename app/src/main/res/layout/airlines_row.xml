@@ -8,6 +8,7 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_gravity="center_vertical"
+        android:contentDescription="Airlines Logo"
         android:src="@drawable/l_zv"/>
     <TextView
         android:id="@+id/name"
@@ -15,7 +16,8 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:layout_gravity="center_vertical"
-        android:paddingLeft="5dp"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
         android:textSize="16sp"
         android:textColor="@color/myPrimaryDarkColor"
         android:text="威航"/>
@@ -32,7 +34,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:layout_gravity="center_vertical|right"
+        android:layout_gravity="center_vertical|end"
         android:textSize="14sp"
         android:text="03-3834131"/>
 </LinearLayout>
