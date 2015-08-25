@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
 import android.widget.TextView;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -26,7 +25,6 @@ import java.util.Calendar;
 
 public class FlightFragment extends Fragment
         implements SearchView.OnQueryTextListener
-
 {
     static private ArrayList<String> mFlightAll = new ArrayList<>();
     static RecyclerView mRecyclerView;

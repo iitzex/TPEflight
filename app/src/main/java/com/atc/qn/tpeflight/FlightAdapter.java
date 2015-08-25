@@ -75,11 +75,6 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHold
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.flight_row, parent, false);
         FlightHolder holder = new FlightHolder(v);
 
-        v.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        });
         return holder;
     }
 
@@ -92,7 +87,6 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHold
         for (int i = 0; i < arrayIATA.length; i++) {
             if (IATA.equals(arrayIATA[i].toUpperCase())) {
                 holder.mLogo.setImageResource(arrayLogo.getResourceId(i, 0));
-
             }
         }
 
@@ -113,12 +107,10 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHold
             }
         });
 
-        //holder.mAirlines.setText(target.getAirlines());
         holder.mAirlines_TW.setText(target.getAirlinesTW());
         holder.mFlightNO.setText(target.getFlightNO());
 
         holder.mExpectTime.setText(target.getExpectTime());
-//        holder.mActualTime.setText(target.getActualTime());
         holder.mDestinationTW.setText(target.getDestinationTW());
 
         if (mClass.equals("D")) {
@@ -204,9 +196,8 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHold
     public static class FlightHolder extends RecyclerView.ViewHolder
     {
         ImageView mLogo;
-        TextView mAirlines, mAirlines_TW, mFlightNO, mShare;
-        TextView mExpectDay, mExpectTime, mActualDay, mActualTime;
-        TextView mGate, mTerminal, mDestination, mDestinationIATA, mDestinationTW;
+        TextView mAirlines, mAirlines_TW, mFlightNO, mShare, mExpectTime;
+        TextView mGate, mTerminal, mDestinationTW;
         TextView mCounter, mBaggage, mType;
         TextView mIconText;
         ImageView mIconStaus;
@@ -215,15 +206,10 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHold
             super(view);
             mLogo = (ImageView) view.findViewById(R.id.logo);
 
-            //mAirlines = (TextView) view.findViewById(R.id.airlines);
             mAirlines_TW = (TextView) view.findViewById(R.id.airlines_TW);
 
             mFlightNO = (TextView) view.findViewById(R.id.flightNO);
             mExpectTime = (TextView) view.findViewById(R.id.expecttime);
-//            mExpectDay = (TextView) view.findViewById(R.id.expectday);
-//            mActualTime = (TextView) view.findViewById(R.id.actualtime);
-//            mActualDay = (TextView) view.findViewById(R.id.actualday);
-//            mDestination = (TextView) view.findViewById(R.id.destination);
             mDestinationTW = (TextView) view.findViewById(R.id.destinationTW);
             mShare = (TextView) view.findViewById(R.id.share);
 

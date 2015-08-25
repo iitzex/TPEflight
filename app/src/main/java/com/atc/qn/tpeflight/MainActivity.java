@@ -1,19 +1,18 @@
 package com.atc.qn.tpeflight;
 
-import android.app.SearchManager;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-import android.widget.SearchView;
 
 public class MainActivity extends AppCompatActivity
         implements DrawerCallback, onFlightClickListener
 {
     private DrawerFragment mDrawerFragment;
+    FragmentManager fragMgr = getSupportFragmentManager();
+    AirlinesFragment infoFrag = new AirlinesFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,9 +30,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onDrawerItemSelected(int position) {
         // update the main_menu content by replacing fragments
-        FragmentManager fragMgr = getSupportFragmentManager();
         FlightFragment flightFrag = new FlightFragment();
-        AirlinesFragment infoFrag = new AirlinesFragment();
         Bundle args = new Bundle();
 
         if (position == 0) {
@@ -43,6 +40,7 @@ public class MainActivity extends AppCompatActivity
             fragMgr.beginTransaction()
                     .replace(R.id.container, flightFrag)
                     .commit();
+
         }else if (position == 1) {
             args.putString("FlightAction", "A");
             flightFrag.setArguments(args);
@@ -63,6 +61,15 @@ public class MainActivity extends AppCompatActivity
             mDrawerFragment.closeDrawer();
         else
             super.onBackPressed();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (!mDrawerFragment.isDrawerOpen()) {
+            getMenuInflater().inflate(R.menu.main_menu, menu);
+            return true;
+        }
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override

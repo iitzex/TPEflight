@@ -1,6 +1,5 @@
 package com.atc.qn.tpeflight;
 
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
