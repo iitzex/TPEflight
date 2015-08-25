@@ -35,27 +35,13 @@
             android:textSize="22sp"
             android:textColor="@color/myPrimaryDarkColor"
             android:text="中華航空"/>
-        <TextView
-            android:id="@+id/infoAirlines"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:paddingLeft="5dp"
-            android:textSize="22sp"
-            android:textColor="@color/myPrimaryDarkColor"
-            android:text="CI"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:textSize="22sp"
-            android:textColor="@color/myPrimaryDarkColor"
-            android:text="-"/>
+
         <TextView
             android:id="@+id/infoNO"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:paddingLeft="5dp"
             android:textSize="22sp"
             android:textColor="@color/myPrimaryDarkColor"
             android:text="123"/>

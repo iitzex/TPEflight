@@ -34,25 +34,13 @@
                 android:textSize="20sp"
                 android:textColor="@color/myPrimaryDarkColor"
                 android:id="@+id/airlines_TW"/>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=""
                 android:textSize="20sp"
                 android:textColor="@color/myPrimaryDarkColor"
                 android:paddingLeft="5dp"
-                android:id="@+id/airlines"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="-"
-                android:textSize="20sp"
-                android:textColor="@color/myPrimaryDarkColor"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:textColor="@color/myPrimaryDarkColor"
                 android:id="@+id/flightNO"/>
             <TextView
                 android:layout_width="wrap_content"

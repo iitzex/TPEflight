@@ -1,16 +1,16 @@
 package com.atc.qn.tpeflight;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,9 +18,11 @@ import android.widget.TextView;
 public class InfoFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        setHasOptionsMenu(true);
 
         getActivity().setTitle("航班資訊");
+
+        InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
 
         return inflater.inflate(R.layout.info, container, false);
     }
@@ -43,14 +45,12 @@ public class InfoFragment extends Fragment {
         String ExpectTime = getArguments().getString("ExpectTime", "ExpectTime");
         String ActualDay = getArguments().getString("ActualDay", "ActualDay");
         String ActualTime = getArguments().getString("ActualTime", "ActualTime");
-
         String DestinationTW = getArguments().getString("DestinationTW", "DestinationTW");
         String Type = getArguments().getString("Type", "Type");
 
         ImageView mStatusLogo = (ImageView) getActivity().findViewById(R.id.infoStatusLogo);
         ImageView mAirlinesLogo = (ImageView) getActivity().findViewById(R.id.infoAirlinesLogo);
         TextView mAirlinesTW = (TextView) getActivity().findViewById(R.id.infoAirlinesTW);
-        TextView mAirlines = (TextView) getActivity().findViewById(R.id.infoAirlines);
         TextView mNO = (TextView) getActivity().findViewById(R.id.infoNO);
 
         TextView mTerminal = (TextView) getActivity().findViewById(R.id.infoTerminal);
@@ -67,7 +67,6 @@ public class InfoFragment extends Fragment {
         Button mPhone = (Button) getActivity().findViewById(R.id.infoPhone);
 
         mAirlinesTW.setText(AirlinesTW);
-        mAirlines.setText(Airlines);
         mNO.setText(NO);
         mTerminal.setText(Terminal);
         mCounter.setText(Counter);
@@ -93,7 +92,7 @@ public class InfoFragment extends Fragment {
         final String [] arrayPhone = getResources().getStringArray(R.array.airlinesPhone);
 
         for (int i = 0; i < arrayIATA.length; i++){
-            if (arrayIATA[i].toUpperCase().equals(Airlines)){
+            if (Airlines.equals(arrayIATA[i].toUpperCase())){
                 mAirlinesLogo.setImageResource(arrayLogo.getResourceId(i, 0));
                 mPhone.setText(arrayPhone[i]);
                 final String phoneNo = arrayPhone[i];
@@ -109,23 +108,4 @@ public class InfoFragment extends Fragment {
         }
         arrayLogo.recycle();
     }
-
-    @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        MenuItem refreshItem = menu.findItem(R.id.action_refresh);
-        MenuItem locateItem = menu.findItem(R.id.action_locate);
-        MenuItem searchItem = menu.findItem(R.id.action_search);
-
-        if (refreshItem != null) {
-            refreshItem.setVisible(false);
-        }
-        if (locateItem != null) {
-            locateItem.setVisible(false);
-        }
-        if (searchItem != null) {
-            searchItem.setVisible(false);
-        }
-        super.onPrepareOptionsMenu(menu);
-    }
-
 }

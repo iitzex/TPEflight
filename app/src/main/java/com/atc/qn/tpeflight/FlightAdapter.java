@@ -1,30 +1,33 @@
 package com.atc.qn.tpeflight;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHolder>{
-    private ArrayList<Flight> mFlightAll;
+public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHolder>
+        implements Filterable
+{
+    private ArrayList<Flight> mFlightAll, mOrig;
     private String mClass = "";
-    private onFlightClickListener mContext;
+    private Context mContext;
 
     public FlightAdapter(ArrayList<String> mFlightAllStr, String mClass, Context mContext) {
         mFlightAll = new ArrayList<>();
         this.mClass = mClass;
-        this.mContext = (onFlightClickListener) mContext;
+        this.mContext = mContext;
 
-        Calendar timeInst = Calendar.getInstance();
-        SimpleDateFormat day = new SimpleDateFormat("yyyy/MM/dd");
-        String dayStr = day.format(timeInst.getTime());
+        LogD.out("size " + mFlightAllStr.size());
 
         for(String item : mFlightAllStr) {
             String[] info = item.split(",");
@@ -32,11 +35,9 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHold
             Flight target = new Flight();
             target.setAirlines(info[2].trim());
             target.setAirlinesTW(info[3].trim());
-            target.setFlightNO(info[4].trim());
-
+            target.setFlightNO(info[2].trim()+info[4].trim());
             target.setAction(info[1].trim());
             target.setTerminal("第" + info[0].trim() + "航廈");
-
             target.setGate(info[5].trim());
             target.setExpectDay(info[6].trim());
             target.setExpectTime(info[7].trim().substring(0, 5));
@@ -44,15 +45,14 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHold
             target.setActualTime(info[9].trim().substring(0, 5));
             target.setDestination(info[11].trim());
             target.setDestinationTW(info[12].trim());
-
             target.setStatus(info[13].trim());
             target.setType(info[14].trim());
-
             target.setBaggage(info[18].trim());
             target.setCounter(info[19].trim());
 
-            if (target.getAction().equals(mClass) && target.getExpectDay().equals(dayStr))
+            if (target.getAction().equals(mClass)) {
                 mFlightAll.add(target);
+            }
         }
     }
 
@@ -60,8 +60,6 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHold
         Calendar timeInst = Calendar.getInstance();
         SimpleDateFormat hour = new SimpleDateFormat("HH");
         String hourStr = hour.format(timeInst.getTime());
-        LogD.out("time:" + hourStr);
-        LogD.out(String.valueOf(mFlightAll.size()));
 
         int position = 0;
         for(Flight item : mFlightAll) {
@@ -69,14 +67,13 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHold
                 position++;
             }
         }
-        LogD.out("position " + position);
         return position;
     }
 
     @Override
     public FlightHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.flight_row, parent, false);
-        FlightHolder holder = new FlightHolder(v, mContext);
+        FlightHolder holder = new FlightHolder(v);
 
         v.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,139 +83,37 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHold
         return holder;
     }
 
-    public void setAirlineLogo(FlightHolder holder, Flight target){
+    public void setAirlineLogo(FlightHolder holder, Flight target) {
         String IATA = target.getAirlines();
-        if (IATA.equals("CI"))
-            holder.mLogo.setImageResource(R.drawable.l_ci);
-        else if (IATA.equals("BR"))
-            holder.mLogo.setImageResource(R.drawable.l_br);
-        else if (IATA.equals("GE"))
-            holder.mLogo.setImageResource(R.drawable.l_ge);
-        else if (IATA.equals("CX"))
-            holder.mLogo.setImageResource(R.drawable.l_cx);
-        else if (IATA.equals("KA"))
-            holder.mLogo.setImageResource(R.drawable.l_ka);
-        else if (IATA.equals("SQ"))
-            holder.mLogo.setImageResource(R.drawable.l_sq);
-        else if (IATA.equals("CZ"))
-            holder.mLogo.setImageResource(R.drawable.l_cz);
-        else if (IATA.equals("MM"))
-            holder.mLogo.setImageResource(R.drawable.l_mm);
-        else if (IATA.equals("IT"))
-            holder.mLogo.setImageResource(R.drawable.l_it);
-        else if (IATA.equals("MU"))
-            holder.mLogo.setImageResource(R.drawable.l_mu);
-        else if (IATA.equals("DG"))
-            holder.mLogo.setImageResource(R.drawable.l_dg);
-        else if (IATA.equals("SC"))
-            holder.mLogo.setImageResource(R.drawable.l_sc);
-        else if (IATA.equals("B7"))
-            holder.mLogo.setImageResource(R.drawable.l_b7);
-        else if (IATA.equals("9C"))
-            holder.mLogo.setImageResource(R.drawable.l_9c);
-        else if (IATA.equals("5J"))
-            holder.mLogo.setImageResource(R.drawable.l_5j);
-        else if (IATA.equals("3K"))
-            holder.mLogo.setImageResource(R.drawable.l_3k);
-        else if (IATA.equals("NH"))
-            holder.mLogo.setImageResource(R.drawable.l_nh);
-        else if (IATA.equals("MF"))
-            holder.mLogo.setImageResource(R.drawable.l_mf);
-        else if (IATA.equals("CA"))
-            holder.mLogo.setImageResource(R.drawable.l_ca);
-        else if (IATA.equals("AE"))
-            holder.mLogo.setImageResource(R.drawable.l_ae);
-        else if (IATA.equals("NX"))
-            holder.mLogo.setImageResource(R.drawable.l_nx);
-        else if (IATA.equals("ZV"))
-            holder.mLogo.setImageResource(R.drawable.l_zv);
-        else if (IATA.equals("TK"))
-            holder.mLogo.setImageResource(R.drawable.l_tk);
-        else if (IATA.equals("HX"))
-            holder.mLogo.setImageResource(R.drawable.l_hx);
-        else if (IATA.equals("KL"))
-            holder.mLogo.setImageResource(R.drawable.l_kl);
-        else if (IATA.equals("UN"))
-            holder.mLogo.setImageResource(R.drawable.l_un);
-        else if (IATA.equals("PG"))
-            holder.mLogo.setImageResource(R.drawable.l_pg);
-        else if (IATA.equals("QF"))
-            holder.mLogo.setImageResource(R.drawable.l_qf);
-        else if (IATA.equals("TZ"))
-            holder.mLogo.setImageResource(R.drawable.l_tz);
-        else if (IATA.equals("PR"))
-            holder.mLogo.setImageResource(R.drawable.l_pr);
-        else if (IATA.equals("HU"))
-            holder.mLogo.setImageResource(R.drawable.l_hu);
-        else if (IATA.equals("ZH"))
-            holder.mLogo.setImageResource(R.drawable.l_zh);
-        else if (IATA.equals("TG"))
-            holder.mLogo.setImageResource(R.drawable.l_tg);
-        else if (IATA.equals("KE"))
-            holder.mLogo.setImageResource(R.drawable.l_ke);
-        else if (IATA.equals("HA"))
-            holder.mLogo.setImageResource(R.drawable.l_ha);
-        else if (IATA.equals("VN"))
-            holder.mLogo.setImageResource(R.drawable.l_vn);
-        else if (IATA.equals("OK"))
-            holder.mLogo.setImageResource(R.drawable.l_ok);
-        else if (IATA.equals("D7"))
-            holder.mLogo.setImageResource(R.drawable.l_d7);
-        else if (IATA.equals("DL"))
-            holder.mLogo.setImageResource(R.drawable.l_dl);
-        else if (IATA.equals("EK"))
-            holder.mLogo.setImageResource(R.drawable.l_ek);
-        else if (IATA.equals("FE"))
-            holder.mLogo.setImageResource(R.drawable.l_fe);
-        else if (IATA.equals("MH"))
-            holder.mLogo.setImageResource(R.drawable.l_mh);
-        else if (IATA.equals("OZ"))
-            holder.mLogo.setImageResource(R.drawable.l_oz);
-        else if (IATA.equals("JL"))
-            holder.mLogo.setImageResource(R.drawable.l_jl);
-        else if (IATA.equals("GA"))
-            holder.mLogo.setImageResource(R.drawable.l_ga);
-        else if (IATA.equals("TR"))
-            holder.mLogo.setImageResource(R.drawable.l_tr);
-        else if (IATA.equals("3U"))
-            holder.mLogo.setImageResource(R.drawable.l_3u);
-        else if (IATA.equals("BX"))
-            holder.mLogo.setImageResource(R.drawable.l_bx);
-        else if (IATA.equals("HO"))
-            holder.mLogo.setImageResource(R.drawable.l_ho);
-        else if (IATA.equals("JW"))
-            holder.mLogo.setImageResource(R.drawable.l_jw);
-        else if (IATA.equals("UA"))
-            holder.mLogo.setImageResource(R.drawable.l_ua);
-        else if (IATA.equals("AA"))
-            holder.mLogo.setImageResource(R.drawable.l_aa);
-        else if (IATA.equals("AK"))
-            holder.mLogo.setImageResource(R.drawable.l_ak);
-        else if (IATA.equals("LH"))
-            holder.mLogo.setImageResource(R.drawable.l_lh);
-        else if (IATA.equals("VJ"))
-            holder.mLogo.setImageResource(R.drawable.l_vj);
-        else if (IATA.equals("7C"))
-            holder.mLogo.setImageResource(R.drawable.l_7c);
-        else
-            holder.mLogo.setImageResource(R.drawable.ic_menu_check);
+
+        final TypedArray arrayLogo = mContext.getApplicationContext().getResources().obtainTypedArray(R.array.arrayLogo);
+        final String[] arrayIATA = mContext.getApplicationContext().getResources().getStringArray(R.array.arrayIATA);
+
+        for (int i = 0; i < arrayIATA.length; i++) {
+            if (IATA.equals(arrayIATA[i].toUpperCase())) {
+                holder.mLogo.setImageResource(arrayLogo.getResourceId(i, 0));
+
+            }
+        }
+
+        arrayLogo.recycle();
     }
+
     @Override
     public void onBindViewHolder(FlightHolder holder, int position) {
         final Flight target = mFlightAll.get(position);
-        LogD.out(String.valueOf(position));
+
         setAirlineLogo(holder, target);
 
-//        LogD.out(holder.itemView.toString());
-//        LogD.out(getPosition());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mContext.onFlightItemClick(target);
+                onFlightClickListener mCallback = (onFlightClickListener) mContext;
+                mCallback.onFlightItemClick(target);
             }
         });
 
-        holder.mAirlines.setText(target.getAirlines());
+        //holder.mAirlines.setText(target.getAirlines());
         holder.mAirlines_TW.setText(target.getAirlinesTW());
         holder.mFlightNO.setText(target.getFlightNO());
 
@@ -272,10 +167,42 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHold
         return mFlightAll == null ? 0 : mFlightAll.size();
     }
 
+    @Override
+    public Filter getFilter() {
+        if (mOrig != null)
+            mFlightAll = mOrig;
+
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                String filterTxt = String.valueOf(constraint);
+                final FilterResults oReturn = new FilterResults();
+                final ArrayList<Flight> results = new ArrayList<>();
+
+                if (mOrig == null)
+                    mOrig = mFlightAll;
+
+                for (Flight item : mFlightAll) {
+                    if (item.getAirlinesTW().contains(filterTxt) ||
+                        item.getFlightNO().contains(filterTxt.toUpperCase()) ||
+                        item.getDestinationTW().contains(filterTxt))
+                        results.add(item);
+                }
+
+                oReturn.values = results;
+                return oReturn;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                mFlightAll = (ArrayList<Flight>) results.values;
+                notifyDataSetChanged();
+            }
+        };
+    }
+
     public static class FlightHolder extends RecyclerView.ViewHolder
     {
-        private onFlightClickListener mContext;
-
         ImageView mLogo;
         TextView mAirlines, mAirlines_TW, mFlightNO, mShare;
         TextView mExpectDay, mExpectTime, mActualDay, mActualTime;
@@ -284,12 +211,11 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHold
         TextView mIconText;
         ImageView mIconStaus;
 
-        FlightHolder(View view, onFlightClickListener mContext) {
+        FlightHolder(View view) {
             super(view);
-            this.mContext = mContext;
             mLogo = (ImageView) view.findViewById(R.id.logo);
 
-            mAirlines = (TextView) view.findViewById(R.id.airlines);
+            //mAirlines = (TextView) view.findViewById(R.id.airlines);
             mAirlines_TW = (TextView) view.findViewById(R.id.airlines_TW);
 
             mFlightNO = (TextView) view.findViewById(R.id.flightNO);

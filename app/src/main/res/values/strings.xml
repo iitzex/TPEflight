@@ -3,10 +3,12 @@
     <string name="drawer_open">Menu opened</string>
     <string name="drawer_close">Menu closed</string>
 
+    <string name="search_hint">搜尋航班</string>
+
+
     <string-array name="arrayLogo">
         <item>@drawable/l_oz</item>
         <item>@drawable/l_ua</item>
-        <item>@drawable/l_7c</item>
         <item>@drawable/l_nx</item>
         <item>@drawable/l_mm</item>
         <item>@drawable/l_tz</item>
@@ -55,12 +57,21 @@
         <item>@drawable/l_ke</item>
         <item>@drawable/l_tk</item>
         <item>@drawable/l_ho</item>
+
+        <item>@drawable/l_ha</item>
+        <item>@drawable/l_ga</item>
+        <item>@drawable/l_pg</item>
+        <item>@drawable/l_un</item>
+        <item>@drawable/l_7c</item>
+        <item>@drawable/l_qf</item>
+        <item>@drawable/l_ok</item>
+        <item>@drawable/l_aa</item>
+
     </string-array>
 
     <string-array name="arrayIATA">
         <item>oz</item>
         <item>ua</item>
-        <item>7c</item>
         <item>nx</item>
         <item>mm</item>
         <item>tz</item>
@@ -109,12 +120,22 @@
         <item>ke</item>
         <item>tk</item>
         <item>ho</item>
+
+        <item>ha</item>
+        <item>ga</item>
+        <item>pg</item>
+        <item>un</item>
+        <item>7c</item>
+        <item>qf</item>
+        <item>ok</item>
+        <item>aa</item>
+
+
     </string-array>
 
     <string-array name="arrayAirlinesTW">
         <item>韓亞航空</item>
         <item>聯合航空</item>
-        <item>濟州航空</item>
         <item>澳門航空</item>
         <item>樂桃航空</item>
         <item>酷航</item>
@@ -172,7 +193,6 @@
         <item>第一航廈1樓</item>
         <item>第一航廈1樓</item>
         <item>第一航廈1樓</item>
-        <item>第一航廈1樓</item>
         <item>第二航廈3樓</item>
         <item>第二航廈3樓</item>
         <item>第二航廈3樓</item>
@@ -223,7 +243,6 @@
     <string-array name="airlinesPhone">
         <item>03-3986010</item>
         <item>03-3982781</item>
-        <item>0</item>
         <item>03-3983972</item>
         <item>02-87933209</item>
         <item>0973-482-980</item>
@@ -272,5 +291,16 @@
         <item>03-3833248</item>
         <item>02-2756-0849</item>
         <item>03-3517621</item>
+
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+
     </string-array>
 </resources>

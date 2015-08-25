@@ -1,5 +1,7 @@
 package com.atc.qn.tpeflight;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -7,9 +9,11 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import java.io.BufferedReader;
@@ -21,6 +25,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class FlightFragment extends Fragment
+        implements SearchView.OnQueryTextListener
+
 {
     static private ArrayList<String> mFlightAll = new ArrayList<>();
     static RecyclerView mRecyclerView;
@@ -43,8 +49,7 @@ public class FlightFragment extends Fragment
         mRecyclerView.setLayoutManager(mManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.setHasFixedSize(true);
-        RecyclerView.ItemDecoration itemDecoration = new
-                Divider(getActivity(), Divider.VERTICAL_LIST);
+        RecyclerView.ItemDecoration itemDecoration = new Divider(getActivity(), Divider.VERTICAL_LIST);
         mRecyclerView.addItemDecoration(itemDecoration);
 
         if (mFlightAll.size() == 0) { //fetch flight infomation while empty
@@ -87,6 +92,21 @@ public class FlightFragment extends Fragment
     }
 
     @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        getActivity().getMenuInflater().inflate(R.menu.main_menu, menu);
+        setupSearchView(menu);
+    }
+
+    private void setupSearchView(Menu menu) {
+        // Associate searchable configuration with the SearchView
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+
+        searchView.setOnQueryTextListener(this);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
@@ -98,6 +118,18 @@ public class FlightFragment extends Fragment
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        mAdapter.getFilter().filter(query);
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        mAdapter.getFilter().filter(newText);
+        return true;
     }
 
     private class FlightAsyncTask extends AsyncTask<String, Integer, Integer> {
@@ -120,19 +152,22 @@ public class FlightFragment extends Fragment
         }
 
         private void downloadData (String HttpAddr) throws IOException {
+            Calendar timeInst = Calendar.getInstance();
+            SimpleDateFormat day = new SimpleDateFormat("yyyy/MM/dd");
+            String dayStr = day.format(timeInst.getTime());
+            LogD.out(dayStr);
+
             URL textUrl = new URL(HttpAddr);
             BufferedReader bufferReader
                 = new BufferedReader(new InputStreamReader(textUrl.openStream(), "Big5"));
 
             String StringBuffer;
             while ((StringBuffer = bufferReader.readLine()) != null) {
-//                Calendar timeInst = Calendar.getInstance();
-//                SimpleDateFormat day = new SimpleDateFormat("yyyy/MM/dd");
-//                String dayStr = day.format(timeInst.getTime());
+                String[] info = StringBuffer.split(",");
 
-//                if (StringBuffer.contains(dayStr)) {
+                if (info[6].trim().equals(dayStr)) { //filter day
                     mFlightAll.add(StringBuffer);
-//                }
+                }
             }
 
             bufferReader.close();
