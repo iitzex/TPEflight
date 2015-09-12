@@ -3,8 +3,7 @@
     <string name="drawer_open">Menu opened</string>
     <string name="drawer_close">Menu closed</string>
 
-    <string name="search_hint">搜尋航班</string>
-
+    <string name="search_hint">搜尋航班及地點</string>
 
     <string-array name="arrayLogo">
         <item>@drawable/l_oz</item>
@@ -66,6 +65,7 @@
         <item>@drawable/l_qf</item>
         <item>@drawable/l_ok</item>
         <item>@drawable/l_aa</item>
+        <item>@drawable/l_lh</item>
 
     </string-array>
 
@@ -129,7 +129,7 @@
         <item>qf</item>
         <item>ok</item>
         <item>aa</item>
-
+        <item>lh</item>
 
     </string-array>
 
@@ -292,6 +292,7 @@
         <item>02-2756-0849</item>
         <item>03-3517621</item>
 
+        <item>0</item>
         <item>0</item>
         <item>0</item>
         <item>0</item>

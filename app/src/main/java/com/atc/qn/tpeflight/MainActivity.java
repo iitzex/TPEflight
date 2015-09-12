@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity
     public void onDrawerItemSelected(int position) {
         // update the main_menu content by replacing fragments
         FlightFragment flightFrag = new FlightFragment();
+
         Bundle args = new Bundle();
 
         if (position == 0) {
@@ -65,12 +66,23 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (!mDrawerFragment.isDrawerOpen()) {
-            getMenuInflater().inflate(R.menu.main_menu, menu);
-            return true;
-        }
+//        if (!mDrawerFragment.isDrawerOpen()) {
+////            getMenuInflater().inflate(R.menu.main_menu, menu);
+////            setupSearchView(menu);
+//            return true;
+//        }
+
         return super.onCreateOptionsMenu(menu);
     }
+
+//    private void setupSearchView(Menu menu) {
+//        // Associate searchable configuration with the SearchView
+//        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+//        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+//        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+//
+//        searchView.setOnQueryTextListener(flightFrag);
+//    }
 
     @Override
     public void onFlightItemClick(Flight info) {

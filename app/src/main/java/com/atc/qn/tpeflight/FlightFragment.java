@@ -34,6 +34,8 @@ public class FlightFragment extends Fragment
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
+
         return inflater.inflate(R.layout.flight, container, false);
     }
 
@@ -41,22 +43,22 @@ public class FlightFragment extends Fragment
         super.onActivityCreated(savedInstanceState);
         mClass = getArguments().getString("FlightAction", "D");
 
-        mManager = new LinearLayoutManager(getActivity());
-        mManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mRecyclerView = (RecyclerView) getActivity().findViewById(R.id.recycleview);
-        mRecyclerView.setLayoutManager(mManager);
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.setHasFixedSize(true);
-        RecyclerView.ItemDecoration itemDecoration = new Divider(getActivity(), Divider.VERTICAL_LIST);
-        mRecyclerView.addItemDecoration(itemDecoration);
+            mManager = new LinearLayoutManager(getActivity());
+            mManager.setOrientation(LinearLayoutManager.VERTICAL);
+
+            mRecyclerView = (RecyclerView) getActivity().findViewById(R.id.recycleview);
+            mRecyclerView.setLayoutManager(mManager);
+            mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+            mRecyclerView.setHasFixedSize(true);
+            RecyclerView.ItemDecoration itemDecoration = new Divider(getActivity(), Divider.VERTICAL_LIST);
+            mRecyclerView.addItemDecoration(itemDecoration);
+
 
         if (mFlightAll.size() == 0) { //fetch flight infomation while empty
             fetchFlight();
         } else { //with information
             onFinishRecyclerView();
         }
-
-        setHasOptionsMenu(true);
     }
 
     @Override
@@ -74,6 +76,7 @@ public class FlightFragment extends Fragment
     private void fetchFlight() {
         String addr = "http://www.taoyuan-airport.com/uploads/flightx/a_flight_v4.txt";
         new FlightAsyncTask().execute(addr, null, null);
+        onFinishRecyclerView();
 
         Calendar timeInst = Calendar.getInstance();
         SimpleDateFormat day = new SimpleDateFormat("yyyy/MM/dd, HH:mm");
@@ -130,6 +133,17 @@ public class FlightFragment extends Fragment
         return true;
     }
 
+//    @Override
+//    public void onBackPressed() {
+//        if (isSearchViewVisible) {
+//            SearchView searchView = (SearchView) menu.findItem(R.id.searchBox).getActionView();
+//
+//            // This method does not exist
+//            searchView.invokeClose();
+//        } else {
+//            super.onBackPressed();
+//        }
+//    }
     private class FlightAsyncTask extends AsyncTask<String, Integer, Integer> {
         @Override
         protected void onPreExecute() {
