@@ -18,42 +18,57 @@ import java.util.Calendar;
 public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHolder>
         implements Filterable
 {
-    private ArrayList<Flight> mFlightAll, mOrig;
+    private static ArrayList<Flight> mFlightAll = new ArrayList<>();
+    private static ArrayList<Flight> mFlightDeparture = new ArrayList<>();
+    private static ArrayList<Flight> mFlightArrival = new ArrayList<>();
+    private ArrayList<Flight> mOrig;
     private String mClass = "";
     private Context mContext;
 
-    public FlightAdapter(ArrayList<String> mFlightAllStr, String mClass, Context mContext) {
-        mFlightAll = new ArrayList<>();
+    public FlightAdapter(ArrayList<String> mFlightAllStr, boolean updated, String mClass, Context mContext) {
+//        mFlightAll = new ArrayList<>();
         this.mClass = mClass;
         this.mContext = mContext;
 
-        LogD.out("size " + mFlightAllStr.size());
+        LogD.out("Adapter init, size " + mFlightAllStr.size());
+        LogD.out("updated: " + updated);
 
-        for(String item : mFlightAllStr) {
-            String[] info = item.split(",");
+        if(updated) {
+            mFlightArrival.clear();
+            mFlightDeparture.clear();
+            for (String item : mFlightAllStr) {
+                String[] info = item.split(",");
 
-            Flight target = new Flight();
-            target.setAirlines(info[2].trim());
-            target.setAirlinesTW(info[3].trim());
-            target.setFlightNO(info[2].trim()+info[4].trim());
-            target.setAction(info[1].trim());
-            target.setTerminal("第" + info[0].trim() + "航廈");
-            target.setGate(info[5].trim());
-            target.setExpectDay(info[6].trim());
-            target.setExpectTime(info[7].trim().substring(0, 5));
-            target.setActualDay(info[8].trim());
-            target.setActualTime(info[9].trim().substring(0, 5));
-            target.setDestination(info[11].trim());
-            target.setDestinationTW(info[12].trim());
-            target.setStatus(info[13].trim());
-            target.setType(info[14].trim());
-            target.setBaggage(info[18].trim());
-            target.setCounter(info[19].trim());
+                Flight target = new Flight();
+                target.setAirlines(info[2].trim());
+                target.setAirlinesTW(info[3].trim());
+                target.setFlightNO(info[2].trim() + info[4].trim());
+                target.setAction(info[1].trim());
+                target.setTerminal("第" + info[0].trim() + "航廈");
+                target.setGate(info[5].trim());
+                target.setExpectDay(info[6].trim());
+                target.setExpectTime(info[7].trim().substring(0, 5));
+                target.setActualDay(info[8].trim());
+                target.setActualTime(info[9].trim().substring(0, 5));
+                target.setDestination(info[11].trim());
+                target.setDestinationTW(info[12].trim());
+                target.setStatus(info[13].trim());
+                target.setType(info[14].trim());
+                target.setBaggage(info[18].trim());
+                target.setCounter(info[19].trim());
 
-            if (target.getAction().equals(mClass)) {
-                mFlightAll.add(target);
+                if (target.getAction().equals("A")) {
+                    mFlightArrival.add(target);
+                } else if (target.getAction().equals("D")) {
+                    mFlightDeparture.add(target);
+                }
             }
         }
+
+        if (mClass.equals("A"))
+            mFlightAll = mFlightArrival;
+        else
+            mFlightAll = mFlightDeparture;
     }
 
     public int getPosition(){

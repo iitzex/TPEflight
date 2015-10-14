@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
 import java.io.BufferedReader;
@@ -43,21 +44,26 @@ public class FlightFragment extends Fragment
         super.onActivityCreated(savedInstanceState);
         mClass = getArguments().getString("FlightAction", "D");
 
-            mManager = new LinearLayoutManager(getActivity());
-            mManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mManager = new LinearLayoutManager(getActivity());
+        mManager.setOrientation(LinearLayoutManager.VERTICAL);
 
-            mRecyclerView = (RecyclerView) getActivity().findViewById(R.id.recycleview);
-            mRecyclerView.setLayoutManager(mManager);
-            mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-            mRecyclerView.setHasFixedSize(true);
-            RecyclerView.ItemDecoration itemDecoration = new Divider(getActivity(), Divider.VERTICAL_LIST);
-            mRecyclerView.addItemDecoration(itemDecoration);
+        mRecyclerView = (RecyclerView) getActivity().findViewById(R.id.recycleview);
+        mRecyclerView.setLayoutManager(mManager);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.setHasFixedSize(true);
+        RecyclerView.ItemDecoration itemDecoration = new Divider(getActivity(), Divider.VERTICAL_LIST);
+        mRecyclerView.addItemDecoration(itemDecoration);
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
 
         if (mFlightAll.size() == 0) { //fetch flight infomation while empty
             fetchFlight();
         } else { //with information
-            onFinishRecyclerView();
+            onFinishRecyclerView(false);
         }
     }
 
@@ -76,18 +82,18 @@ public class FlightFragment extends Fragment
     private void fetchFlight() {
         String addr = "http://www.taoyuan-airport.com/uploads/flightx/a_flight_v4.txt";
         new FlightAsyncTask().execute(addr, null, null);
-        onFinishRecyclerView();
+//        onFinishRecyclerView();
 
         Calendar timeInst = Calendar.getInstance();
         SimpleDateFormat day = new SimpleDateFormat("yyyy/MM/dd, HH:mm");
         mUpdateTime = day.format(timeInst.getTime());
     }
 
-    private void onFinishRecyclerView() {
+    private void onFinishRecyclerView(boolean updated) {
         TextView mUpdateTextView = (TextView) getActivity().findViewById(R.id.updatetime);
         mUpdateTextView.setText("最近更新：" + mUpdateTime);
 
-        mAdapter = new FlightAdapter(mFlightAll, mClass, getActivity());
+        mAdapter = new FlightAdapter(mFlightAll, updated, mClass, getActivity());
         mManager.scrollToPositionWithOffset(mAdapter.getPosition(), 0);
         mRecyclerView.setAdapter(mAdapter);
     }
@@ -145,10 +151,13 @@ public class FlightFragment extends Fragment
 //        }
 //    }
     private class FlightAsyncTask extends AsyncTask<String, Integer, Integer> {
+        ProgressBar loading;
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             mFlightAll.clear();
+            loading = (ProgressBar)getView().findViewById(R.id.progressbar);
+            loading.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -187,8 +196,10 @@ public class FlightFragment extends Fragment
 
         @Override
         protected void onPostExecute(Integer result) {
-            if(result == 1)
-                onFinishRecyclerView();
+            if(result == 1) {
+                loading.setVisibility(View.INVISIBLE);
+                onFinishRecyclerView(true);
+            }
         }
     }
 }
