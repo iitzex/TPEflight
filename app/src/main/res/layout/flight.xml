@@ -4,6 +4,13 @@
     android:layout_height="match_parent"
     android:paddingLeft="5dp"
     android:paddingRight="5dp">
+    <ProgressBar
+        android:id="@+id/progressbar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:indeterminate="true"
+        android:layout_centerVertical="true"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/updatetime"
@@ -13,13 +20,12 @@
         android:layout_alignParentBottom="true"
         android:gravity="center|center_horizontal"
         android:textAlignment="center"
-        android:textSize="16sp"
-         />
+        android:textSize="16sp"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycleview"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
         android:layout_above="@+id/updatetime"
-        android:layout_alignParentTop="true" />
+        android:layout_alignParentTop="true"/>
 </RelativeLayout>
