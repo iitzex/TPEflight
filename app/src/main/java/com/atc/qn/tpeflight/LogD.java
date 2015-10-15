@@ -3,7 +3,7 @@ package com.atc.qn.tpeflight;
 import android.util.Log;
 
 public class LogD {
-    static boolean DEBUG = false;
+    static boolean DEBUG = true;
     static String TAG = "TPEflight";
 
     static public void out(String msg) {

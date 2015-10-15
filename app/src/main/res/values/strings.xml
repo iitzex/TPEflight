@@ -4,6 +4,10 @@
     <string name="drawer_close">Menu closed</string>
 
     <string name="search_hint">搜尋航班及地點</string>
+    <string name="name_departure">出境航班</string>
+    <string name="name_arrival">入境航班</string>
+    <string name="name_wx">即時機場天氣</string>
+    <string name="name_airlines">航空公司資訊</string>
 
     <string-array name="arrayLogo">
         <item>@drawable/l_oz</item>

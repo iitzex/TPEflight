@@ -5,7 +5,7 @@
     android:paddingLeft="5dp"
     android:paddingRight="5dp">
     <ProgressBar
-        android:id="@+id/progressbar"
+        android:id="@+id/flight_loading"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:indeterminate="true"
@@ -13,7 +13,7 @@
         android:visibility="gone"/>
 
     <TextView
-        android:id="@+id/updatetime"
+        android:id="@+id/flight_updatetime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -23,9 +23,9 @@
         android:textSize="16sp"/>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycleview"
+        android:id="@+id/flight_content"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
-        android:layout_above="@+id/updatetime"
+        android:layout_above="@+id/flight_updatetime"
         android:layout_alignParentTop="true"/>
 </RelativeLayout>

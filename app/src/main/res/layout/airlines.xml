@@ -5,10 +5,16 @@
     android:layout_alignParentTop="true" >
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:padding="5dp"
         android:orientation="vertical"
         android:id="@+id/airlinestable">
 
+        <ProgressBar
+            android:id="@+id/airlines_loading"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:indeterminate="true"
+            android:visibility="visible"/>
     </LinearLayout>
 </ScrollView>

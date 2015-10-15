@@ -22,16 +22,12 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHold
     private static ArrayList<Flight> mFlightDeparture = new ArrayList<>();
     private static ArrayList<Flight> mFlightArrival = new ArrayList<>();
     private ArrayList<Flight> mOrig;
-    private String mClass = "";
+    private String mAction = "";
     private Context mContext;
 
     public FlightAdapter(ArrayList<String> mFlightAllStr, boolean updated, String mClass, Context mContext) {
-//        mFlightAll = new ArrayList<>();
-        this.mClass = mClass;
+        this.mAction = mClass;
         this.mContext = mContext;
-
-        LogD.out("Adapter init, size " + mFlightAllStr.size());
-        LogD.out("updated: " + updated);
 
         if(updated) {
             mFlightArrival.clear();
@@ -128,10 +124,10 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHold
         holder.mExpectTime.setText(target.getExpectTime());
         holder.mDestinationTW.setText(target.getDestinationTW());
 
-        if (mClass.equals("D")) {
+        if (mAction.equals("D")) {
             holder.mCounter.setText(target.getCounter());
             holder.mBaggage.setVisibility(View.GONE);
-        }else if (mClass.equals("A")) {
+        }else if (mAction.equals("A")) {
             holder.mCounter.setVisibility(View.GONE);
             holder.mBaggage.setText(target.getBaggage());
         }
@@ -211,7 +207,7 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHold
     public static class FlightHolder extends RecyclerView.ViewHolder
     {
         ImageView mLogo;
-        TextView mAirlines, mAirlines_TW, mFlightNO, mShare, mExpectTime;
+        TextView mAirlines_TW, mFlightNO, mShare, mExpectTime;
         TextView mGate, mTerminal, mDestinationTW;
         TextView mCounter, mBaggage, mType;
         TextView mIconText;
@@ -220,7 +216,6 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHold
         FlightHolder(View view) {
             super(view);
             mLogo = (ImageView) view.findViewById(R.id.logo);
-
             mAirlines_TW = (TextView) view.findViewById(R.id.airlines_TW);
 
             mFlightNO = (TextView) view.findViewById(R.id.flightNO);

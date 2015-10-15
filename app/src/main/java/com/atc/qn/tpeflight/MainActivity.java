@@ -49,10 +49,15 @@ public class MainActivity extends AppCompatActivity
             fragMgr.beginTransaction()
                     .replace(R.id.container, flightFrag)
                     .commit();
-        }else{
+        }else if (position == 2) {
+            WxFragment wxFrag = new WxFragment();
             fragMgr.beginTransaction()
-                    .replace(R.id.container, infoFrag)
+                    .replace(R.id.container, wxFrag)
                     .commit();
+        }else if (position == 3) {
+            fragMgr.beginTransaction()
+                .replace(R.id.container, infoFrag)
+                .commit();
         }
     }
 

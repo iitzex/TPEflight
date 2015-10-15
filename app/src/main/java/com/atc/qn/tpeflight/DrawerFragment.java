@@ -19,11 +19,6 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Fragment used for managing interactions for and presentation of a navigation drawer.
- * See the <a href="https://developer.android.com/design/patterns/navigation-drawer.html#Interaction">
- * design guidelines</a> for a complete explanation of the behaviors implemented here.
- */
 public class DrawerFragment extends Fragment
         implements DrawerCallback {
     /**
@@ -56,7 +51,7 @@ public class DrawerFragment extends Fragment
         super.onCreate(savedInstanceState);
 
         // Read in the flag indicating whether or not the user has demonstrated awareness of the
-        // drawer. See PREF_USER_LEARNED_DRAWER for details.
+        // drawer. See PREF_USER_LEARNED_DRAWbER for details.
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
         mUserLearnedDrawer = sp.getBoolean(PREF_USER_LEARNED_DRAWER, false);
 
@@ -97,13 +92,14 @@ public class DrawerFragment extends Fragment
     public List<DrawerItem> getMenu() {
         List<DrawerItem> items = new ArrayList<>();
 
-        items.add(new DrawerItem("出境航班",
+        items.add(new DrawerItem(getActivity().getString(R.string.name_departure),
                 ContextCompat.getDrawable(getActivity(), R.drawable.v_takeoff)));
-        items.add(new DrawerItem("入境航班",
+        items.add(new DrawerItem(getActivity().getString(R.string.name_arrival),
                 ContextCompat.getDrawable(getActivity(), R.drawable.v_landing)));
-        items.add(new DrawerItem("航空公司資訊",
+        items.add(new DrawerItem(getActivity().getString(R.string.name_wx),
+                ContextCompat.getDrawable(getActivity(), R.drawable.ic_wx)));
+        items.add(new DrawerItem(getActivity().getString(R.string.name_airlines),
                 ContextCompat.getDrawable(getActivity(), R.drawable.v_info)));
-
         return items;
     }
 

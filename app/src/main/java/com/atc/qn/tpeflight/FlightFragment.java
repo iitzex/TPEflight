@@ -47,7 +47,7 @@ public class FlightFragment extends Fragment
         mManager = new LinearLayoutManager(getActivity());
         mManager.setOrientation(LinearLayoutManager.VERTICAL);
 
-        mRecyclerView = (RecyclerView) getActivity().findViewById(R.id.recycleview);
+        mRecyclerView = (RecyclerView) getActivity().findViewById(R.id.flight_content);
         mRecyclerView.setLayoutManager(mManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.setHasFixedSize(true);
@@ -90,7 +90,7 @@ public class FlightFragment extends Fragment
     }
 
     private void onFinishRecyclerView(boolean updated) {
-        TextView mUpdateTextView = (TextView) getActivity().findViewById(R.id.updatetime);
+        TextView mUpdateTextView = (TextView) getActivity().findViewById(R.id.flight_updatetime);
         mUpdateTextView.setText("最近更新：" + mUpdateTime);
 
         mAdapter = new FlightAdapter(mFlightAll, updated, mClass, getActivity());
@@ -156,7 +156,7 @@ public class FlightFragment extends Fragment
         protected void onPreExecute() {
             super.onPreExecute();
             mFlightAll.clear();
-            loading = (ProgressBar)getView().findViewById(R.id.progressbar);
+            loading = (ProgressBar)getView().findViewById(R.id.flight_loading);
             loading.setVisibility(View.VISIBLE);
         }
 
