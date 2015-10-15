@@ -54,7 +54,7 @@ public class AirlinesFragment extends Fragment {
 
         loading = (ProgressBar)getView().findViewById(R.id.airlines_loading);
         loading.setVisibility(View.VISIBLE);
-        top_layout = (LinearLayout) getActivity().findViewById(R.id.airlinestable);
+        top_layout = (LinearLayout) getActivity().findViewById(R.id.airlines_content);
 
         new AirlinesAsyncTask().execute("Airlines", null, null);
     }

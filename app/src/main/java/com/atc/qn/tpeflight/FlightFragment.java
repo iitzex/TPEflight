@@ -28,10 +28,11 @@ public class FlightFragment extends Fragment
         implements SearchView.OnQueryTextListener
 {
     static private ArrayList<String> mFlightAll = new ArrayList<>();
-    static RecyclerView mRecyclerView;
-    static FlightAdapter mAdapter;
-    static LinearLayoutManager mManager;
-    static String mClass, mUpdateTime;
+    private RecyclerView mRecyclerView;
+    private FlightAdapter mAdapter;
+    private LinearLayoutManager mManager;
+    private String mAction, mUpdateTime;
+    private ProgressBar mLoading;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -42,11 +43,12 @@ public class FlightFragment extends Fragment
 
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mClass = getArguments().getString("FlightAction", "D");
+        mAction = getArguments().getString("FlightAction", "D");
 
         mManager = new LinearLayoutManager(getActivity());
         mManager.setOrientation(LinearLayoutManager.VERTICAL);
 
+        mLoading = (ProgressBar)getView().findViewById(R.id.flight_loading);
         mRecyclerView = (RecyclerView) getActivity().findViewById(R.id.flight_content);
         mRecyclerView.setLayoutManager(mManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -63,7 +65,7 @@ public class FlightFragment extends Fragment
         if (mFlightAll.size() == 0) { //fetch flight infomation while empty
             fetchFlight();
         } else { //with information
-            onFinishRecyclerView(false);
+            onFinishView(false);
         }
     }
 
@@ -71,10 +73,10 @@ public class FlightFragment extends Fragment
     public void onResume() {
         super.onResume();
         String mTitle;
-        if (mClass.equals("D"))
-            mTitle = "出境航班";
+        if (mAction.equals("D"))
+            mTitle = getActivity().getString(R.string.name_departure);
         else
-            mTitle = "入境航班";
+            mTitle = getActivity().getString(R.string.name_arrival);
 
         getActivity().setTitle(mTitle);
     }
@@ -82,18 +84,20 @@ public class FlightFragment extends Fragment
     private void fetchFlight() {
         String addr = "http://www.taoyuan-airport.com/uploads/flightx/a_flight_v4.txt";
         new FlightAsyncTask().execute(addr, null, null);
-//        onFinishRecyclerView();
+//        onFinishView();
 
         Calendar timeInst = Calendar.getInstance();
         SimpleDateFormat day = new SimpleDateFormat("yyyy/MM/dd, HH:mm");
         mUpdateTime = day.format(timeInst.getTime());
     }
 
-    private void onFinishRecyclerView(boolean updated) {
+    private void onFinishView(boolean updated) {
+        mLoading.setVisibility(View.INVISIBLE);
+
         TextView mUpdateTextView = (TextView) getActivity().findViewById(R.id.flight_updatetime);
         mUpdateTextView.setText("最近更新：" + mUpdateTime);
 
-        mAdapter = new FlightAdapter(mFlightAll, updated, mClass, getActivity());
+        mAdapter = new FlightAdapter(mFlightAll, updated, mAction, getActivity());
         mManager.scrollToPositionWithOffset(mAdapter.getPosition(), 0);
         mRecyclerView.setAdapter(mAdapter);
     }
@@ -151,13 +155,12 @@ public class FlightFragment extends Fragment
 //        }
 //    }
     private class FlightAsyncTask extends AsyncTask<String, Integer, Integer> {
-        ProgressBar loading;
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+
             mFlightAll.clear();
-            loading = (ProgressBar)getView().findViewById(R.id.flight_loading);
-            loading.setVisibility(View.VISIBLE);
+            mLoading.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -197,8 +200,8 @@ public class FlightFragment extends Fragment
         @Override
         protected void onPostExecute(Integer result) {
             if(result == 1) {
-                loading.setVisibility(View.INVISIBLE);
-                onFinishRecyclerView(true);
+
+                onFinishView(true);
             }
         }
     }
