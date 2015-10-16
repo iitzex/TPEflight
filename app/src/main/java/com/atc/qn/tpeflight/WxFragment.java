@@ -96,26 +96,30 @@ public class WxFragment extends Fragment{
         Calendar timeInst = Calendar.getInstance();
         SimpleDateFormat day = new SimpleDateFormat("hh");
         String hour = day.format(timeInst.getTime());
-//        LogD.out("now hour:" + hour);
+        String nighTag = "";
+        String iconName = "wx_";
 
-        int resID = 0;
-        if(Integer.valueOf(hour) <= 19) { //day time
-            resID = R.drawable.wx_sunny;
-            if (wx.contains("RA")) {
-                resID = R.drawable.wx_light_rain;
-            } else if (wx.contains("TS")) {
-                resID = R.drawable.wx_tstorm1;
-            }
-        }else { //night time
-            resID = R.drawable.wx_sunny_night;
-            if (wx.contains("RA")) {
-                resID = R.drawable.wx_light_rain;
-            } else if (wx.contains("TS")) {
-                resID = R.drawable.wx_tstorm1_night;
-            }
+        if(Integer.valueOf(hour) >= 18) {
+            nighTag = "_night";
         }
 
-        icon.setImageResource(resID);
+        wx="RA";
+        if (wx.contains("RA")) {
+            iconName += "light_rain";
+        }else if (wx.contains("SH")) {
+            iconName += "shower1" + nighTag;
+        }else if (wx.contains("BR")) {
+            iconName += "mist" + nighTag;
+        }else if (wx.contains("FG")) {
+            iconName += "fog" + nighTag;
+        }else if (wx.contains("TS")) {
+            iconName += "tstorm1" + nighTag;
+        }else {
+            iconName += "sunny" + nighTag;
+        }
+
+        int resId = getResources().getIdentifier(iconName, "drawable", getActivity().getPackageName());
+        icon.setImageResource(resId);
     }
     private String translateVis(String vis){
         if (vis.equals("10k+")){

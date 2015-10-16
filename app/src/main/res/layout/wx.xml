@@ -7,7 +7,7 @@
     <ProgressBar
         android:id="@+id/wx_loading"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="100dp"
         android:indeterminate="true"
         android:scrollbarSize="15dp"
         android:visibility="gone"/>
