@@ -33,7 +33,7 @@ public class WxFragment extends Fragment{
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        reload();
+        fetchData();
 
         super.onActivityCreated(savedInstanceState);
     }
@@ -44,14 +44,8 @@ public class WxFragment extends Fragment{
         getActivity().setTitle(getActivity().getString(R.string.name_wx));
     }
 
-    private void reload() {
-        String addr = "http://aoaws.caa.gov.tw/cgi-bin/wmds/aoaws_metars?metar_ids=" +
-                "RCTP" + "&NHOURS=Lastest&std_trans=";
-        new WxAsyncTask().execute(addr, null, null);
-    }
-
-    private void loaded(){
-        decode(content);
+    private void fetchData() {
+        new WxAsyncTask().execute(null, null, null);
     }
 
     public void decode(String rawdata) {
@@ -103,7 +97,6 @@ public class WxFragment extends Fragment{
             nighTag = "_night";
         }
 
-        wx="RA";
         if (wx.contains("RA")) {
             iconName += "light_rain";
         }else if (wx.contains("SH")) {
@@ -198,14 +191,16 @@ public class WxFragment extends Fragment{
         int id = item.getItemId();
 
         if (id == R.id.wx_refresh) {
-            reload();
+            fetchData();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private class WxAsyncTask extends AsyncTask<String, Integer, Integer> {
+    private class WxAsyncTask extends AsyncTask<Void , Void, Integer> {
         ProgressBar loading;
+        String addr = "http://aoaws.caa.gov.tw/cgi-bin/wmds/aoaws_metars?metar_ids=" +
+                "RCTP" + "&NHOURS=Lastest&std_trans=";
 
         @Override
         protected void onPreExecute() {
@@ -215,9 +210,8 @@ public class WxFragment extends Fragment{
         }
 
         @Override
-        protected Integer doInBackground(String... params) {
+        protected Integer doInBackground(Void... params) {
             try {
-                String addr = params[0];
                 downloadData(addr);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -235,7 +229,6 @@ public class WxFragment extends Fragment{
             while ((StringBuffer = bufferReader.readLine()) != null) {
                 content += StringBuffer;
             }
-
             bufferReader.close();
         }
 
@@ -243,7 +236,7 @@ public class WxFragment extends Fragment{
         protected void onPostExecute(Integer result) {
             if(result == 1) {
                 loading.setVisibility(View.INVISIBLE);
-                loaded();
+                decode(content);
             }
         }
     }

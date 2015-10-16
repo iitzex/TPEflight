@@ -23,6 +23,7 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import android.os.Handler;
 
 public class FlightFragment extends Fragment
         implements SearchView.OnQueryTextListener
@@ -91,15 +92,24 @@ public class FlightFragment extends Fragment
         mUpdateTime = day.format(timeInst.getTime());
     }
 
-    private void onFinishView(boolean updated) {
+    private void onFinishView(final boolean updated) {
         mLoading.setVisibility(View.INVISIBLE);
 
         TextView mUpdateTextView = (TextView) getActivity().findViewById(R.id.flight_updatetime);
         mUpdateTextView.setText("最近更新：" + mUpdateTime);
 
-        mAdapter = new FlightAdapter(mFlightAll, updated, mAction, getActivity());
-        mManager.scrollToPositionWithOffset(mAdapter.getPosition(), 0);
-        mRecyclerView.setAdapter(mAdapter);
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                mAdapter = new FlightAdapter(mFlightAll, updated, mAction, getActivity());
+                mManager.scrollToPositionWithOffset(mAdapter.getPosition(), 0);
+                mRecyclerView.setAdapter(mAdapter);
+            }
+        };
+
+        Handler mHandler = new Handler();
+//        mHandler.post(r);
+        mHandler.postDelayed(r, 300);
     }
 
     @Override
