@@ -2,14 +2,13 @@ package com.atc.qn.tpeflight;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -24,7 +23,6 @@ import java.util.regex.Pattern;
 
 public class WxFragment extends Fragment{
     String content = "";
-    TextView wx_content;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -35,7 +33,6 @@ public class WxFragment extends Fragment{
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        wx_content = (TextView)getView().findViewById(R.id.wx_content);
         reload();
 
         super.onActivityCreated(savedInstanceState);
@@ -62,34 +59,69 @@ public class WxFragment extends Fragment{
         if (info.equals("EMPTY!!"))
             return;
 
-        wx_content.setText(info);
-
-        String time = info.substring(5, 9).trim();
         String degree = info.substring(10, 13).trim();
         String scale = info.substring(14, 17).trim();
         String gst = info.substring(18, 21).trim();
         String vis = info.substring(22, 26).trim();
         String weather = info.substring(31, 38).trim();
         String ceil = info.substring(39, 43).trim();
-        String tmp = info.substring(44, 47).trim();
+        String temp = info.substring(44, 47).trim();
         String dew = info.substring(48, 51).trim();
-        String QNH = info.substring(52, 56).trim();
 
-        String mTime = time + " UTC";
-        String mWind = degree + "° " + scale + " kt";
-        mWind += gst.equals("") ? "" : ", gusting " + gst + "kt";
+        String mWind = degree + "° " + String.valueOf((Integer.valueOf(scale) * 1.852)) + " 公里/時";
+//        mWind += gst.equals("") ? "" : ", 陣風 " + String.valueOf(Integer.valueOf(gst) * 1.852) + " 公里/時";
         String mVis = vis.equals("") ? "" : translateVis(vis);
         String mWX = weather.equals("") ? "" : translateWX(weather);
-        String mCeil = ceil.equals("") ? "" : ceil.replaceFirst("^0+(?!$)", "") + "00 ft";
-        String mTemp = tmp + " °C";
+        String mCloud = ceil.equals("") ? "" : ceil.replaceFirst("^0+(?!$)", "") + "00 呎";
+        String mTemp = temp + " °C";
         String mDew = dew + " °C";
-        String mQNH = QNH + " hPa";
+
+        TextView wx_vis = (TextView)getView().findViewById(R.id.wx_vis);
+        TextView wx_wind = (TextView)getView().findViewById(R.id.wx_wind);
+        TextView wx_cloud = (TextView)getView().findViewById(R.id.wx_cloud);
+        TextView wx_temp = (TextView)getView().findViewById(R.id.wx_temperature);
+        TextView wx_dew = (TextView)getView().findViewById(R.id.wx_dewpoint);
+
+        setIcon(weather);
+
+        wx_vis.setText("能見度：\t" + mVis);
+        wx_wind.setText("風向/速：\t" + mWind);
+        wx_cloud.setText("雲幕高：\t" + mCloud);
+        wx_temp.setText("溫度：\t" + mTemp);
+        wx_dew.setText(("露點：\t" + mDew));
+    }
+    private void setIcon(String wx)
+    {
+        ImageView icon = (ImageView)getView().findViewById(R.id.wx_icon);
+        Calendar timeInst = Calendar.getInstance();
+        SimpleDateFormat day = new SimpleDateFormat("hh");
+        String hour = day.format(timeInst.getTime());
+//        LogD.out("now hour:" + hour);
+
+        int resID = 0;
+        if(Integer.valueOf(hour) <= 19) { //day time
+            resID = R.drawable.wx_sunny;
+            if (wx.contains("RA")) {
+                resID = R.drawable.wx_light_rain;
+            } else if (wx.contains("TS")) {
+                resID = R.drawable.wx_tstorm1;
+            }
+        }else { //night time
+            resID = R.drawable.wx_sunny_night;
+            if (wx.contains("RA")) {
+                resID = R.drawable.wx_light_rain;
+            } else if (wx.contains("TS")) {
+                resID = R.drawable.wx_tstorm1_night;
+            }
+        }
+
+        icon.setImageResource(resID);
     }
     private String translateVis(String vis){
         if (vis.equals("10k+")){
-            return "10KM or more";
+            return "10公里以上";
         }else
-            return vis + " m";
+            return vis + " 公尺";
     }
 
     private String translateWX(String wx){
@@ -144,7 +176,6 @@ public class WxFragment extends Fragment{
         String result = "";
         int i = 0;
         while (m.find()) {
-            //LogD.out(String.valueOf(i++) + "_" + m.group(1));
             result += m.group(1) + "\n\n";
         }
         if (result.equals(""))
@@ -192,18 +223,12 @@ public class WxFragment extends Fragment{
         }
 
         private void downloadData (String HttpAddr) throws IOException {
-            Calendar timeInst = Calendar.getInstance();
-            SimpleDateFormat day = new SimpleDateFormat("yyyy/MM/dd");
-            String dayStr = day.format(timeInst.getTime());
-            LogD.out(dayStr);
-
             URL textUrl = new URL(HttpAddr);
             BufferedReader bufferReader
                     = new BufferedReader(new InputStreamReader(textUrl.openStream(), "Big5"));
 
             String StringBuffer;
             while ((StringBuffer = bufferReader.readLine()) != null) {
-                //String[] info = StringBuffer.split(",");
                 content += StringBuffer;
             }
 
@@ -218,5 +243,4 @@ public class WxFragment extends Fragment{
             }
         }
     }
-
 }

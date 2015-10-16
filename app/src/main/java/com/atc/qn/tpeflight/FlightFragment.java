@@ -31,7 +31,7 @@ public class FlightFragment extends Fragment
     private RecyclerView mRecyclerView;
     private FlightAdapter mAdapter;
     private LinearLayoutManager mManager;
-    private String mAction, mUpdateTime;
+    private static String mAction, mUpdateTime;
     private ProgressBar mLoading;
 
     @Override
@@ -179,7 +179,7 @@ public class FlightFragment extends Fragment
             Calendar timeInst = Calendar.getInstance();
             SimpleDateFormat day = new SimpleDateFormat("yyyy/MM/dd");
             String dayStr = day.format(timeInst.getTime());
-            LogD.out(dayStr);
+//            LogD.out(dayStr);
 
             URL textUrl = new URL(HttpAddr);
             BufferedReader bufferReader
