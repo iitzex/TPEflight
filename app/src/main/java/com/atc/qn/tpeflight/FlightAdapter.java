@@ -1,7 +1,6 @@
 package com.atc.qn.tpeflight;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -24,6 +23,7 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHold
     private ArrayList<Flight> mOrig;
     private String mAction = "";
     private Context mContext;
+    private static int mClickPosition = -1;
 
     public FlightAdapter(ArrayList<String> mFlightAllStr, boolean updated, String mClass, Context mContext) {
         this.mAction = mClass;
@@ -66,8 +66,10 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHold
         else
             mFlightAll = mFlightDeparture;
     }
-
-    public int getPosition(){
+    public int getClickPosition() {
+        return mClickPosition;
+    }
+    public int getTimePosition(){
         Calendar timeInst = Calendar.getInstance();
         SimpleDateFormat hour = new SimpleDateFormat("HH");
         String hourStr = hour.format(timeInst.getTime());
@@ -90,31 +92,22 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHold
     }
 
     public void setAirlineLogo(FlightHolder holder, Flight target) {
-        String IATA = target.getAirlines();
-
-        final TypedArray arrayLogo = mContext.getApplicationContext().getResources().obtainTypedArray(R.array.arrayLogo);
-        final String[] arrayIATA = mContext.getApplicationContext().getResources().getStringArray(R.array.arrayIATA);
-
-        for (int i = 0; i < arrayIATA.length; i++) {
-            if (IATA.equals(arrayIATA[i].toUpperCase())) {
-                holder.mLogo.setImageResource(arrayLogo.getResourceId(i, 0));
-            }
-        }
-
-        arrayLogo.recycle();
+        String iconName = "l_" + target.getAirlines().toLowerCase();
+        int resId = mContext.getResources().getIdentifier(iconName, "drawable", mContext.getPackageName());
+        holder.mLogo.setImageResource(resId);
     }
 
     @Override
-    public void onBindViewHolder(FlightHolder holder, int position) {
+    public void onBindViewHolder(FlightHolder holder, final int position) {
         final Flight target = mFlightAll.get(position);
 
         setAirlineLogo(holder, target);
-
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onFlightClickListener mCallback = (onFlightClickListener) mContext;
                 mCallback.onFlightItemClick(target);
+                mClickPosition = position;
             }
         });
 

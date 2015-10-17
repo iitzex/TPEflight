@@ -56,7 +56,7 @@ public class AirlinesFragment extends Fragment {
         loading.setVisibility(View.VISIBLE);
         top_layout = (LinearLayout) getActivity().findViewById(R.id.airlines_content);
 
-        new AirlinesAsyncTask().execute("Airlines", null, null);
+        new AirlinesAsyncTask().execute(null, null, null);
     }
 
     @Override
@@ -74,9 +74,9 @@ public class AirlinesFragment extends Fragment {
             LinearLayout airlines_row = (LinearLayout) inflater.inflate(R.layout.airlines_row, null);
 
             ImageView logoImgView = (ImageView) airlines_row.findViewById(R.id.logo);
-            TextView nameTxtView = (TextView) airlines_row.findViewById(R.id.name);
-            TextView placeTxtView = (TextView) airlines_row.findViewById(R.id.place);
-            Button phoneBtn = (Button) airlines_row.findViewById(R.id.phone);
+            TextView nameTxtView = (TextView) airlines_row.findViewById(R.id.airlines_name);
+            TextView placeTxtView = (TextView) airlines_row.findViewById(R.id.airlines_place);
+            Button phoneBtn = (Button) airlines_row.findViewById(R.id.airlines_phone);
 
             final String name = airlinesTWList[i];
             final String place = airlinesPlaceList[i];
@@ -98,7 +98,7 @@ public class AirlinesFragment extends Fragment {
         }
     }
 
-    private class AirlinesAsyncTask extends AsyncTask<String, Integer, Integer> {
+    private class AirlinesAsyncTask extends AsyncTask<Void, Integer, Integer> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -107,7 +107,7 @@ public class AirlinesFragment extends Fragment {
         }
 
         @Override
-        protected Integer doInBackground(String... params) {
+        protected Integer doInBackground(Void... params) {
             getAirlines();
             return null;
         }

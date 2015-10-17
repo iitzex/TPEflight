@@ -22,7 +22,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class WxFragment extends Fragment{
-    String content = "";
+    String mContent = "";
+    WxAsyncTask mTask;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -45,7 +46,7 @@ public class WxFragment extends Fragment{
     }
 
     private void fetchData() {
-        new WxAsyncTask().execute(null, null, null);
+        mTask = (WxAsyncTask) new WxAsyncTask().execute(null, null, null);
     }
 
     public void decode(String rawdata) {
@@ -62,10 +63,11 @@ public class WxFragment extends Fragment{
         String temp = info.substring(44, 47).trim();
         String dew = info.substring(48, 51).trim();
 
-        String mWind = degree + "° " + String.valueOf((Integer.valueOf(scale) * 1.852)) + " 公里/時";
+        double kmh = Integer.valueOf(scale) * 1.852;
+        String mWind = degree + "° " + String.valueOf((int) kmh) + " 公里/時";
 //        mWind += gst.equals("") ? "" : ", 陣風 " + String.valueOf(Integer.valueOf(gst) * 1.852) + " 公里/時";
         String mVis = vis.equals("") ? "" : translateVis(vis);
-        String mWX = weather.equals("") ? "" : translateWX(weather);
+//        String mWX = weather.equals("") ? "" : translateWX(weather);
         String mCloud = ceil.equals("") ? "" : ceil.replaceFirst("^0+(?!$)", "") + "00 呎";
         String mTemp = temp + " °C";
         String mDew = dew + " °C";
@@ -76,44 +78,48 @@ public class WxFragment extends Fragment{
         TextView wx_temp = (TextView)getView().findViewById(R.id.wx_temperature);
         TextView wx_dew = (TextView)getView().findViewById(R.id.wx_dewpoint);
 
-        setIcon(weather);
-
         wx_vis.setText("能見度：\t" + mVis);
         wx_wind.setText("風向/速：\t" + mWind);
         wx_cloud.setText("雲幕高：\t" + mCloud);
         wx_temp.setText("溫度：\t" + mTemp);
         wx_dew.setText(("露點：\t" + mDew));
+
+        setIcon(weather);
+
     }
+
     private void setIcon(String wx)
     {
         ImageView icon = (ImageView)getView().findViewById(R.id.wx_icon);
         Calendar timeInst = Calendar.getInstance();
-        SimpleDateFormat day = new SimpleDateFormat("hh");
+        SimpleDateFormat day = new SimpleDateFormat("HH");
         String hour = day.format(timeInst.getTime());
-        String nighTag = "";
+        String nightTag = "";
         String iconName = "wx_";
 
         if(Integer.valueOf(hour) >= 18) {
-            nighTag = "_night";
+            nightTag = "_night";
         }
 
         if (wx.contains("RA")) {
             iconName += "light_rain";
         }else if (wx.contains("SH")) {
-            iconName += "shower1" + nighTag;
+            iconName += "shower1" + nightTag;
         }else if (wx.contains("BR")) {
-            iconName += "mist" + nighTag;
+            iconName += "mist" + nightTag;
         }else if (wx.contains("FG")) {
-            iconName += "fog" + nighTag;
+            iconName += "fog" + nightTag;
         }else if (wx.contains("TS")) {
-            iconName += "tstorm1" + nighTag;
+            iconName += "tstorm1" + nightTag;
         }else {
-            iconName += "sunny" + nighTag;
+            iconName += "sunny" + nightTag;
         }
 
+        LogD.out(hour + ", " + iconName);
         int resId = getResources().getIdentifier(iconName, "drawable", getActivity().getPackageName());
         icon.setImageResource(resId);
     }
+
     private String translateVis(String vis){
         if (vis.equals("10k+")){
             return "10公里以上";
@@ -121,48 +127,46 @@ public class WxFragment extends Fragment{
             return vis + " 公尺";
     }
 
-    private String translateWX(String wx){
-        //INTENSITY OR PROXIMITY 1
-        String modifiedWX = wx.replace("-", "Light ")
-                .replace("+", "Heavy ")
-                .replace("VC", "In the vicinity, ")
-                        //DESCRIPTOR 2
-                .replace("MI", "Shallow ")
-                .replace("PR", "Partial ")
-                .replace("BC", "Patches ")
-                .replace("DR", "Low Drifting ")
-                .replace("BL", "Blowing ")
-                .replace("SH", "Shower ")
-                .replace("TS", "Thunderstorm ")
-                .replace("FZ", "Freezing ")
-                        //PRECIPITATION 3
-                .replace("DZ", "Drizzle, ")
-                .replace("RA", "Rain, ")
-                .replace("SN", "Snow, ")
-                .replace("SG", "Snow Grains, ")
-                .replace("IC", "Ice Crystals, ")
-                .replace("PL", "Ice Pellets, ")
-                .replace("GR", "Hail, ")
-                .replace("GS", "Small Hail and/or Snow Pellets, ")
-                .replace("UP", "Unknown Precipitation, ")
-                        //OBSCURATION 4
-                .replace("BR", "Mist, ")
-                .replace("FG", "Fog, ")
-                .replace("FU", "Smoke, ")
-                .replace("VA", "Volcanic Ash, ")
-                .replace("DU", "Widespread Dust, ")
-                .replace("SA", "Sand, ")
-                .replace("HZ", "Haze, ")
-                .replace("PY", "Spray, ")
-                        //OTHER 5
-                .replace("PO", "Well-Developed Dust/Sand Whirls, ")
-                .replace("SQ", "Squalls, ")
-                .replace("FC", "Funnel Cloud Tornado Waterspout, ")
-                .replace("SS", "Sandstorm, ")
-                .replace("DS", "Duststorm, ");
-
-        return modifiedWX;
-    }
+//    private String translateWX(String wx){
+//                //INTENSITY OR PROXIMITY 1
+//        return wx.replace("-", "Light ")
+//                .replace("+", "Heavy ")
+//                .replace("VC", "In the vicinity, ")
+//                //DESCRIPTOR 2
+//                .replace("MI", "Shallow ")
+//                .replace("PR", "Partial ")
+//                .replace("BC", "Patches ")
+//                .replace("DR", "Low Drifting ")
+//                .replace("BL", "Blowing ")
+//                .replace("SH", "Shower ")
+//                .replace("TS", "Thunderstorm ")
+//                .replace("FZ", "Freezing ")
+//                //PRECIPITATION 3
+//                .replace("DZ", "Drizzle, ")
+//                .replace("RA", "Rain, ")
+//                .replace("SN", "Snow, ")
+//                .replace("SG", "Snow Grains, ")
+//                .replace("IC", "Ice Crystals, ")
+//                .replace("PL", "Ice Pellets, ")
+//                .replace("GR", "Hail, ")
+//                .replace("GS", "Small Hail and/or Snow Pellets, ")
+//                .replace("UP", "Unknown Precipitation, ")
+//                //OBSCURATION 4
+//                .replace("BR", "Mist, ")
+//                .replace("FG", "Fog, ")
+//                .replace("FU", "Smoke, ")
+//                .replace("VA", "Volcanic Ash, ")
+//                .replace("DU", "Widespread Dust, ")
+//                .replace("SA", "Sand, ")
+//                .replace("HZ", "Haze, ")
+//                .replace("PY", "Spray, ")
+//                //OTHER 5
+//                .replace("PO", "Well-Developed Dust/Sand Whirls, ")
+//                .replace("SQ", "Squalls, ")
+//                .replace("FC", "Funnel Cloud Tornado Waterspout, ")
+//                .replace("SS", "Sandstorm, ")
+//                .replace("DS", "Duststorm, ");
+//    }
 
     private String parse(String rawData, String expression){
         if(rawData == null){
@@ -171,7 +175,6 @@ public class WxFragment extends Fragment{
 
         Matcher m =  Pattern.compile(expression).matcher(rawData);
         String result = "";
-        int i = 0;
         while (m.find()) {
             result += m.group(1) + "\n\n";
         }
@@ -197,16 +200,22 @@ public class WxFragment extends Fragment{
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onStop() {
+        mTask.cancel(true);
+        super.onStop();
+    }
+
     private class WxAsyncTask extends AsyncTask<Void , Void, Integer> {
-        ProgressBar loading;
+        ProgressBar mLoading;
         String addr = "http://aoaws.caa.gov.tw/cgi-bin/wmds/aoaws_metars?metar_ids=" +
                 "RCTP" + "&NHOURS=Lastest&std_trans=";
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            loading = (ProgressBar)getView().findViewById(R.id.wx_loading);
-            loading.setVisibility(View.VISIBLE);
+            mLoading = (ProgressBar)getView().findViewById(R.id.wx_loading);
+            mLoading.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -227,7 +236,7 @@ public class WxFragment extends Fragment{
 
             String StringBuffer;
             while ((StringBuffer = bufferReader.readLine()) != null) {
-                content += StringBuffer;
+                mContent += StringBuffer;
             }
             bufferReader.close();
         }
@@ -235,8 +244,8 @@ public class WxFragment extends Fragment{
         @Override
         protected void onPostExecute(Integer result) {
             if(result == 1) {
-                loading.setVisibility(View.INVISIBLE);
-                decode(content);
+                mLoading.setVisibility(View.INVISIBLE);
+                decode(mContent);
             }
         }
     }

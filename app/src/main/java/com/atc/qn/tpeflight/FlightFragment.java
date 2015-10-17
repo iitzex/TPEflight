@@ -3,6 +3,7 @@ package com.atc.qn.tpeflight;
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -34,17 +35,32 @@ public class FlightFragment extends Fragment
     private LinearLayoutManager mManager;
     private static String mAction, mUpdateTime;
     private ProgressBar mLoading;
+    private static int mFirstVisiblePosition = -1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(true);
+        if(savedInstanceState != null)
+        {
+            LogD.out("--restoring");
+            Parcelable savedRecyclerLayoutState = savedInstanceState.getParcelable(BUNDLE_RECYCLER_LAYOUT);
+            mRecyclerView.getLayoutManager().onRestoreInstanceState(savedRecyclerLayoutState);
+        }else
+            LogD.out("--null state");
 
         return inflater.inflate(R.layout.flight, container, false);
     }
 
     public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mAction = getArguments().getString("FlightAction", "D");
+        if(savedInstanceState != null)
+        {
+            LogD.out("restoring");
+            Parcelable savedRecyclerLayoutState = savedInstanceState.getParcelable(BUNDLE_RECYCLER_LAYOUT);
+            mRecyclerView.getLayoutManager().onRestoreInstanceState(savedRecyclerLayoutState);
+        }else
+            LogD.out("null state");
+
+        LogD.out("act created, " + mFirstVisiblePosition);
 
         mManager = new LinearLayoutManager(getActivity());
         mManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -56,13 +72,16 @@ public class FlightFragment extends Fragment
         mRecyclerView.setHasFixedSize(true);
         RecyclerView.ItemDecoration itemDecoration = new Divider(getActivity(), Divider.VERTICAL_LIST);
         mRecyclerView.addItemDecoration(itemDecoration);
+        mRecyclerView.setAdapter(mAdapter);
 
+        super.onActivityCreated(savedInstanceState);
     }
 
     @Override
     public void onStart() {
         super.onStart();
 
+        LogD.out("frag start, " + mFirstVisiblePosition);
         if (mFlightAll.size() == 0) { //fetch flight infomation while empty
             fetchFlight();
         } else { //with information
@@ -73,19 +92,16 @@ public class FlightFragment extends Fragment
     @Override
     public void onResume() {
         super.onResume();
-        String mTitle;
-        if (mAction.equals("D"))
-            mTitle = getActivity().getString(R.string.name_departure);
-        else
-            mTitle = getActivity().getString(R.string.name_arrival);
 
-        getActivity().setTitle(mTitle);
+        mAction = getArguments().getString("FlightAction", "D");
+        if (mAction.equals("D"))
+            getActivity().setTitle(getActivity().getString(R.string.name_departure));
+        else
+            getActivity().setTitle(getActivity().getString(R.string.name_arrival));
     }
 
     private void fetchFlight() {
-        String addr = "http://www.taoyuan-airport.com/uploads/flightx/a_flight_v4.txt";
-        new FlightAsyncTask().execute(addr, null, null);
-//        onFinishView();
+        new FlightAsyncTask().execute(null, null, null);
 
         Calendar timeInst = Calendar.getInstance();
         SimpleDateFormat day = new SimpleDateFormat("yyyy/MM/dd, HH:mm");
@@ -102,14 +118,42 @@ public class FlightFragment extends Fragment
             @Override
             public void run() {
                 mAdapter = new FlightAdapter(mFlightAll, updated, mAction, getActivity());
-                mManager.scrollToPositionWithOffset(mAdapter.getPosition(), 0);
+
+                // TODO: 2015/10/17
+                // fix the restore problem
+                boolean mReloaded = getArguments().getBoolean("Reloaded", false);
+                if (mReloaded) {
+                    mManager.scrollToPositionWithOffset(mAdapter.getTimePosition(), 0);
+                }else
+                    mManager.scrollToPositionWithOffset(mFirstVisiblePosition, 0);
+
                 mRecyclerView.setAdapter(mAdapter);
             }
         };
 
         Handler mHandler = new Handler();
-//        mHandler.post(r);
         mHandler.postDelayed(r, 300);
+    }
+
+    private static final String BUNDLE_RECYCLER_LAYOUT = "classname.recycler.layout";
+
+    @Override
+    public void onViewStateRestored(Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        LogD.out("restore layout");
+        if(savedInstanceState != null)
+        {
+            LogD.out("restoring");
+            Parcelable savedRecyclerLayoutState = savedInstanceState.getParcelable(BUNDLE_RECYCLER_LAYOUT);
+            mRecyclerView.getLayoutManager().onRestoreInstanceState(savedRecyclerLayoutState);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        LogD.out("saving instance");
+        outState.putParcelable(BUNDLE_RECYCLER_LAYOUT, mRecyclerView.getLayoutManager().onSaveInstanceState());
     }
 
     @Override
@@ -131,13 +175,15 @@ public class FlightFragment extends Fragment
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
+        getArguments().putBoolean("Reloaded", true);
         if (id == R.id.action_locate) {
-            mManager.scrollToPositionWithOffset(mAdapter.getPosition(), 0);
+            mManager.scrollToPositionWithOffset(mAdapter.getTimePosition(), 0);
             return true;
         }else if (id == R.id.action_refresh) {
             fetchFlight();
             return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -153,30 +199,28 @@ public class FlightFragment extends Fragment
         return true;
     }
 
-//    @Override
-//    public void onBackPressed() {
-//        if (isSearchViewVisible) {
-//            SearchView searchView = (SearchView) menu.findItem(R.id.searchBox).getActionView();
-//
-//            // This method does not exist
-//            searchView.invokeClose();
-//        } else {
-//            super.onBackPressed();
-//        }
-//    }
-    private class FlightAsyncTask extends AsyncTask<String, Integer, Integer> {
+    @Override
+    public void onStop() {
+        mFirstVisiblePosition = mManager.findFirstVisibleItemPosition();
+        getArguments().putBoolean("Reloaded", false);
+
+        super.onStop();
+    }
+
+    private class FlightAsyncTask extends AsyncTask<Void, Void, Integer> {
+        String addr = "http://www.taoyuan-airport.com/uploads/flightx/a_flight_v4.txt";
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
 
-            mFlightAll.clear();
+        mFlightAll.clear();
             mLoading.setVisibility(View.VISIBLE);
         }
 
         @Override
-        protected Integer doInBackground(String... params) {
+        protected Integer doInBackground(Void... params) {
             try {
-                String addr = params[0];
                 downloadData(addr);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -189,7 +233,6 @@ public class FlightFragment extends Fragment
             Calendar timeInst = Calendar.getInstance();
             SimpleDateFormat day = new SimpleDateFormat("yyyy/MM/dd");
             String dayStr = day.format(timeInst.getTime());
-//            LogD.out(dayStr);
 
             URL textUrl = new URL(HttpAddr);
             BufferedReader bufferReader
@@ -199,7 +242,7 @@ public class FlightFragment extends Fragment
             while ((StringBuffer = bufferReader.readLine()) != null) {
                 String[] info = StringBuffer.split(",");
 
-                if (info[6].trim().equals(dayStr)) { //filter day
+                if (info[6].trim().equals(dayStr)) { //filtered by day
                     mFlightAll.add(StringBuffer);
                 }
             }
@@ -209,10 +252,8 @@ public class FlightFragment extends Fragment
 
         @Override
         protected void onPostExecute(Integer result) {
-            if(result == 1) {
-
+            if(result == 1)
                 onFinishView(true);
-            }
         }
     }
 }

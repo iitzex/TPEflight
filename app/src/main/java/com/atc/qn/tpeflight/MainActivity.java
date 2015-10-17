@@ -1,6 +1,7 @@
 package com.atc.qn.tpeflight;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -13,19 +14,33 @@ public class MainActivity extends AppCompatActivity
     private DrawerFragment mDrawerFragment;
     FragmentManager fragMgr = getSupportFragmentManager();
     AirlinesFragment infoFrag = new AirlinesFragment();
+    private Fragment mContent = new Fragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+//        if (savedInstanceState != null) {
+//            //Restore the fragment's instance
+//            mContent = getSupportFragmentManager().getFragment(savedInstanceState, "mContent");
+//        }else
+//            LogD.out("000null state");
+//
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
         setSupportActionBar(mToolbar);
 
         mDrawerFragment = (DrawerFragment) getFragmentManager().findFragmentById(R.id.fragment_drawer);
-
-        // Set up the drawer.
         mDrawerFragment.setup(R.id.fragment_drawer, (DrawerLayout) findViewById(R.id.drawer), mToolbar);
+
     }
+//    @Override
+//    protected void onSaveInstanceState(Bundle outState) {
+//        super.onSaveInstanceState(outState);
+//
+//        //Save the fragment's instance
+//        LogD.out("000 saving");
+//        getSupportFragmentManager().putFragment(outState, "mContent", mContent);
+//    }
 
     @Override
     public void onDrawerItemSelected(int position) {
@@ -33,6 +48,12 @@ public class MainActivity extends AppCompatActivity
         FlightFragment flightFrag = new FlightFragment();
 
         Bundle args = new Bundle();
+        args.putBoolean("Reloaded", true);
+
+        //clear stack
+        for(int i = 0; i < fragMgr.getBackStackEntryCount(); ++i) {
+            fragMgr.popBackStack();
+        }
 
         if (position == 0) {
             args.putString("FlightAction", "D");
@@ -116,7 +137,7 @@ public class MainActivity extends AppCompatActivity
 
         fragMgr.beginTransaction()
                 .replace(R.id.container, infoFrag)
-                .addToBackStack(null)
+                .addToBackStack("infoFrag")
                 .commit();
     }
 }

@@ -17,9 +17,9 @@ import android.widget.TextView;
 public class InfoFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        getActivity().setTitle(getActivity().getString(R.string.name_info));
 
-        getActivity().setTitle("航班資訊");
-
+        //dismiss input keyboard
         InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
 
