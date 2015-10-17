@@ -69,7 +69,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/myAccentColor"
-                    android:textSize="18sp"
+                    android:textSize="25sp"
                     android:text="第一航廈"/>
             </LinearLayout>
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -90,7 +90,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/myAccentColor"
-                    android:textSize="18sp"
+                    android:textSize="25sp"
                     android:text="12"/>
             </LinearLayout>
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -110,7 +110,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/myAccentColor"
-                    android:textSize="20sp"
+                    android:textSize="25sp"
                     android:text="C9"/>
             </LinearLayout>
         </LinearLayout>

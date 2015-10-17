@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?><!-- -->
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/airlinesrow">
+    android:id="@+id/airlines_row">
     <ImageView
         android:id="@+id/logo"
         android:layout_width="30dp"
@@ -10,27 +10,33 @@
         android:layout_gravity="center_vertical"
         android:contentDescription="Airlines Logo"
         android:src="@drawable/l_zv"/>
-    <TextView
-        android:id="@+id/name"
-        android:layout_width="wrap_content"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_gravity="center_vertical"
-        android:paddingStart="5dp"
-        android:paddingEnd="5dp"
-        android:textSize="16sp"
-        android:textColor="@color/myPrimaryDarkColor"
-        android:text="威航"/>
-    <TextView
-        android:id="@+id/place"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_gravity="center_vertical|center"
-        android:textSize="14sp"
-        android:text="第一航廈1樓"/>
+        android:padding="5dp"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/airlines_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:textSize="20sp"
+            android:textColor="@color/myPrimaryDarkColor"
+            android:text="威航"/>
+        <TextView
+            android:id="@+id/airlines_place"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:textSize="18sp"
+            android:text="第一航廈1樓"/>
+    </LinearLayout>
     <Button
-        android:id="@+id/phone"
+        android:id="@+id/airlines_phone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
