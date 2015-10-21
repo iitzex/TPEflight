@@ -84,11 +84,11 @@ public class WxFragment extends Fragment{
         wx_temp.setText("溫度：\t" + mTemp);
         wx_dew.setText(("露點：\t" + mDew));
 
-        setIcon(weather);
+        setIcon(weather, ceil);
 
     }
 
-    private void setIcon(String wx)
+    private void setIcon(String wx, String ceil)
     {
         ImageView icon = (ImageView)getView().findViewById(R.id.wx_icon);
         Calendar timeInst = Calendar.getInstance();
@@ -96,8 +96,14 @@ public class WxFragment extends Fragment{
         String hour = day.format(timeInst.getTime());
         String nightTag = "";
         String iconName = "wx_";
+        Integer ceilValue;
+        if (ceil.equals("")) {
+            ceilValue = Integer.valueOf("0");
+        }else {
+            ceilValue = Integer.valueOf(ceil);
+        }
 
-        if(Integer.valueOf(hour) >= 18) {
+        if(Integer.valueOf(hour) >= 18 || Integer.valueOf(hour) <= 6) {
             nightTag = "_night";
         }
 
@@ -111,11 +117,16 @@ public class WxFragment extends Fragment{
             iconName += "fog" + nightTag;
         }else if (wx.contains("TS")) {
             iconName += "tstorm1" + nightTag;
+        }else if (ceilValue > 0 && ceilValue <= 20) {
+            iconName += "cloudy3" + nightTag;
+        }else if (ceilValue > 0 && ceilValue <= 40) {
+            iconName += "cloudy2" + nightTag;
+        }else if (ceilValue > 0 && ceilValue <= 80) {
+            iconName += "cloudy1" + nightTag;
         }else {
             iconName += "sunny" + nightTag;
         }
 
-        LogD.out(hour + ", " + iconName);
         int resId = getResources().getIdentifier(iconName, "drawable", getActivity().getPackageName());
         icon.setImageResource(resId);
     }

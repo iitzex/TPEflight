@@ -96,6 +96,8 @@ public class DrawerFragment extends Fragment
                 ContextCompat.getDrawable(getActivity(), R.drawable.v_takeoff)));
         items.add(new DrawerItem(getActivity().getString(R.string.name_arrival),
                 ContextCompat.getDrawable(getActivity(), R.drawable.v_landing)));
+        items.add(new DrawerItem(getActivity().getString(R.string.name_track),
+                ContextCompat.getDrawable(getActivity(), R.drawable.v_star)));
         items.add(new DrawerItem(getActivity().getString(R.string.name_wx),
                 ContextCompat.getDrawable(getActivity(), R.drawable.ic_wx)));
         items.add(new DrawerItem(getActivity().getString(R.string.name_airlines),

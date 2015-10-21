@@ -86,9 +86,8 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHold
     @Override
     public FlightHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.flight_row, parent, false);
-        FlightHolder holder = new FlightHolder(v);
 
-        return holder;
+        return new FlightHolder(v);
     }
 
     public void setAirlineLogo(FlightHolder holder, Flight target) {

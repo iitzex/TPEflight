@@ -36,17 +36,18 @@ public class FlightFragment extends Fragment
     private static String mAction, mUpdateTime;
     private ProgressBar mLoading;
     private static int mFirstVisiblePosition = -1;
+    private FlightAsyncTask fetchTasker;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         if(savedInstanceState != null)
         {
-            LogD.out("--restoring");
+            QNLog.d("--restoring");
             Parcelable savedRecyclerLayoutState = savedInstanceState.getParcelable(BUNDLE_RECYCLER_LAYOUT);
             mRecyclerView.getLayoutManager().onRestoreInstanceState(savedRecyclerLayoutState);
         }else
-            LogD.out("--null state");
+            QNLog.d("--null state");
 
         return inflater.inflate(R.layout.flight, container, false);
     }
@@ -54,13 +55,11 @@ public class FlightFragment extends Fragment
     public void onActivityCreated(Bundle savedInstanceState) {
         if(savedInstanceState != null)
         {
-            LogD.out("restoring");
+            QNLog.d("restoring");
             Parcelable savedRecyclerLayoutState = savedInstanceState.getParcelable(BUNDLE_RECYCLER_LAYOUT);
             mRecyclerView.getLayoutManager().onRestoreInstanceState(savedRecyclerLayoutState);
         }else
-            LogD.out("null state");
-
-        LogD.out("act created, " + mFirstVisiblePosition);
+            QNLog.d("null state");
 
         mManager = new LinearLayoutManager(getActivity());
         mManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -81,7 +80,7 @@ public class FlightFragment extends Fragment
     public void onStart() {
         super.onStart();
 
-        LogD.out("frag start, " + mFirstVisiblePosition);
+        QNLog.d("frag start, " + mFirstVisiblePosition);
         if (mFlightAll.size() == 0) { //fetch flight infomation while empty
             fetchFlight();
         } else { //with information
@@ -101,7 +100,7 @@ public class FlightFragment extends Fragment
     }
 
     private void fetchFlight() {
-        new FlightAsyncTask().execute(null, null, null);
+        fetchTasker = (FlightAsyncTask) new FlightAsyncTask().execute(null, null, null);
 
         Calendar timeInst = Calendar.getInstance();
         SimpleDateFormat day = new SimpleDateFormat("yyyy/MM/dd, HH:mm");
@@ -128,6 +127,7 @@ public class FlightFragment extends Fragment
                     mManager.scrollToPositionWithOffset(mFirstVisiblePosition, 0);
 
                 mRecyclerView.setAdapter(mAdapter);
+
             }
         };
 
@@ -140,10 +140,10 @@ public class FlightFragment extends Fragment
     @Override
     public void onViewStateRestored(Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
-        LogD.out("restore layout");
+        QNLog.d("restore layout");
         if(savedInstanceState != null)
         {
-            LogD.out("restoring");
+            QNLog.d("restoring");
             Parcelable savedRecyclerLayoutState = savedInstanceState.getParcelable(BUNDLE_RECYCLER_LAYOUT);
             mRecyclerView.getLayoutManager().onRestoreInstanceState(savedRecyclerLayoutState);
         }
@@ -152,7 +152,7 @@ public class FlightFragment extends Fragment
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        LogD.out("saving instance");
+        QNLog.d("saving instance");
         outState.putParcelable(BUNDLE_RECYCLER_LAYOUT, mRecyclerView.getLayoutManager().onSaveInstanceState());
     }
 
@@ -204,6 +204,9 @@ public class FlightFragment extends Fragment
         mFirstVisiblePosition = mManager.findFirstVisibleItemPosition();
         getArguments().putBoolean("Reloaded", false);
 
+        if (fetchTasker != null)
+            fetchTasker.cancel(true);
+
         super.onStop();
     }
 
@@ -214,7 +217,7 @@ public class FlightFragment extends Fragment
         protected void onPreExecute() {
             super.onPreExecute();
 
-        mFlightAll.clear();
+            mFlightAll.clear();
             mLoading.setVisibility(View.VISIBLE);
         }
 
