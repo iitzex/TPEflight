@@ -3,17 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity">
     <item
-        android:visible="false"
-        android:id="@+id/info_alarm"
-        android:title="設定鬧鐘"
-        android:icon="@drawable/ic_alarm"
+        android:id="@+id/track_deleteall"
+        android:title="重新載入航班資訊"
+        android:icon="@drawable/ic_deleleall"
         android:orderInCategory="10"
         app:showAsAction="ifRoom"/>
     <item
-        android:id="@+id/info_star"
-        android:title="追蹤航班"
-        android:icon="@drawable/ic_star"
+        android:id="@+id/track_refresh"
+        android:title="重新載入航班資訊"
+        android:icon="@drawable/ic_refresh"
         android:orderInCategory="10"
         app:showAsAction="ifRoom"/>
-
 </menu>

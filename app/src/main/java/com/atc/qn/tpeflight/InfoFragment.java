@@ -1,5 +1,6 @@
 package com.atc.qn.tpeflight;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
@@ -15,58 +16,81 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class InfoFragment extends Fragment {
+    private Activity mContext;
+    private Flight mInfo;
+    private ImageView mStatusLogo;
+    private ImageView mAirlinesLogo;    
+    private TextView mAirlinesTW, mNO, mTerminal;
+    private TextView mCounter, mCounterTxt;
+    private TextView mGate, mStatus;
+    private TextView mExpectTime, mActualTime;
+    private TextView mDestinationTxt, mDestinationTW;
+    private TextView mType;
+    private Button mPhone;
+
+    private TypedArray arrayLogo;
+    private String [] arrayIATA;
+    private String [] arrayPhone;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-        getActivity().setTitle(getActivity().getString(R.string.name_info));
+        mContext = getActivity();
+        mContext.setTitle(mContext.getString(R.string.name_info));
 
-        //dismiss input keyboard
-        InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+        View view = inflater.inflate(R.layout.info, container, false);
+        mStatusLogo = (ImageView) view.findViewById(R.id.infoStatusLogo);
+        mAirlinesLogo = (ImageView) view.findViewById(R.id.infoAirlinesLogo);
+        mAirlinesTW = (TextView) view.findViewById(R.id.infoAirlinesTW);
+        mNO = (TextView) view.findViewById(R.id.infoNO);
 
-        return inflater.inflate(R.layout.info, container, false);
+        mTerminal = (TextView) view.findViewById(R.id.infoTerminal);
+        mCounter = (TextView) view.findViewById(R.id.infoCounter);
+        mCounterTxt = (TextView) view.findViewById(R.id.infoCounterTxt);
+        mGate = (TextView) view.findViewById(R.id.infoGate);
+
+        mStatus = (TextView) view.findViewById(R.id.infoStatus);
+        mExpectTime = (TextView) view.findViewById(R.id.infoExpectTime);
+        mActualTime = (TextView) view.findViewById(R.id.infoActualTime);
+        mDestinationTxt = (TextView) view.findViewById(R.id.infoDestinationTxt);
+        mDestinationTW = (TextView) view.findViewById(R.id.infoDestinationTW);
+        mType = (TextView) view.findViewById(R.id.infoType);
+        mPhone = (Button) view.findViewById(R.id.infoPhone);
+
+        arrayLogo = getResources().obtainTypedArray(R.array.arrayLogo);
+        arrayIATA = getResources().getStringArray(R.array.arrayIATA);
+        arrayPhone = getResources().getStringArray(R.array.airlinesPhone);
+
+        return view;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        //dismiss input keyboard
+        InputMethodManager imm = (InputMethodManager)mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(mContext.getCurrentFocus().getWindowToken(), 0);
 
-        String Airlines = getArguments().getString("Airlines", "Airlines");
-        String AirlinesTW = getArguments().getString("AirlinesTW", "AirlinesTW");
-        String NO = getArguments().getString("NO", "NO");
-        String Action = getArguments().getString("Action", "Action");
-        String Terminal = getArguments().getString("Terminal", "Terminal");
-        String Counter = getArguments().getString("Counter", "Counter");
-        String Baggage = getArguments().getString("Baggage", "Baggage");
-        String Gate = getArguments().getString("Gate", "Gate");
+        mInfo = getArguments().getParcelable("Flight");
+        String Airlines = mInfo.getAirlines();
+        String AirlinesTW = mInfo.getAirlinesTW();
+        String NO = mInfo.getFlightNO();
+        String Action = mInfo.getAction();
+        String Terminal = mInfo.getTerminal();
+        String Counter = mInfo.getCounter();
+        String Baggage = mInfo.getBaggage();
+        String Gate = mInfo.getGate();
 
-        String Status = getArguments().getString("Status", "Status");
-        String ExpectDay = getArguments().getString("ExpectDay", "ExpectDay");
-        String ExpectTime = getArguments().getString("ExpectTime", "ExpectTime");
-        String ActualDay = getArguments().getString("ActualDay", "ActualDay");
-        String ActualTime = getArguments().getString("ActualTime", "ActualTime");
-        String DestinationTW = getArguments().getString("DestinationTW", "DestinationTW");
-        String Type = getArguments().getString("Type", "Type");
-
-        ImageView mStatusLogo = (ImageView) getActivity().findViewById(R.id.infoStatusLogo);
-        ImageView mAirlinesLogo = (ImageView) getActivity().findViewById(R.id.infoAirlinesLogo);
-        TextView mAirlinesTW = (TextView) getActivity().findViewById(R.id.infoAirlinesTW);
-        TextView mNO = (TextView) getActivity().findViewById(R.id.infoNO);
-
-        TextView mTerminal = (TextView) getActivity().findViewById(R.id.infoTerminal);
-        TextView mCounter = (TextView) getActivity().findViewById(R.id.infoCounter);
-        TextView mCounterTxt = (TextView) getActivity().findViewById(R.id.infoCounterTxt);
-        TextView mGate = (TextView) getActivity().findViewById(R.id.infoGate);
-
-        TextView mStatus = (TextView) getActivity().findViewById(R.id.infoStatus);
-        TextView mExpectTime = (TextView) getActivity().findViewById(R.id.infoExpectTime);
-        TextView mActualTime = (TextView) getActivity().findViewById(R.id.infoActualTime);
-        TextView mDestinationTxt = (TextView) getActivity().findViewById(R.id.infoDestinationTxt);
-        TextView mDestinationTW = (TextView) getActivity().findViewById(R.id.infoDestinationTW);
-        TextView mType = (TextView) getActivity().findViewById(R.id.infoType);
-        Button mPhone = (Button) getActivity().findViewById(R.id.infoPhone);
+        String Status = mInfo.getStatus();
+        String ExpectDay = mInfo.getExpectDay();
+        String ExpectTime = mInfo.getExpectTime();
+        String ActualDay = mInfo.getActualDay();
+        String ActualTime = mInfo.getActualTime();
+        String DestinationTW = mInfo.getDestinationTW();
+        String Type = mInfo.getType();
 
         mAirlinesTW.setText(AirlinesTW);
         mNO.setText(NO);
@@ -89,10 +113,6 @@ public class InfoFragment extends Fragment {
             mDestinationTxt.setText("出發地");
         }
 
-        final TypedArray arrayLogo = getResources().obtainTypedArray(R.array.arrayLogo);
-        final String [] arrayIATA = getResources().getStringArray(R.array.arrayIATA);
-        final String [] arrayPhone = getResources().getStringArray(R.array.airlinesPhone);
-
         for (int i = 0; i < arrayIATA.length; i++){
             if (Airlines.equals(arrayIATA[i].toUpperCase())){
                 mAirlinesLogo.setImageResource(arrayLogo.getResourceId(i, 0));
@@ -108,7 +128,12 @@ public class InfoFragment extends Fragment {
                 break;
             }
         }
+    }
+
+    @Override
+    public void onStop() {
         arrayLogo.recycle();
+        super.onStop();
     }
 
     @Override
@@ -120,12 +145,19 @@ public class InfoFragment extends Fragment {
             dialog.show(getFragmentManager(), "AlarmDialog");
 
             return true;
+        }else if (id == R.id.info_star) {
+            String msg = mInfo.getAirlinesTW() + " " + mInfo.getFlightNO() + "已加入追蹤名單";
+            Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
+            ((FlightInterface)mContext).onStarClick(mInfo);
+
+            return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
-        getActivity().getMenuInflater().inflate(R.menu.info_menu, menu);
+        mContext.getMenuInflater().inflate(R.menu.info_menu, menu);
     }
 }

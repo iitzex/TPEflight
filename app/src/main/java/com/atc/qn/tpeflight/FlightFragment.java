@@ -1,9 +1,9 @@
 package com.atc.qn.tpeflight;
 
+import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -29,47 +29,46 @@ import android.os.Handler;
 public class FlightFragment extends Fragment
         implements SearchView.OnQueryTextListener
 {
-    static private ArrayList<String> mFlightAll = new ArrayList<>();
+    private Activity mContext;
+    private static ArrayList<String> mFlightAll = new ArrayList<>();
     private RecyclerView mRecyclerView;
     private FlightAdapter mAdapter;
     private LinearLayoutManager mManager;
-    private static String mAction, mUpdateTime;
     private ProgressBar mLoading;
-    private static int mFirstVisiblePosition = -1;
+    private TextView mUpdateTextView;
+    private static String mAction, mUpdateTime;
+    private static int mPositionDeparture = -1, mPositionArrival = -1;
+    private static int mPosition = -1;
     private FlightAsyncTask fetchTasker;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        mContext = getActivity();
         setHasOptionsMenu(true);
-        if(savedInstanceState != null)
-        {
-            QNLog.d("--restoring");
-            Parcelable savedRecyclerLayoutState = savedInstanceState.getParcelable(BUNDLE_RECYCLER_LAYOUT);
-            mRecyclerView.getLayoutManager().onRestoreInstanceState(savedRecyclerLayoutState);
-        }else
-            QNLog.d("--null state");
 
-        return inflater.inflate(R.layout.flight, container, false);
+        mAction = getArguments().getString("Action", "D");
+        if (mAction.equals("D")) {
+            mPosition = mPositionDeparture;
+        }else {
+            mPosition = mPositionArrival;
+        }
+
+        View view =  inflater.inflate(R.layout.flight, container, false);
+        mLoading = (ProgressBar) view.findViewById(R.id.flight_loading);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.flight_content);
+        mUpdateTextView = (TextView) view.findViewById(R.id.flight_updatetime);
+        return view;
     }
 
     public void onActivityCreated(Bundle savedInstanceState) {
-        if(savedInstanceState != null)
-        {
-            QNLog.d("restoring");
-            Parcelable savedRecyclerLayoutState = savedInstanceState.getParcelable(BUNDLE_RECYCLER_LAYOUT);
-            mRecyclerView.getLayoutManager().onRestoreInstanceState(savedRecyclerLayoutState);
-        }else
-            QNLog.d("null state");
 
-        mManager = new LinearLayoutManager(getActivity());
+        mManager = new LinearLayoutManager(mContext);
         mManager.setOrientation(LinearLayoutManager.VERTICAL);
 
-        mLoading = (ProgressBar) getView().findViewById(R.id.flight_loading);
-        mRecyclerView = (RecyclerView) getActivity().findViewById(R.id.flight_content);
         mRecyclerView.setLayoutManager(mManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.setHasFixedSize(true);
-        RecyclerView.ItemDecoration itemDecoration = new Divider(getActivity(), Divider.VERTICAL_LIST);
+        RecyclerView.ItemDecoration itemDecoration = new Divider(mContext, Divider.VERTICAL_LIST);
         mRecyclerView.addItemDecoration(itemDecoration);
         mRecyclerView.setAdapter(mAdapter);
 
@@ -80,7 +79,6 @@ public class FlightFragment extends Fragment
     public void onStart() {
         super.onStart();
 
-        QNLog.d("frag start, " + mFirstVisiblePosition);
         if (mFlightAll.size() == 0) { //fetch flight infomation while empty
             fetchFlight();
         } else { //with information
@@ -92,14 +90,14 @@ public class FlightFragment extends Fragment
     public void onResume() {
         super.onResume();
 
-        mAction = getArguments().getString("FlightAction", "D");
         if (mAction.equals("D"))
-            getActivity().setTitle(getActivity().getString(R.string.name_departure));
+            mContext.setTitle(mContext.getString(R.string.name_departure));
         else
-            getActivity().setTitle(getActivity().getString(R.string.name_arrival));
+            mContext.setTitle(mContext.getString(R.string.name_arrival));
     }
 
     private void fetchFlight() {
+        getArguments().putBoolean("Reloaded", false);
         fetchTasker = (FlightAsyncTask) new FlightAsyncTask().execute(null, null, null);
 
         Calendar timeInst = Calendar.getInstance();
@@ -110,26 +108,20 @@ public class FlightFragment extends Fragment
     private void onFinishView(final boolean updated) {
         mLoading.setVisibility(View.INVISIBLE);
 
-        TextView mUpdateTextView = (TextView) getActivity().findViewById(R.id.flight_updatetime);
         mUpdateTextView.setText("最近更新：" + mUpdateTime);
 
         Runnable r = new Runnable() {
             @Override
             public void run() {
-                mAdapter = new FlightAdapter(mFlightAll, updated, mAction, getActivity());
+                mAdapter = new FlightAdapter(mFlightAll, updated, mAction, mContext);
 
-                // TODO: 2015/10/17
-                // fix the restore problem
-                boolean mReloaded = getArguments().getBoolean("Reloaded", false);
-                if (mReloaded) {
+                if (mPosition == -1) {
                     mManager.scrollToPositionWithOffset(mAdapter.getTimePosition(), 0);
-                    QNLog.d();
-                    QNLog.d(mFirstVisiblePosition);
-                }else
-                    mManager.scrollToPositionWithOffset(mFirstVisiblePosition, 0);
+                }else {
+                    mManager.scrollToPositionWithOffset(mPosition, 0);
+                }
 
                 mRecyclerView.setAdapter(mAdapter);
-
             }
         };
 
@@ -137,38 +129,17 @@ public class FlightFragment extends Fragment
         mHandler.postDelayed(r, 300);
     }
 
-    private static final String BUNDLE_RECYCLER_LAYOUT = "classname.recycler.layout";
-
-    @Override
-    public void onViewStateRestored(Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-        QNLog.d("restore layout");
-        if(savedInstanceState != null)
-        {
-            QNLog.d("restoring");
-            Parcelable savedRecyclerLayoutState = savedInstanceState.getParcelable(BUNDLE_RECYCLER_LAYOUT);
-            mRecyclerView.getLayoutManager().onRestoreInstanceState(savedRecyclerLayoutState);
-        }
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        QNLog.d("saving instance");
-        outState.putParcelable(BUNDLE_RECYCLER_LAYOUT, mRecyclerView.getLayoutManager().onSaveInstanceState());
-    }
-
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
-        getActivity().getMenuInflater().inflate(R.menu.main_menu, menu);
+        mContext.getMenuInflater().inflate(R.menu.main_menu, menu);
         setupSearchView(menu);
     }
 
     private void setupSearchView(Menu menu) {
         // Associate searchable configuration with the SearchView
-        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        SearchManager searchManager = (SearchManager) mContext.getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(mContext.getComponentName()));
 
         searchView.setOnQueryTextListener(this);
     }
@@ -182,6 +153,8 @@ public class FlightFragment extends Fragment
             mManager.scrollToPositionWithOffset(mAdapter.getTimePosition(), 0);
             return true;
         }else if (id == R.id.action_refresh) {
+            mPosition = mManager.findFirstVisibleItemPosition();
+
             fetchFlight();
             return true;
         }
@@ -196,15 +169,23 @@ public class FlightFragment extends Fragment
     }
 
     @Override
-    public boolean onQueryTextChange(String newText) {
-        mAdapter.getFilter().filter(newText);
+    public boolean onQueryTextChange(String query) {
+        mAdapter.getFilter().filter(query);
         return true;
     }
 
     @Override
     public void onStop() {
-        mFirstVisiblePosition = mManager.findFirstVisibleItemPosition();
+        mPosition = mManager.findFirstVisibleItemPosition();
         getArguments().putBoolean("Reloaded", false);
+
+        if (mPosition >= 0) {
+            if (mAction.equals("D")) {
+                mPositionDeparture = mPosition;
+            } else {
+                mPositionArrival = mPosition;
+            }
+        }
 
         if (fetchTasker != null)
             fetchTasker.cancel(true);
@@ -213,7 +194,7 @@ public class FlightFragment extends Fragment
     }
 
     private class FlightAsyncTask extends AsyncTask<Void, Void, Integer> {
-        String addr = "http://www.taoyuan-airport.com/uploads/flightx/a_flight_v4.txt";
+        final static String addr = "http://www.taoyuan-airport.com/uploads/flightx/a_flight_v4.txt";
 
         @Override
         protected void onPreExecute() {

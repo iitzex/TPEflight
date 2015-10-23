@@ -10,6 +10,7 @@
     <string name="name_airlines">航空公司資訊</string>
     <string name="name_info">航班資訊</string>
     <string name="name_track">追蹤航班</string>
+    <string name="name_drawer">桃園機場航班資訊</string>
 
     <string-array name="arrayLogo">
         <item>@drawable/l_oz</item>

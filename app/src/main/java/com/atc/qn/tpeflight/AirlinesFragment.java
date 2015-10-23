@@ -20,13 +20,13 @@ import java.util.ArrayList;
 public class AirlinesFragment extends Fragment {
     LayoutInflater inflater;
     static private ArrayList<LinearLayout> airlines_array;
-    static private LinearLayout top_layout;
+    private LinearLayout top_layout;
+    private ProgressBar loading;
 
     private static TypedArray arrayLogo;
     private static String [] airlinesTWList;
     private static String [] airlinesPlaceList;
     private static String [] airlinesPhoneList;
-    private ProgressBar loading;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,7 +44,11 @@ public class AirlinesFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.airlines, container, false);
+        View view = inflater.inflate(R.layout.airlines, container, false);
+        loading = (ProgressBar) view.findViewById(R.id.airlines_loading);
+        top_layout = (LinearLayout) view.findViewById(R.id.airlines_content);
+
+        return view;
     }
 
     @Override
@@ -52,10 +56,7 @@ public class AirlinesFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         getActivity().setTitle(getActivity().getString(R.string.name_airlines));
 
-        loading = (ProgressBar)getView().findViewById(R.id.airlines_loading);
         loading.setVisibility(View.VISIBLE);
-        top_layout = (LinearLayout) getActivity().findViewById(R.id.airlines_content);
-
         new AirlinesAsyncTask().execute(null, null, null);
     }
 

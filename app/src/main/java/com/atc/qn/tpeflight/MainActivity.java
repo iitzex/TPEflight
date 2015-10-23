@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -11,22 +12,32 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 
-import java.text.SimpleDateFormat;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONException;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.text.SimpleDateFormat;
 
 public class MainActivity extends AppCompatActivity
         implements DrawerCallback, FlightInterface
 {
+    private FragmentManager fragMgr = getSupportFragmentManager();
     private DrawerFragment mDrawerFragment;
-    FragmentManager fragMgr = getSupportFragmentManager();
-    AlarmManager alarmMgr;
-    AirlinesFragment infoFrag = new AirlinesFragment();
-    ArrayList<Flight> mTracking = new ArrayList<>();
+    private ArrayList<Flight> mTrackList = new ArrayList<>();
+    private SharedPreferences mPrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            mTrackList = savedInstanceState.getParcelableArrayList("TRACKING");
+            QNLog.d(mTrackList.toString());
+        }
+
         setContentView(R.layout.activity_main);
 //        if (savedInstanceState != null) {
 //            //Restore the fragment's instance
@@ -40,7 +51,7 @@ public class MainActivity extends AppCompatActivity
         mDrawerFragment = (DrawerFragment) getFragmentManager().findFragmentById(R.id.fragment_drawer);
         mDrawerFragment.setup(R.id.fragment_drawer, (DrawerLayout) findViewById(R.id.drawer), mToolbar);
 
-        alarmSetting();
+//        alarmSetting();
     }
 
     public void alarmSetting(){
@@ -50,7 +61,7 @@ public class MainActivity extends AppCompatActivity
         QNLog.d(day.format(calendar.getTime()));
         QNLog.d(calendar.getTimeZone().toString());
 
-        alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        AlarmManager alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this, AlarmReceiver.class);
         intent.putExtra("name", "TPEflight");
 
@@ -58,58 +69,79 @@ public class MainActivity extends AppCompatActivity
         alarmMgr.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pending);
     }
 
-//    @Override
-//    protected void onSaveInstanceState(Bundle outState) {
-//        super.onSaveInstanceState(outState);
-//
-//        //Save the fragment's instance
-//        getSupportFragmentManager().putFragment(outState, "mContent", mContent);
-//    }
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList("TRACKING", mTrackList);
+    }
 
     @Override
     public void onDrawerItemSelected(int position) {
-        // update the main_menu content by replacing fragments
-        FlightFragment flightFrag = new FlightFragment();
-
-        Bundle args = new Bundle();
-        args.putBoolean("Reloaded", true);
-
         //clear stack
         for(int i = 0; i < fragMgr.getBackStackEntryCount(); ++i) {
             fragMgr.popBackStack();
         }
 
         if (position == 0) {
-            args.putString("FlightAction", "D");
+            FlightFragment flightFrag = new FlightFragment();
+            Bundle args = new Bundle();
+            args.putString("Action", "D");
             flightFrag.setArguments(args);
 
             fragMgr.beginTransaction()
                     .replace(R.id.container, flightFrag)
                     .commit();
-
         }else if (position == 1) {
-            args.putString("FlightAction", "A");
+            FlightFragment flightFrag = new FlightFragment();
+            Bundle args = new Bundle();
+            args.putString("Action", "A");
             flightFrag.setArguments(args);
 
             fragMgr.beginTransaction()
                     .replace(R.id.container, flightFrag)
                     .commit();
         }else if (position == 2) {
-            WxFragment wxFrag = new WxFragment();
-            fragMgr.beginTransaction()
-                    .replace(R.id.container, wxFrag)
-                    .commit();
+            TrackFragment trackFragment = new TrackFragment();
+            Bundle args = new Bundle();
+            args.putParcelableArrayList("TRACKING", mTrackList);
+            trackFragment.setArguments(args);
 
+            fragMgr.beginTransaction()
+                    .replace(R.id.container, trackFragment)
+                    .commit();
         }else if (position == 3) {
             WxFragment wxFrag = new WxFragment();
             fragMgr.beginTransaction()
                     .replace(R.id.container, wxFrag)
                     .commit();
         }else if (position == 4) {
+            AirlinesFragment airlinesFragment = new AirlinesFragment();
             fragMgr.beginTransaction()
-                .replace(R.id.container, infoFrag)
+                .replace(R.id.container, airlinesFragment)
                 .commit();
         }
+    }
+    @Override
+    public void onResume() {
+        super.onResume();  // Always call the superclass method first
+
+        Gson gson = new Gson();
+        mPrefs = getSharedPreferences("PREFERENCES", MODE_PRIVATE);
+        String mTrackJson = mPrefs.getString("TRACKING", null);
+
+        Type listType = new TypeToken<ArrayList<Flight>>() {}.getType();
+        mTrackList = gson.fromJson(mTrackJson, listType);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        SharedPreferences.Editor Pref = mPrefs.edit();
+        Gson data = new Gson();
+        String mTrackJson = data.toJson(mTrackList);
+        Pref.putString("TRACKING", mTrackJson);
+        Pref.apply();
     }
 
     @Override
@@ -141,28 +173,12 @@ public class MainActivity extends AppCompatActivity
 //    }
 
     @Override
-    public void onFlightItemClick(Flight info) {
+    public void onFlightItemClick(Flight mInfo) {
         FragmentManager fragMgr = getSupportFragmentManager();
 
         InfoFragment infoFrag = new InfoFragment();
         Bundle infoArgs = new Bundle();
-        infoArgs.putString("AirlinesTW", info.getAirlinesTW());
-        infoArgs.putString("Airlines", info.getAirlines());
-        infoArgs.putString("NO", info.getFlightNO());
-        infoArgs.putString("Action", info.getAction());
-        infoArgs.putString("ExpectDay", info.getExpectDay());
-        infoArgs.putString("ExpectTime", info.getExpectTime());
-        infoArgs.putString("ActualDay", info.getActualDay());
-        infoArgs.putString("ActualTime", info.getActualTime());
-        infoArgs.putString("Terminal", info.getTerminal());
-        infoArgs.putString("Counter", info.getCounter());
-        infoArgs.putString("Baggage", info.getBaggage());
-        infoArgs.putString("Gate", info.getGate());
-        infoArgs.putString("Status", info.getStatus());
-        infoArgs.putString("Destination", info.getDestination());
-        infoArgs.putString("DestinationTW", info.getDestinationTW());
-        infoArgs.putString("Type", info.getType());
-
+        infoArgs.putParcelable("Flight", mInfo);
         infoFrag.setArguments(infoArgs);
 
         fragMgr.beginTransaction()
@@ -174,6 +190,22 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onAlarmClick() {
         QNLog.d("alarm click");
+    }
+
+    @Override
+    public void onStarClick(Flight mInfo) {
+        for (Flight item : mTrackList){
+            if (item.getFlightNO().equals(mInfo.getFlightNO()) &&
+                    item.getAction().equals(mInfo.getAction())) {
+                return;
+            }
+        }
+
+        mTrackList.add(mInfo);
+    }
+
+    public int getTrackListSize(){
+        return mTrackList.size();
     }
 }
 

@@ -1,6 +1,9 @@
 package com.atc.qn.tpeflight;
 
-public class Flight {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Flight implements Parcelable{
     private String action;
     private String flightNO;
     private String airlines;
@@ -158,4 +161,60 @@ public class Flight {
     public void setBaggage(String baggage) {
         this.baggage = baggage;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(action);
+        dest.writeString(flightNO);
+        dest.writeString(airlines);
+        dest.writeString(airlinesTW);
+        dest.writeString(gate);
+        dest.writeString(terminal);
+        dest.writeString(expectDay);
+        dest.writeString(expectTime);
+        dest.writeString(actualDay);
+        dest.writeString(actualTime);
+        dest.writeString(destination);
+        dest.writeString(destinationIATA);
+        dest.writeString(destinationTW);
+        dest.writeString(status);
+        dest.writeString(type);
+        dest.writeString(counter);
+        dest.writeString(baggage);
+    }
+
+    public static final Parcelable.Creator<Flight> CREATOR = new Parcelable.Creator<Flight>() {
+        @Override
+        public Flight createFromParcel(Parcel source) {
+            Flight mFlight = new Flight();
+            mFlight.setAction(source.readString());
+            mFlight.setFlightNO(source.readString());
+            mFlight.setAirlines(source.readString());
+            mFlight.setAirlinesTW(source.readString());
+            mFlight.setGate(source.readString());
+            mFlight.setTerminal(source.readString());
+            mFlight.setExpectDay(source.readString());
+            mFlight.setExpectTime(source.readString());
+            mFlight.setActualDay(source.readString());
+            mFlight.setActualTime(source.readString());
+            mFlight.setDestination(source.readString());
+            mFlight.setDestinationIATA(source.readString());
+            mFlight.setDestinationTW(source.readString());
+            mFlight.setStatus(source.readString());
+            mFlight.setType(source.readString());
+            mFlight.setCounter(source.readString());
+            mFlight.setBaggage(source.readString());
+
+            return mFlight;
+        }
+        @Override
+        public Flight[] newArray(int size) {
+            return new Flight[size];
+        }
+    };
 }

@@ -2,6 +2,7 @@ package com.atc.qn.tpeflight;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -45,6 +46,7 @@ public class DrawerFragment extends Fragment
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
+    private String mOrigTitle = "";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -90,6 +92,7 @@ public class DrawerFragment extends Fragment
     }
 
     public List<DrawerItem> getMenu() {
+        FlightInterface mContext = (FlightInterface) getActivity();
         List<DrawerItem> items = new ArrayList<>();
 
         items.add(new DrawerItem(getActivity().getString(R.string.name_departure),
@@ -97,6 +100,7 @@ public class DrawerFragment extends Fragment
         items.add(new DrawerItem(getActivity().getString(R.string.name_arrival),
                 ContextCompat.getDrawable(getActivity(), R.drawable.v_landing)));
         items.add(new DrawerItem(getActivity().getString(R.string.name_track),
+//                    + "(" + mContext.getTrackListSize() + ")",
                 ContextCompat.getDrawable(getActivity(), R.drawable.v_star)));
         items.add(new DrawerItem(getActivity().getString(R.string.name_wx),
                 ContextCompat.getDrawable(getActivity(), R.drawable.ic_wx)));
@@ -137,7 +141,8 @@ public class DrawerFragment extends Fragment
                     sp.edit().putBoolean(PREF_USER_LEARNED_DRAWER, true).apply();
                 }
 
-                getActivity().setTitle("桃園機場航班資訊");
+                mOrigTitle = getActivity().getTitle().toString();
+                getActivity().setTitle(getActivity().getString(R.string.name_drawer));
                 getActivity().invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
             }
         };

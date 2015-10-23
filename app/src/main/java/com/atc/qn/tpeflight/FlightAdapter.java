@@ -15,18 +15,27 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHolder>
-        implements Filterable
-{
+        implements Filterable {
     private static ArrayList<Flight> mFlightAll = new ArrayList<>();
     private static ArrayList<Flight> mFlightDeparture = new ArrayList<>();
     private static ArrayList<Flight> mFlightArrival = new ArrayList<>();
     private ArrayList<Flight> mOrig;
     private String mAction = "";
     private Context mContext;
-    private static int mClickPosition = -1;
+    private static int mClickPositionDeparture = -1;
+    private static int mClickPositionArrival = -1;
 
-    public FlightAdapter(ArrayList<String> mFlightAllStr, boolean updated, String mClass, Context mContext) {
-        this.mAction = mClass;
+    public FlightAdapter(ArrayList<Flight> mTracking, String mAction, Context mContext) {
+        this.mAction = mAction;
+        this.mContext = mContext;
+
+        if (mAction.equals("TRACKING")) {
+            mFlightAll = mTracking;
+        }
+    }
+
+    public FlightAdapter(ArrayList<String> mFlightAllStr, boolean updated, String mAction, Context mContext) {
+        this.mAction = mAction;
         this.mContext = mContext;
 
         if(updated) {
@@ -61,13 +70,17 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHold
             }
         }
 
-        if (mClass.equals("A"))
+        if (mAction.equals("A"))
             mFlightAll = mFlightArrival;
         else
             mFlightAll = mFlightDeparture;
     }
+
     public int getClickPosition() {
-        return mClickPosition;
+        if (mAction.equals("D"))
+            return mClickPositionDeparture;
+        else
+            return mClickPositionArrival;
     }
     public int getTimePosition(){
         Calendar timeInst = Calendar.getInstance();
@@ -106,7 +119,11 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHold
             public void onClick(View v) {
                 FlightInterface mCallback = (FlightInterface) mContext;
                 mCallback.onFlightItemClick(target);
-                mClickPosition = position;
+//                mClickPosition = position;
+                if (mAction.equals("D"))
+                    mClickPositionDeparture = position;
+                else
+                    mClickPositionArrival = position;
             }
         });
 

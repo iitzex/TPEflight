@@ -22,14 +22,31 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class WxFragment extends Fragment{
-    String mContent = "";
-    WxAsyncTask mTask;
+    private String mContent = "";
+    private TextView wx_vis;
+    private TextView wx_wind;
+    private TextView wx_cloud;
+    private TextView wx_temp;
+    private TextView wx_dew;
+    private ImageView wx_icon;
+    private WxAsyncTask mTask;
+    private ProgressBar mLoading;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(true);
 
-        return inflater.inflate(R.layout.wx, container, false);
+        View view = inflater.inflate(R.layout.wx, container, false);
+        wx_vis = (TextView) view.findViewById(R.id.wx_vis);
+        wx_wind = (TextView) view.findViewById(R.id.wx_wind);
+        wx_cloud = (TextView) view.findViewById(R.id.wx_cloud);
+        wx_temp = (TextView) view.findViewById(R.id.wx_temperature);
+        wx_dew = (TextView) view.findViewById(R.id.wx_dewpoint);
+        wx_icon = (ImageView) view.findViewById(R.id.wx_icon);
+
+        mLoading = (ProgressBar) view.findViewById(R.id.wx_loading);
+
+        return view;
     }
 
     @Override
@@ -72,12 +89,6 @@ public class WxFragment extends Fragment{
         String mTemp = temp + " °C";
         String mDew = dew + " °C";
 
-        TextView wx_vis = (TextView) getView().findViewById(R.id.wx_vis);
-        TextView wx_wind = (TextView) getView().findViewById(R.id.wx_wind);
-        TextView wx_cloud = (TextView) getView().findViewById(R.id.wx_cloud);
-        TextView wx_temp = (TextView) getView().findViewById(R.id.wx_temperature);
-        TextView wx_dew = (TextView) getView().findViewById(R.id.wx_dewpoint);
-
         wx_vis.setText("能見度：\t" + mVis);
         wx_wind.setText("風向/速：\t" + mWind);
         wx_cloud.setText("雲幕高：\t" + mCloud);
@@ -89,7 +100,6 @@ public class WxFragment extends Fragment{
 
     private void setIcon(String wx, String ceil)
     {
-        ImageView icon = (ImageView)getView().findViewById(R.id.wx_icon);
         Calendar timeInst = Calendar.getInstance();
         SimpleDateFormat day = new SimpleDateFormat("HH");
         String hour = day.format(timeInst.getTime());
@@ -127,7 +137,7 @@ public class WxFragment extends Fragment{
         }
 
         int resId = getResources().getIdentifier(iconName, "drawable", getActivity().getPackageName());
-        icon.setImageResource(resId);
+        wx_icon.setImageResource(resId);
     }
 
     private String translateVis(String vis){
@@ -217,14 +227,12 @@ public class WxFragment extends Fragment{
     }
 
     private class WxAsyncTask extends AsyncTask<Void , Void, Integer> {
-        ProgressBar mLoading;
         String addr = "http://aoaws.caa.gov.tw/cgi-bin/wmds/aoaws_metars?metar_ids=" +
                 "RCTP" + "&NHOURS=Lastest&std_trans=";
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            mLoading = (ProgressBar)getView().findViewById(R.id.wx_loading);
             mLoading.setVisibility(View.VISIBLE);
         }
 
