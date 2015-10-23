@@ -1,0 +1,55 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:id="@+id/alarm_layout">
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:text="15分前"
+        android:textSize="20sp"
+        android:textColor="@color/myPrimaryDarkColor"
+        android:id="@+id/alarm_15m" />
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:text="30分前"
+        android:textSize="20sp"
+        android:textColor="@color/myPrimaryDarkColor"
+        android:id="@+id/alarm_30m" />
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:text="1小時前"
+        android:textSize="20sp"
+        android:textColor="@color/myPrimaryDarkColor"
+        android:id="@+id/alarm_1h" />
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:text="2小時前"
+        android:textSize="20sp"
+        android:textColor="@color/myPrimaryDarkColor"
+        android:id="@+id/alarm_2h" />
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:text="3小時前"
+        android:textSize="20sp"
+        android:textColor="@color/myPrimaryDarkColor"
+        android:id="@+id/alarm_3h" />
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:text="4小時前"
+        android:textSize="20sp"
+        android:textColor="@color/myPrimaryDarkColor"
+        android:id="@+id/alarm_4h" />
+</LinearLayout>

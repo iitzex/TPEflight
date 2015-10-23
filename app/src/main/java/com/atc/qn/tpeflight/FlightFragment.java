@@ -64,7 +64,7 @@ public class FlightFragment extends Fragment
         mManager = new LinearLayoutManager(getActivity());
         mManager.setOrientation(LinearLayoutManager.VERTICAL);
 
-        mLoading = (ProgressBar)getView().findViewById(R.id.flight_loading);
+        mLoading = (ProgressBar) getView().findViewById(R.id.flight_loading);
         mRecyclerView = (RecyclerView) getActivity().findViewById(R.id.flight_content);
         mRecyclerView.setLayoutManager(mManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -123,6 +123,8 @@ public class FlightFragment extends Fragment
                 boolean mReloaded = getArguments().getBoolean("Reloaded", false);
                 if (mReloaded) {
                     mManager.scrollToPositionWithOffset(mAdapter.getTimePosition(), 0);
+                    QNLog.d();
+                    QNLog.d(mFirstVisiblePosition);
                 }else
                     mManager.scrollToPositionWithOffset(mFirstVisiblePosition, 0);
 

@@ -115,7 +115,10 @@ public class InfoFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.info_star) {
+        if (id == R.id.info_alarm) {
+            AlarmDialog dialog = new AlarmDialog();
+            dialog.show(getFragmentManager(), "AlarmDialog");
+
             return true;
         }
         return super.onOptionsItemSelected(item);

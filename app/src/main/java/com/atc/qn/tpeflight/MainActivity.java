@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity
-        implements DrawerCallback, onFlightClickListener
+        implements DrawerCallback, FlightInterface
 {
     private DrawerFragment mDrawerFragment;
     FragmentManager fragMgr = getSupportFragmentManager();
@@ -169,6 +169,11 @@ public class MainActivity extends AppCompatActivity
                 .replace(R.id.container, infoFrag)
                 .addToBackStack("infoFrag")
                 .commit();
+    }
+
+    @Override
+    public void onAlarmClick() {
+        QNLog.d("alarm click");
     }
 }
 

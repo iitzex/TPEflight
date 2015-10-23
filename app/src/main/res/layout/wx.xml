@@ -27,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="18sp"
-            android:textColor="@color/myPrimaryDarkColor" 
+            android:textColor="@color/myPrimaryDarkColor"
             android:layout_margin="7dp"
             android:id="@+id/wx_vis"/>
         <TextView

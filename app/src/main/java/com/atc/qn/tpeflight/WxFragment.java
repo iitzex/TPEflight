@@ -72,11 +72,11 @@ public class WxFragment extends Fragment{
         String mTemp = temp + " °C";
         String mDew = dew + " °C";
 
-        TextView wx_vis = (TextView)getView().findViewById(R.id.wx_vis);
-        TextView wx_wind = (TextView)getView().findViewById(R.id.wx_wind);
-        TextView wx_cloud = (TextView)getView().findViewById(R.id.wx_cloud);
-        TextView wx_temp = (TextView)getView().findViewById(R.id.wx_temperature);
-        TextView wx_dew = (TextView)getView().findViewById(R.id.wx_dewpoint);
+        TextView wx_vis = (TextView) getView().findViewById(R.id.wx_vis);
+        TextView wx_wind = (TextView) getView().findViewById(R.id.wx_wind);
+        TextView wx_cloud = (TextView) getView().findViewById(R.id.wx_cloud);
+        TextView wx_temp = (TextView) getView().findViewById(R.id.wx_temperature);
+        TextView wx_dew = (TextView) getView().findViewById(R.id.wx_dewpoint);
 
         wx_vis.setText("能見度：\t" + mVis);
         wx_wind.setText("風向/速：\t" + mWind);
@@ -85,7 +85,6 @@ public class WxFragment extends Fragment{
         wx_dew.setText(("露點：\t" + mDew));
 
         setIcon(weather, ceil);
-
     }
 
     private void setIcon(String wx, String ceil)

@@ -104,7 +104,7 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHold
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onFlightClickListener mCallback = (onFlightClickListener) mContext;
+                FlightInterface mCallback = (FlightInterface) mContext;
                 mCallback.onFlightItemClick(target);
                 mClickPosition = position;
             }
