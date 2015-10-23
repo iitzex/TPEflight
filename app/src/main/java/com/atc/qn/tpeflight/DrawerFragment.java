@@ -2,7 +2,6 @@ package com.atc.qn.tpeflight;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -47,6 +46,7 @@ public class DrawerFragment extends Fragment
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
     private String mOrigTitle = "";
+    private Fragment mFrag;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,6 +61,7 @@ public class DrawerFragment extends Fragment
             mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
             mFromSavedInstanceState = true;
         }
+        mFrag = this;
     }
 
     @Override
@@ -73,13 +74,18 @@ public class DrawerFragment extends Fragment
         mDrawerList.setLayoutManager(layoutManager);
         mDrawerList.setHasFixedSize(true);
 
-        final List<DrawerItem> drawerItems = getMenu();
-        DrawerAdapter adapter = new DrawerAdapter(drawerItems);
-        adapter.setNavigationDrawerCallbacks(this);
-        mDrawerList.setAdapter(adapter);
+        updateDrawerList();
         selectItem(mCurrentSelectedPosition);
 
         return view;
+    }
+
+    private void updateDrawerList() {
+        final List<DrawerItem> drawerItems = getMenu();
+        DrawerAdapter adapter = new DrawerAdapter(drawerItems);
+        adapter.setNavigationDrawerCallbacks(this);
+        adapter.selectPosition(mCurrentSelectedPosition);
+        mDrawerList.setAdapter(adapter);
     }
 
     public boolean isDrawerOpen() {
@@ -94,13 +100,14 @@ public class DrawerFragment extends Fragment
     public List<DrawerItem> getMenu() {
         FlightInterface mContext = (FlightInterface) getActivity();
         List<DrawerItem> items = new ArrayList<>();
+        String mTrackCount = "";
+        mTrackCount = "(" + mContext.getTrackListSize() + ")";
 
         items.add(new DrawerItem(getActivity().getString(R.string.name_departure),
                 ContextCompat.getDrawable(getActivity(), R.drawable.v_takeoff)));
         items.add(new DrawerItem(getActivity().getString(R.string.name_arrival),
                 ContextCompat.getDrawable(getActivity(), R.drawable.v_landing)));
-        items.add(new DrawerItem(getActivity().getString(R.string.name_track),
-//                    + "(" + mContext.getTrackListSize() + ")",
+        items.add(new DrawerItem(getActivity().getString(R.string.name_track) + mTrackCount,
                 ContextCompat.getDrawable(getActivity(), R.drawable.v_star)));
         items.add(new DrawerItem(getActivity().getString(R.string.name_wx),
                 ContextCompat.getDrawable(getActivity(), R.drawable.ic_wx)));
@@ -140,6 +147,8 @@ public class DrawerFragment extends Fragment
                     SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
                     sp.edit().putBoolean(PREF_USER_LEARNED_DRAWER, true).apply();
                 }
+
+                updateDrawerList();
 
                 mOrigTitle = getActivity().getTitle().toString();
                 getActivity().setTitle(getActivity().getString(R.string.name_drawer));
