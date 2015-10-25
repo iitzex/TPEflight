@@ -121,6 +121,7 @@ public class MainActivity extends AppCompatActivity
                 .commit();
         }
     }
+
     @Override
     public void onResume() {
         super.onResume();  // Always call the superclass method first
@@ -206,6 +207,10 @@ public class MainActivity extends AppCompatActivity
 
     public int getTrackListSize(){
         return mTrackList.size();
+    }
+
+    public void removeTracklist(int position) {
+        mTrackList.remove(position);
     }
 }
 

@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHolder>
-        implements Filterable {
+        implements Filterable, ItemCallback.FlightMoveInterface {
     private static ArrayList<Flight> mFlightAll = new ArrayList<>();
     private static ArrayList<Flight> mFlightDeparture = new ArrayList<>();
     private static ArrayList<Flight> mFlightArrival = new ArrayList<>();
@@ -24,6 +24,7 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHold
     private Context mContext;
     private static int mClickPositionDeparture = -1;
     private static int mClickPositionArrival = -1;
+
 
     public FlightAdapter(ArrayList<Flight> mTracking, String mAction, Context mContext) {
         this.mAction = mAction;
@@ -94,6 +95,12 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHold
             }
         }
         return position;
+    }
+
+    @Override
+    public void onItemDismiss(int position) {
+        notifyItemRemoved(position);
+        ((FlightInterface)mContext).removeTracklist(position);
     }
 
     @Override
@@ -243,3 +250,5 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHold
         }
     }
 }
+
+

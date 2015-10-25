@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,7 +34,6 @@ public class TrackFragment extends Fragment {
     private FlightAsyncTask fetchTasker;
     private static String mUpdateTime;
     private TextView mUpdateTextView;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -82,7 +82,8 @@ public class TrackFragment extends Fragment {
 
         mAdapter = new FlightAdapter(mTrackList, "TRACKING", mContext);
         mRecyclerView.setAdapter(mAdapter);
-        QNLog.d(mTrackList.toString());
+        ItemTouchHelper touchHelper = new ItemTouchHelper(new ItemCallback(mAdapter));
+        touchHelper.attachToRecyclerView(mRecyclerView);
     }
 
     @Override

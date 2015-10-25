@@ -116,19 +116,25 @@ public class WxFragment extends Fragment{
             nightTag = "_night";
         }
 
-        if (wx.contains("RA")) {
+        if (wx.contains("TS")) {
+            iconName += "tstorm1" + nightTag;
+        }else if (wx.contains("RA")) {
             iconName += "light_rain";
         }else if (wx.contains("SH")) {
+            iconName += "shower2" + nightTag;
+        }else if (wx.contains("DZ")) {
             iconName += "shower1" + nightTag;
         }else if (wx.contains("BR")) {
             iconName += "mist" + nightTag;
         }else if (wx.contains("FG")) {
             iconName += "fog" + nightTag;
-        }else if (wx.contains("TS")) {
-            iconName += "tstorm1" + nightTag;
+        }else if (ceilValue > 0 && ceilValue <= 10) {
+            iconName += "cloudy5";
         }else if (ceilValue > 0 && ceilValue <= 20) {
-            iconName += "cloudy3" + nightTag;
+            iconName += "cloudy4" + nightTag;
         }else if (ceilValue > 0 && ceilValue <= 40) {
+            iconName += "cloudy3" + nightTag;
+        }else if (ceilValue > 0 && ceilValue <= 60) {
             iconName += "cloudy2" + nightTag;
         }else if (ceilValue > 0 && ceilValue <= 80) {
             iconName += "cloudy1" + nightTag;
@@ -140,13 +146,13 @@ public class WxFragment extends Fragment{
         wx_icon.setImageResource(resId);
     }
 
-    private String translateVis(String vis){
-        if (vis.equals("10k+")){
+    private String translateVis(String vis) {
+        if (vis.equals("10k+")) {
             return "10公里以上";
-        }else
+        } else {
             return vis + " 公尺";
+        }
     }
-
 //    private String translateWX(String wx){
 //                //INTENSITY OR PROXIMITY 1
 //        return wx.replace("-", "Light ")

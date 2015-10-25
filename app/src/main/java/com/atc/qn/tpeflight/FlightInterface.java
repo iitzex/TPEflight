@@ -5,4 +5,5 @@ public interface FlightInterface {
     void onAlarmClick();
     void onStarClick(Flight mInfo);
     int getTrackListSize();
+    void removeTracklist(int position);
 }
