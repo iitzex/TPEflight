@@ -15,7 +15,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHolder>
-        implements Filterable, ItemCallback.FlightMoveInterface {
+        implements Filterable, ItemCallback.MoveInterface
+{
     private static ArrayList<Flight> mFlightAll = new ArrayList<>();
     private static ArrayList<Flight> mFlightDeparture = new ArrayList<>();
     private static ArrayList<Flight> mFlightArrival = new ArrayList<>();
@@ -24,7 +25,6 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHold
     private Context mContext;
     private static int mClickPositionDeparture = -1;
     private static int mClickPositionArrival = -1;
-
 
     public FlightAdapter(ArrayList<Flight> mTracking, String mAction, Context mContext) {
         this.mAction = mAction;
@@ -59,7 +59,6 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHold
                 target.setDestination(info[11].trim());
                 target.setDestinationTW(info[12].trim());
                 target.setStatus(info[13].trim());
-                target.setType(info[14].trim());
                 target.setBaggage(info[18].trim());
                 target.setCounter(info[19].trim());
 
@@ -77,12 +76,6 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHold
             mFlightAll = mFlightDeparture;
     }
 
-    public int getClickPosition() {
-        if (mAction.equals("D"))
-            return mClickPositionDeparture;
-        else
-            return mClickPositionArrival;
-    }
     public int getTimePosition(){
         Calendar timeInst = Calendar.getInstance();
         SimpleDateFormat hour = new SimpleDateFormat("HH");
@@ -100,7 +93,7 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHold
     @Override
     public void onItemDismiss(int position) {
         notifyItemRemoved(position);
-        ((FlightInterface)mContext).removeTracklist(position);
+        ((FlightInterface)mContext).removeTrackList(position);
     }
 
     @Override
@@ -110,7 +103,7 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHold
         return new FlightHolder(v);
     }
 
-    public void setAirlineLogo(FlightHolder holder, Flight target) {
+    public void setLogo(FlightHolder holder, Flight target) {
         String iconName = "l_" + target.getAirlines().toLowerCase();
         int resId = mContext.getResources().getIdentifier(iconName, "drawable", mContext.getPackageName());
         holder.mLogo.setImageResource(resId);
@@ -120,13 +113,11 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHold
     public void onBindViewHolder(FlightHolder holder, final int position) {
         final Flight target = mFlightAll.get(position);
 
-        setAirlineLogo(holder, target);
+        setLogo(holder, target);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FlightInterface mCallback = (FlightInterface) mContext;
-                mCallback.onFlightItemClick(target);
-//                mClickPosition = position;
+                ((FlightInterface) mContext).onFlightItemClick(target);
                 if (mAction.equals("D"))
                     mClickPositionDeparture = position;
                 else
@@ -150,7 +141,6 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHold
 
         holder.mGate.setText(target.getGate());
         holder.mTerminal.setText(target.getTerminal());
-        holder.mType.setText(target.getType());
 
         //clean holder
         holder.mIconText.setText("");
@@ -161,23 +151,23 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHold
         if (target.getStatus().contains("CANCELLED")) {
             paint.setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
 
-            holder.mIconStaus.setImageResource(R.drawable.ic_cancel);
+            holder.mIconStatus.setImageResource(R.drawable.ic_cancel);
         }else if (target.getStatus().contains("DELAY")) {
             paint.setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
 
             holder.mIconText.setText(target.getActualTime());
-            holder.mIconStaus.setImageResource(R.drawable.ic_delay);
+            holder.mIconStatus.setImageResource(R.drawable.ic_delay);
         }else if (target.getStatus().contains("ON TIME")) {
-            holder.mIconStaus.setImageResource(R.drawable.ic_ontime);
+            holder.mIconStatus.setImageResource(R.drawable.ic_ontime);
         }else if (target.getStatus().contains("SCHEDULE CHANGE")) {
             paint.setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
 
             holder.mIconText.setText(target.getActualTime());
-            holder.mIconStaus.setImageResource(R.drawable.ic_delay);
+            holder.mIconStatus.setImageResource(R.drawable.ic_delay);
         }else if (target.getStatus().contains("ARRIVED")) {
-            holder.mIconStaus.setImageResource(R.drawable.v_landing);
+            holder.mIconStatus.setImageResource(R.drawable.v_landing);
         }else if (target.getStatus().contains("DEPARTED")) {
-            holder.mIconStaus.setImageResource(R.drawable.v_takeoff);
+            holder.mIconStatus.setImageResource(R.drawable.v_takeoff);
         }
     }
 
@@ -225,28 +215,26 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHold
         ImageView mLogo;
         TextView mAirlines_TW, mFlightNO, mShare, mExpectTime;
         TextView mGate, mTerminal, mDestinationTW;
-        TextView mCounter, mBaggage, mType;
+        TextView mCounter, mBaggage;
         TextView mIconText;
-        ImageView mIconStaus;
+        ImageView mIconStatus;
 
         FlightHolder(View view) {
             super(view);
-            mLogo = (ImageView) view.findViewById(R.id.logo);
+            mLogo = (ImageView) view.findViewById(R.id.airlines_logo);
             mAirlines_TW = (TextView) view.findViewById(R.id.airlines_TW);
 
             mFlightNO = (TextView) view.findViewById(R.id.flightNO);
             mExpectTime = (TextView) view.findViewById(R.id.expecttime);
             mDestinationTW = (TextView) view.findViewById(R.id.destinationTW);
-            mShare = (TextView) view.findViewById(R.id.share);
 
             mCounter = (TextView) view.findViewById(R.id.counter);
             mBaggage = (TextView) view.findViewById(R.id.baggage);
             mGate = (TextView) view.findViewById(R.id.gate);
             mTerminal = (TextView) view.findViewById(R.id.terminal);
-            mType = (TextView) view.findViewById(R.id.type);
 
             mIconText = (TextView) view.findViewById(R.id.icontext);
-            mIconStaus = (ImageView) view.findViewById(R.id.iconstatus);
+            mIconStatus = (ImageView) view.findViewById(R.id.iconstatus);
         }
     }
 }

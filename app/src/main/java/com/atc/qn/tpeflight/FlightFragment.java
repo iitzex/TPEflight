@@ -37,9 +37,8 @@ public class FlightFragment extends Fragment
     private ProgressBar mLoading;
     private TextView mUpdateTextView;
     private static String mAction, mUpdateTime;
-    private static int mPositionDeparture = -1, mPositionArrival = -1;
-    private static int mPosition = -1;
-    private FlightAsyncTask fetchTasker;
+    private static int mPositionDeparture = -1, mPositionArrival = -1, mPosition = -1;
+    private FlightAsyncTask mTask;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -98,7 +97,7 @@ public class FlightFragment extends Fragment
 
     private void fetchFlight() {
         getArguments().putBoolean("Reloaded", false);
-        fetchTasker = (FlightAsyncTask) new FlightAsyncTask().execute(null, null, null);
+        mTask = (FlightAsyncTask) new FlightAsyncTask().execute(null, null, null);
 
         Calendar timeInst = Calendar.getInstance();
         SimpleDateFormat day = new SimpleDateFormat("yyyy/MM/dd, HH:mm");
@@ -187,8 +186,8 @@ public class FlightFragment extends Fragment
             }
         }
 
-        if (fetchTasker != null)
-            fetchTasker.cancel(true);
+        if (mTask != null)
+            mTask.cancel(true);
 
         super.onStop();
     }

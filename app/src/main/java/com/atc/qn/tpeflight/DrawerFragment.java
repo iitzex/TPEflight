@@ -1,4 +1,5 @@
 package com.atc.qn.tpeflight;
+import com.atc.qn.tpeflight.DrawerAdapter.DrawerInterface;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -20,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DrawerFragment extends Fragment
-        implements DrawerCallback {
+        implements DrawerInterface {
     /**
      * Remember the position of the selected item.
      */
@@ -33,7 +34,7 @@ public class DrawerFragment extends Fragment
     /**
      * A pointer to the current callbacks instance (the Activity).
      */
-    private DrawerCallback mCallback;
+    private DrawerInterface mCallback;
     /**
      * Helper component that ties the action bar to the navigation drawer.
      */
@@ -98,21 +99,23 @@ public class DrawerFragment extends Fragment
     }
 
     public List<DrawerItem> getMenu() {
-        FlightInterface mContext = (FlightInterface) getActivity();
+        Activity mContext = getActivity();
         List<DrawerItem> items = new ArrayList<>();
-        String mTrackCount = "";
-        mTrackCount = "(" + mContext.getTrackListSize() + ")";
+        String mTrackCount = "(" + ((FlightInterface)mContext).getTrackListSize() + ")";
+        String mAlarmCount = "(" + ((FlightInterface)mContext).getAlarmListSize() + ")";
 
-        items.add(new DrawerItem(getActivity().getString(R.string.name_departure),
-                ContextCompat.getDrawable(getActivity(), R.drawable.v_takeoff)));
-        items.add(new DrawerItem(getActivity().getString(R.string.name_arrival),
-                ContextCompat.getDrawable(getActivity(), R.drawable.v_landing)));
-        items.add(new DrawerItem(getActivity().getString(R.string.name_track) + mTrackCount,
-                ContextCompat.getDrawable(getActivity(), R.drawable.v_star)));
-        items.add(new DrawerItem(getActivity().getString(R.string.name_wx),
-                ContextCompat.getDrawable(getActivity(), R.drawable.ic_wx)));
-        items.add(new DrawerItem(getActivity().getString(R.string.name_airlines),
-                ContextCompat.getDrawable(getActivity(), R.drawable.v_info)));
+        items.add(new DrawerItem(mContext.getString(R.string.name_departure),
+                ContextCompat.getDrawable(mContext, R.drawable.v_takeoff)));
+        items.add(new DrawerItem(mContext.getString(R.string.name_arrival),
+                ContextCompat.getDrawable(mContext, R.drawable.v_landing)));
+        items.add(new DrawerItem(mContext.getString(R.string.name_track) + mTrackCount,
+                ContextCompat.getDrawable(mContext, R.drawable.v_star)));
+        items.add(new DrawerItem(mContext.getString(R.string.name_alarm) + mAlarmCount,
+                ContextCompat.getDrawable(mContext, R.drawable.v_alarm)));
+        items.add(new DrawerItem(mContext.getString(R.string.name_wx),
+                ContextCompat.getDrawable(mContext, R.drawable.ic_wx)));
+        items.add(new DrawerItem(mContext.getString(R.string.name_airlines),
+                ContextCompat.getDrawable(mContext, R.drawable.v_info)));
         return items;
     }
 
@@ -196,7 +199,7 @@ public class DrawerFragment extends Fragment
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mCallback = (DrawerCallback) activity;
+            mCallback = (DrawerInterface) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException("Activity must implement DrawerCallbacks.");
         }

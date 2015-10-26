@@ -23,11 +23,7 @@ import java.util.regex.Pattern;
 
 public class WxFragment extends Fragment{
     private String mContent = "";
-    private TextView wx_vis;
-    private TextView wx_wind;
-    private TextView wx_cloud;
-    private TextView wx_temp;
-    private TextView wx_dew;
+    private TextView wx_vis, wx_wind, wx_cloud, wx_temp, wx_dew;
     private ImageView wx_icon;
     private WxAsyncTask mTask;
     private ProgressBar mLoading;
@@ -43,7 +39,6 @@ public class WxFragment extends Fragment{
         wx_temp = (TextView) view.findViewById(R.id.wx_temperature);
         wx_dew = (TextView) view.findViewById(R.id.wx_dewpoint);
         wx_icon = (ImageView) view.findViewById(R.id.wx_icon);
-
         mLoading = (ProgressBar) view.findViewById(R.id.wx_loading);
 
         return view;

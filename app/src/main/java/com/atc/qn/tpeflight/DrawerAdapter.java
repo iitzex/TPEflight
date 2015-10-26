@@ -9,15 +9,19 @@ import java.util.List;
 
 public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder> {
     private List<DrawerItem> mData;
-    private DrawerCallback mDrawerCallbacks;
+    private DrawerInterface mDrawerCallbacks;
     private View mSelectedView;
     private int mSelectedPosition;
+
+    public interface DrawerInterface {
+        void onDrawerItemSelected(int position);
+    }
 
     public DrawerAdapter(List<DrawerItem> data) {
         mData = data;
     }
 
-    public void setNavigationDrawerCallbacks(DrawerCallback drawerCallbacks) {
+    public void setNavigationDrawerCallbacks(DrawerInterface drawerCallbacks) {
         mDrawerCallbacks = drawerCallbacks;
     }
 

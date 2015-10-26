@@ -28,11 +28,9 @@ public class TrackFragment extends Fragment {
     private Activity mContext;
     private RecyclerView mRecyclerView;
     private FlightAdapter mAdapter;
-    private LinearLayoutManager mManager;
     private ProgressBar mLoading;
     private ArrayList<Flight> mTrackList;
     private FlightAsyncTask fetchTasker;
-    private static String mUpdateTime;
     private TextView mUpdateTextView;
 
     @Override
@@ -53,7 +51,7 @@ public class TrackFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         mTrackList = getArguments().getParcelableArrayList("TRACKING");
 
-        mManager = new LinearLayoutManager(mContext);
+        LinearLayoutManager mManager = new LinearLayoutManager(mContext);
         mManager.setOrientation(LinearLayoutManager.VERTICAL);
 
         mRecyclerView.setLayoutManager(mManager);
@@ -76,7 +74,7 @@ public class TrackFragment extends Fragment {
     private void onFinishView() {
         Calendar timeInst = Calendar.getInstance();
         SimpleDateFormat day = new SimpleDateFormat("yyyy/MM/dd, HH:mm");
-        mUpdateTime = day.format(timeInst.getTime());
+        String mUpdateTime = day.format(timeInst.getTime());
         mUpdateTextView.setText("最近更新：" + mUpdateTime);
         mLoading.setVisibility(View.INVISIBLE);
 
@@ -173,7 +171,6 @@ public class TrackFragment extends Fragment {
                     item.setDestination(info[11].trim());
                     item.setDestinationTW(info[12].trim());
                     item.setStatus(info[13].trim());
-                    item.setType(info[14].trim());
                     item.setBaggage(info[18].trim());
                     item.setCounter(info[19].trim());
                 }

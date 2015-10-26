@@ -3,15 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity">
     <item
-        android:id="@+id/track_deleteall"
+        android:id="@+id/alarm_deleteall"
         android:title="全部刪除"
         android:icon="@drawable/ic_deleleall"
-        android:orderInCategory="10"
-        app:showAsAction="ifRoom"/>
-    <item
-        android:id="@+id/track_refresh"
-        android:title="重新載入航班資訊"
-        android:icon="@drawable/ic_refresh"
         android:orderInCategory="10"
         app:showAsAction="ifRoom"/>
 </menu>

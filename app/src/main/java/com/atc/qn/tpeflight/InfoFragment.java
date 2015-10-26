@@ -75,6 +75,9 @@ public class InfoFragment extends Fragment {
         imm.hideSoftInputFromWindow(mContext.getCurrentFocus().getWindowToken(), 0);
 
         mInfo = getArguments().getParcelable("Flight");
+        if (mInfo == null)
+            return;
+
         String Airlines = mInfo.getAirlines();
         String AirlinesTW = mInfo.getAirlinesTW();
         String NO = mInfo.getFlightNO();
@@ -90,7 +93,6 @@ public class InfoFragment extends Fragment {
         String ActualDay = mInfo.getActualDay();
         String ActualTime = mInfo.getActualTime();
         String DestinationTW = mInfo.getDestinationTW();
-        String Type = mInfo.getType();
 
         mAirlinesTW.setText(AirlinesTW);
         mNO.setText(NO);
@@ -102,7 +104,6 @@ public class InfoFragment extends Fragment {
         mExpectTime.setText(ExpectDay + " " + ExpectTime);
         mActualTime.setText(ActualDay + " " + ActualTime);
         mDestinationTW.setText(DestinationTW);
-        mType.setText(Type);
 
         if (Action.equals("A")) {
             mStatusLogo.setImageResource(R.drawable.v_landing);
@@ -132,7 +133,7 @@ public class InfoFragment extends Fragment {
 
     @Override
     public void onStop() {
-        arrayLogo.recycle();
+//        arrayLogo.recycle();
         super.onStop();
     }
 
@@ -142,6 +143,10 @@ public class InfoFragment extends Fragment {
 
         if (id == R.id.info_alarm) {
             AlarmDialog dialog = new AlarmDialog();
+            Bundle infoArgs = new Bundle();
+            infoArgs.putParcelable("Flight", mInfo);
+            dialog.setArguments(infoArgs);
+
             dialog.show(getFragmentManager(), "AlarmDialog");
 
             return true;

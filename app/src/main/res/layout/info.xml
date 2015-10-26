@@ -1,40 +1,41 @@
-<android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="15dp"
-    app:cardCornerRadius="10dp"
-    >
+    app:cardCornerRadius="10dp">
+
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/airlinesinfo"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="5dp"
-        android:id="@+id/airlinesinfo">
+        android:padding="5dp">
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="5dp"
+            android:gravity="center_horizontal"
             android:orientation="horizontal"
-            android:gravity="center_horizontal">
+            android:padding="5dp">
+
             <ImageView
                 android:id="@+id/infoAirlinesLogo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:padding="5dp"
                 android:contentDescription="Airlines Logo"
-                android:src="@drawable/l_ci"/>
+                android:padding="5dp"
+                android:src="@drawable/l_ci" />
+
             <TextView
                 android:id="@+id/infoAirlinesTW"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:textSize="22sp"
+                android:text="中華航空"
                 android:textColor="@color/myPrimaryDarkColor"
-                android:text="中華航空"/>
+                android:textSize="22sp" />
 
             <TextView
                 android:id="@+id/infoNO"
@@ -42,76 +43,85 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:paddingLeft="5dp"
-                android:textSize="22sp"
+                android:text="123"
                 android:textColor="@color/myPrimaryDarkColor"
-                android:text="123"/>
+                android:textSize="22sp" />
         </LinearLayout>
+
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="2dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="2dp">
 
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:gravity="center_horizontal"
-                android:padding="2dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="2dp">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="18sp"
-                    android:text="航廈"/>
+                    android:text="航廈"
+                    android:textSize="18sp" />
+
                 <TextView
                     android:id="@+id/infoTerminal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="第一航廈"
                     android:textColor="@color/myAccentColor"
-                    android:textSize="25sp"
-                    android:text="第一航廈"/>
+                    android:textSize="25sp" />
             </LinearLayout>
+
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:gravity="center_horizontal"
-                android:padding="2dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="2dp">
+
                 <TextView
                     android:id="@+id/infoCounterTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="18sp"
-                    android:text="報到櫃檯"/>
+                    android:text="報到櫃檯"
+                    android:textSize="18sp" />
+
                 <TextView
                     android:id="@+id/infoCounter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="12"
                     android:textColor="@color/myAccentColor"
-                    android:textSize="25sp"
-                    android:text="12"/>
+                    android:textSize="25sp" />
             </LinearLayout>
+
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:gravity="center_horizontal"
-                android:padding="2dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="2dp">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="18sp"
-                    android:text="登機門"/>
+                    android:text="登機門"
+                    android:textSize="18sp" />
+
                 <TextView
                     android:id="@+id/infoGate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="C9"
                     android:textColor="@color/myAccentColor"
-                    android:textSize="25sp"
-                    android:text="C9"/>
+                    android:textSize="25sp" />
             </LinearLayout>
         </LinearLayout>
 
@@ -125,155 +135,176 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:padding="2dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="2dp">
+
             <ImageView
                 android:id="@+id/infoStatusLogo"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:src="@drawable/v_takeoff"/>
+                android:src="@drawable/v_takeoff" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
-                android:textSize="18sp"
-                android:text="狀態"/>
+                android:text="狀態"
+                android:textSize="18sp" />
+
             <TextView
                 android:id="@+id/infoStatus"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/myAccentColor"
-                android:textSize="20sp"
+                android:gravity="right"
                 android:text="準時"
-                android:gravity="right" />
+                android:textColor="@color/myAccentColor"
+                android:textSize="20sp" />
         </LinearLayout>
+
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:padding="2dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="2dp">
+
             <ImageView
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:src="@drawable/v_time"/>
+                android:src="@drawable/v_time" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="10dp"
-                android:textSize="18sp"
-                android:text="表定時間"/>
+                android:text="表定時間"
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/infoExpectTime"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/myAccentColor"
-                android:textSize="18sp"
+                android:gravity="right"
                 android:text="2015/08/15 08:30"
-                android:gravity="right" />
+                android:textColor="@color/myAccentColor"
+                android:textSize="18sp" />
         </LinearLayout>
+
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:padding="2dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="2dp">
+
             <ImageView
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:src="@drawable/v_time"/>
+                android:src="@drawable/v_time" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="10dp"
-                android:textSize="18sp"
                 android:text="實際時間"
-                />
+                android:textSize="18sp" />
+
             <TextView
                 android:id="@+id/infoActualTime"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/myAccentColor"
-                android:textSize="18sp"
+                android:gravity="right"
                 android:text="2015/08/15 08:45"
-                android:gravity="right" />
+                android:textColor="@color/myAccentColor"
+                android:textSize="18sp" />
         </LinearLayout>
+
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:padding="2dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="2dp">
+
             <ImageView
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:src="@drawable/ic_destination" />
+
             <TextView
                 android:id="@+id/infoDestinationTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="10dp"
-                android:textSize="18sp"
-                android:text="目的地" />
+                android:text="目的地"
+                android:textSize="18sp" />
+
             <TextView
                 android:id="@+id/infoDestinationTW"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/myPrimaryColor"
-                android:textSize="18sp"
+                android:gravity="right"
                 android:text="香港"
-                android:gravity="right" />
+                android:textColor="@color/myPrimaryColor"
+                android:textSize="18sp" />
         </LinearLayout>
+
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:padding="2dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="2dp">
+
             <ImageView
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:src="@drawable/ic_type"/>
+                android:src="@drawable/ic_type" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="10dp"
-                android:textSize="18sp"
-                android:text="機型"/>
+                android:text="機型"
+                android:textSize="18sp" />
+
             <TextView
                 android:id="@+id/infoType"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/myPrimaryColor"
-                android:textSize="20sp"
+                android:gravity="right"
                 android:text="Airbus-330"
-                android:gravity="right" />
+                android:textColor="@color/myPrimaryColor"
+                android:textSize="20sp" />
         </LinearLayout>
+
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:padding="2dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="2dp">
+
             <ImageView
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:src="@drawable/ic_phone"/>
+                android:src="@drawable/ic_phone" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="10dp"
-                android:textSize="18sp"
-                android:text="電話"/>
+                android:text="電話"
+                android:textSize="18sp" />
+
             <Button
                 android:id="@+id/infoPhone"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="right"
+                android:text="03-3988888"
                 android:textColor="@color/myPrimaryColor"
-                android:textSize="18sp"
-                android:text="03-3988888"/>
+                android:textSize="18sp" />
         </LinearLayout>
     </LinearLayout>
 </android.support.v7.widget.CardView>

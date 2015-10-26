@@ -3,6 +3,8 @@ package com.atc.qn.tpeflight;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Calendar;
+
 public class Flight implements Parcelable{
     private String action;
     private String flightNO;
@@ -21,9 +23,30 @@ public class Flight implements Parcelable{
     private String type;
     private String counter;
     private String baggage;
+    private Calendar alarm;
 
     public Flight() {
         super();
+    }
+
+    public Flight(Flight mInfo) {
+        this.action = mInfo.action;
+        this.flightNO = mInfo.flightNO;
+        this.airlines = mInfo.airlines;
+        this.airlinesTW = mInfo.airlinesTW;
+        this.gate = mInfo.gate;
+        this.terminal = mInfo.terminal;
+        this.expectDay = mInfo.expectDay;
+        this.expectTime = mInfo.expectTime;
+        this.actualDay = mInfo.actualDay;
+        this.actualTime = mInfo.actualTime;
+        this.destination = mInfo.destination;
+        this.destinationIATA = mInfo.destinationIATA;
+        this.destinationTW = mInfo.destinationTW;
+        this.status = mInfo.status;
+        this.type = mInfo.type;
+        this.counter= mInfo.counter;
+        this.baggage = mInfo.baggage;
     }
 
     public String getAction() {
@@ -62,14 +85,6 @@ public class Flight implements Parcelable{
         return actualTime;
     }
 
-    public String getDestination() {
-        return destination;
-    }
-
-    public String getDestinationIATA() {
-        return destinationIATA;
-    }
-
     public String getAirlinesTW() {
         return airlinesTW;
     }
@@ -82,16 +97,16 @@ public class Flight implements Parcelable{
         return status;
     }
 
-    public String getType() {
-        return type;
-    }
-
     public String getCounter() {
         return counter;
     }
 
     public String getBaggage() {
         return baggage;
+    }
+
+    public Calendar getAlarm() {
+        return alarm;
     }
 
     public void setAction(String action) {
@@ -150,16 +165,16 @@ public class Flight implements Parcelable{
         this.status = status;
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
-
     public void setCounter(String counter) {
         this.counter = counter;
     }
 
     public void setBaggage(String baggage) {
         this.baggage = baggage;
+    }
+
+    public void setAlarm(Calendar alarm) {
+        this.alarm = alarm;
     }
 
     @Override
@@ -183,7 +198,6 @@ public class Flight implements Parcelable{
         dest.writeString(destinationIATA);
         dest.writeString(destinationTW);
         dest.writeString(status);
-        dest.writeString(type);
         dest.writeString(counter);
         dest.writeString(baggage);
     }
@@ -191,26 +205,25 @@ public class Flight implements Parcelable{
     public static final Parcelable.Creator<Flight> CREATOR = new Parcelable.Creator<Flight>() {
         @Override
         public Flight createFromParcel(Parcel source) {
-            Flight mFlight = new Flight();
-            mFlight.setAction(source.readString());
-            mFlight.setFlightNO(source.readString());
-            mFlight.setAirlines(source.readString());
-            mFlight.setAirlinesTW(source.readString());
-            mFlight.setGate(source.readString());
-            mFlight.setTerminal(source.readString());
-            mFlight.setExpectDay(source.readString());
-            mFlight.setExpectTime(source.readString());
-            mFlight.setActualDay(source.readString());
-            mFlight.setActualTime(source.readString());
-            mFlight.setDestination(source.readString());
-            mFlight.setDestinationIATA(source.readString());
-            mFlight.setDestinationTW(source.readString());
-            mFlight.setStatus(source.readString());
-            mFlight.setType(source.readString());
-            mFlight.setCounter(source.readString());
-            mFlight.setBaggage(source.readString());
+            Flight mInfo = new Flight();
+            mInfo.setAction(source.readString());
+            mInfo.setFlightNO(source.readString());
+            mInfo.setAirlines(source.readString());
+            mInfo.setAirlinesTW(source.readString());
+            mInfo.setGate(source.readString());
+            mInfo.setTerminal(source.readString());
+            mInfo.setExpectDay(source.readString());
+            mInfo.setExpectTime(source.readString());
+            mInfo.setActualDay(source.readString());
+            mInfo.setActualTime(source.readString());
+            mInfo.setDestination(source.readString());
+            mInfo.setDestinationIATA(source.readString());
+            mInfo.setDestinationTW(source.readString());
+            mInfo.setStatus(source.readString());
+            mInfo.setCounter(source.readString());
+            mInfo.setBaggage(source.readString());
 
-            return mFlight;
+            return mInfo;
         }
         @Override
         public Flight[] newArray(int size) {

@@ -1,13 +1,18 @@
 package com.atc.qn.tpeflight;
 
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView.Adapter;
 import android.support.v7.widget.helper.ItemTouchHelper;
 
 public class ItemCallback extends ItemTouchHelper.Callback {
-    private final FlightAdapter mAdapter;
+    private final Adapter mAdapter;
 
-    public interface FlightMoveInterface {
+    public interface MoveInterface {
         void onItemDismiss(int position);
+    }
+
+    public ItemCallback(AlarmAdapter mAdapter) {
+        this.mAdapter = mAdapter;
     }
 
     public ItemCallback(FlightAdapter mAdapter) {
@@ -40,6 +45,10 @@ public class ItemCallback extends ItemTouchHelper.Callback {
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int i) {
-        mAdapter.onItemDismiss(viewHolder.getAdapterPosition());
+        if (mAdapter instanceof FlightAdapter)
+            ((FlightAdapter)mAdapter).onItemDismiss(viewHolder.getAdapterPosition());
+        else if (mAdapter instanceof AlarmAdapter)
+            ((AlarmAdapter)mAdapter).onItemDismiss(viewHolder.getAdapterPosition());
+
     }
 }
