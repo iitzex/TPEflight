@@ -113,23 +113,43 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onResume() {
         super.onResume();  // Always call the superclass method first
-
-        Gson gson = new Gson();
-        mPrefs = getSharedPreferences("PREFERENCES", MODE_PRIVATE);
-        String mTrackJson = mPrefs.getString("TRACKING", null);
-
-        Type listType = new TypeToken<ArrayList<Flight>>() {}.getType();
-        mTrackList = gson.fromJson(mTrackJson, listType);
+        restoreList();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
 
+        saveList();
+    }
+
+    private void restoreList() {
+        mPrefs = getSharedPreferences("PREFERENCES", MODE_PRIVATE);
+
+        ArrayList<Flight> mList;
+        Gson gson = new Gson();
+        String mTrackJson = mPrefs.getString("TRACKING", null);
+        Type listType = new TypeToken<ArrayList<Flight>>() {}.getType();
+        if ((mList = gson.fromJson(mTrackJson, listType)) != null)
+            mTrackList = mList;
+
+        gson = new Gson();
+        String mAlarmJson = mPrefs.getString("ALARMLIST", null);
+        if ((mList = gson.fromJson(mAlarmJson, listType)) != null)
+            mAlarmList = mList;
+
+    }
+
+    private void saveList() {
         SharedPreferences.Editor Pref = mPrefs.edit();
-        Gson data = new Gson();
-        String mTrackJson = data.toJson(mTrackList);
+        Gson mTrackGson = new Gson();
+        String mTrackJson = mTrackGson.toJson(mTrackList);
         Pref.putString("TRACKING", mTrackJson);
+
+        Gson mAlarmGson = new Gson();
+        String mAlarmJson = mAlarmGson.toJson(mAlarmList);
+        Pref.putString("ALARMLIST", mAlarmJson);
+
         Pref.apply();
     }
 
@@ -158,6 +178,7 @@ public class MainActivity extends AppCompatActivity
         InfoFragment infoFrag = new InfoFragment();
         Bundle infoArgs = new Bundle();
         infoArgs.putParcelable("Flight", mInfo);
+        infoArgs.putParcelableArrayList("ALARMLIST", mAlarmList);
         infoFrag.setArguments(infoArgs);
 
         fragMgr.beginTransaction()
@@ -167,57 +188,16 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onAlarmClick(Flight mInfo, boolean[] timeTable) {
-        String mActualTime = mInfo.getActualDay() + ", " + mInfo.getActualTime();
-
-        for (int i = 0; i < 6; i++) {
-            Calendar mCal = Calendar.getInstance();
-            SimpleDateFormat mDayFromat = new SimpleDateFormat("yyyy/MM/dd, HH:mm");
-            try {
-                mCal.setTime(mDayFromat.parse(mActualTime));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            if (timeTable[i]) {
-                Flight target = new Flight(mInfo);
-                int timeDelta = 0;
-                if (i == 1)
-                    timeDelta = -15;
-                if (i == 2)
-                    timeDelta = -30;
-                if (i == 3)
-                    timeDelta = -60;
-                if (i == 4)
-                    timeDelta = -120;
-                if (i == 5)
-                    timeDelta = -240;
-
-                mCal.add(Calendar.MINUTE, timeDelta);
-                target.setAlarm(mCal);
-                mAlarmList.add(target);
-            }
-        }
-
-        Calendar timeInst = Calendar.getInstance();
-        timeInst.add(Calendar.SECOND, 10);
-        QNLog.d(timeInst.toString());
-
-//        setAlarm(timeInst);
-    }
-
-    public void addAlarm(Calendar mCal){
-//        Calendar calendar = Calendar.getInstance();
-//        calendar.set(2015, 9, 21, 10, 18);
-//        SimpleDateFormat day = new SimpleDateFormat("yyyy/MM/dd, HH:mm");
-//        QNLog.d(day.format(calendar.getTime()));
-
-        AlarmManager mAlarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this, AlarmReceiver.class);
-        intent.putExtra("GETNAME", "TPEflight");
-
-        PendingIntent pending = PendingIntent.getBroadcast(this, 0, intent, 0);
-        mAlarmMgr.set(AlarmManager.RTC_WAKEUP, mCal.getTimeInMillis(), pending);
+    public void onAlarmClick(Flight mInfo) {
+//        Calendar timeInst = Calendar.getInstance();
+//        timeInst.add(Calendar.SECOND, 10);
+//
+//        AlarmManager mAlarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+//        Intent intent = new Intent(this, AlarmReceiver.class);
+//        intent.putExtra("GETNAME", "TPEflight");
+//
+//        PendingIntent pending = PendingIntent.getBroadcast(this, 0, intent, 0);
+//        mAlarmMgr.set(AlarmManager.RTC_WAKEUP, timeInst.getTimeInMillis(), pending);
     }
 
     @Override
@@ -240,8 +220,18 @@ public class MainActivity extends AppCompatActivity
         return mAlarmList.size();
     }
 
+    public ArrayList<Flight> getAlarmList(){
+        return mAlarmList;
+    }
+
     public void removeTrackList(int position) {
         mTrackList.remove(position);
+        saveList();
+    }
+
+    public void removeAlarmList(int position) {
+        mAlarmList.remove(position);
+        saveList();
     }
 }
 

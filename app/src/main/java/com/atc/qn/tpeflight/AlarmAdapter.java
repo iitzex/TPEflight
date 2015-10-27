@@ -32,7 +32,7 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmHolder>
     @Override
     public void onItemDismiss(int position) {
         notifyItemRemoved(position);
-        ((FlightInterface)mContext).removeTrackList(position);
+        ((FlightInterface)mContext).removeAlarmList(position);
     }
 
     @Override
@@ -49,9 +49,20 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmHolder>
         holder.mFlightNO.setText(target.getFlightNO());
         holder.mActualTime.setText(target.getActualTime());
 
-        SimpleDateFormat day = new SimpleDateFormat("HH:mm");
-        String ringTime = day.format((target.getAlarm()).getTime());
+        String ringTime = target.getAlarm();
         holder.mRingTime.setText(ringTime);
+
+//        if (mAction.equals("D")) {
+//            holder.mCounter.setText(target.getCounter());
+//            holder.mBaggage.setVisibility(View.GONE);
+//        }else if (mAction.equals("A")) {
+//            holder.mCounter.setVisibility(View.GONE);
+//            holder.mBaggage.setText(target.getBaggage());
+//        }
+
+        holder.mGate.setText(target.getGate());
+        holder.mTerminal.setText(target.getTerminal());
+
     }
 
     public void setLogo(AlarmHolder holder, Flight target) {
@@ -65,6 +76,8 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmHolder>
         ImageView mLogo;
         TextView mAirlines_TW, mFlightNO, mActualTime;
         TextView mRingTime;
+        TextView mGate, mTerminal, mDestinationTW;
+        TextView mCounter, mBaggage;
 
         AlarmHolder(View view) {
             super(view);
@@ -73,6 +86,12 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmHolder>
             mFlightNO = (TextView) view.findViewById(R.id.flightNO);
             mActualTime = (TextView) view.findViewById(R.id.alarm_actualTime);
             mRingTime = (TextView) view.findViewById(R.id.alarm_ringTime);
+
+            mDestinationTW = (TextView) view.findViewById(R.id.destinationTW);
+            mCounter = (TextView) view.findViewById(R.id.counter);
+            mBaggage = (TextView) view.findViewById(R.id.baggage);
+            mGate = (TextView) view.findViewById(R.id.gate);
+            mTerminal = (TextView) view.findViewById(R.id.terminal);
         }
     }
 }

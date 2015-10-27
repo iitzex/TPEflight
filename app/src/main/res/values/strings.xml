@@ -4,14 +4,14 @@
     <string name="drawer_close">Menu closed</string>
 
     <string name="search_hint">搜尋航班及地點</string>
+    <string name="name_drawer">桃園機場航班資訊</string>
     <string name="name_departure">出境航班</string>
     <string name="name_arrival">入境航班</string>
-    <string name="name_wx">即時機場天氣</string>
-    <string name="name_airlines">航空公司資訊</string>
     <string name="name_info">航班資訊</string>
     <string name="name_track">追蹤航班</string>
-    <string name="name_drawer">桃園機場航班資訊</string>
-    <string name="name_alarm">航班提醒</string>
+    <string name="name_alarm">鬧鐘提醒</string>
+    <string name="name_wx">即時機場天氣</string>
+    <string name="name_airlines">航空公司資訊</string>
 
     <string-array name="arrayLogo">
         <item>@drawable/l_oz</item>
@@ -74,6 +74,7 @@
         <item>@drawable/l_ok</item>
         <item>@drawable/l_aa</item>
         <item>@drawable/l_lh</item>
+        <item>@drawable/l_xw</item>
 
     </string-array>
 
@@ -138,6 +139,7 @@
         <item>ok</item>
         <item>aa</item>
         <item>lh</item>
+        <item>xw</item>
 
     </string-array>
 
@@ -245,6 +247,7 @@
         <item>第一航廈1樓</item>
         <item>第二航廈3樓</item>
         <item>第一航廈1樓</item>
+        <item></item>
 
     </string-array>
 
@@ -300,6 +303,7 @@
         <item>02-2756-0849</item>
         <item>03-3517621</item>
 
+        <item>0</item>
         <item>0</item>
         <item>0</item>
         <item>0</item>

@@ -213,7 +213,7 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHold
     public static class FlightHolder extends RecyclerView.ViewHolder
     {
         ImageView mLogo;
-        TextView mAirlines_TW, mFlightNO, mShare, mExpectTime;
+        TextView mAirlines_TW, mFlightNO, mExpectTime;
         TextView mGate, mTerminal, mDestinationTW;
         TextView mCounter, mBaggage;
         TextView mIconText;

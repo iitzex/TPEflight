@@ -3,8 +3,6 @@ package com.atc.qn.tpeflight;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.Calendar;
-
 public class Flight implements Parcelable{
     private String action;
     private String flightNO;
@@ -23,7 +21,8 @@ public class Flight implements Parcelable{
     private String type;
     private String counter;
     private String baggage;
-    private Calendar alarm;
+    private String alarm;
+    private long key;
 
     public Flight() {
         super();
@@ -47,6 +46,8 @@ public class Flight implements Parcelable{
         this.type = mInfo.type;
         this.counter= mInfo.counter;
         this.baggage = mInfo.baggage;
+        this.alarm = mInfo.alarm;
+        this.key = key;
     }
 
     public String getAction() {
@@ -105,8 +106,12 @@ public class Flight implements Parcelable{
         return baggage;
     }
 
-    public Calendar getAlarm() {
+    public String getAlarm() {
         return alarm;
+    }
+
+    public long getKey() {
+        return key;
     }
 
     public void setAction(String action) {
@@ -173,8 +178,12 @@ public class Flight implements Parcelable{
         this.baggage = baggage;
     }
 
-    public void setAlarm(Calendar alarm) {
+    public void setAlarm(String alarm) {
         this.alarm = alarm;
+    }
+
+    public void setKey(long key) {
+        this.key = key;
     }
 
     @Override
@@ -200,6 +209,7 @@ public class Flight implements Parcelable{
         dest.writeString(status);
         dest.writeString(counter);
         dest.writeString(baggage);
+        dest.writeString(alarm);
     }
 
     public static final Parcelable.Creator<Flight> CREATOR = new Parcelable.Creator<Flight>() {
@@ -222,6 +232,7 @@ public class Flight implements Parcelable{
             mInfo.setStatus(source.readString());
             mInfo.setCounter(source.readString());
             mInfo.setBaggage(source.readString());
+            mInfo.setAlarm(source.readString());
 
             return mInfo;
         }

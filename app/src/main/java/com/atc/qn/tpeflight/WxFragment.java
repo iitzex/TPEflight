@@ -68,7 +68,7 @@ public class WxFragment extends Fragment{
 
         String degree = info.substring(10, 13).trim();
         String scale = info.substring(14, 17).trim();
-        String gst = info.substring(18, 21).trim();
+//        String gst = info.substring(18, 21).trim();
         String vis = info.substring(22, 26).trim();
         String weather = info.substring(31, 38).trim();
         String ceil = info.substring(39, 43).trim();
@@ -84,13 +84,18 @@ public class WxFragment extends Fragment{
         String mTemp = temp + " °C";
         String mDew = dew + " °C";
 
+        setIcon(weather, ceil);
+
         wx_vis.setText("能見度：\t" + mVis);
         wx_wind.setText("風向/速：\t" + mWind);
-        wx_cloud.setText("雲幕高：\t" + mCloud);
         wx_temp.setText("溫度：\t" + mTemp);
         wx_dew.setText(("露點：\t" + mDew));
 
-        setIcon(weather, ceil);
+        if (mCloud.equals(""))
+            wx_cloud.setVisibility(View.GONE);
+        else
+            wx_cloud.setText("雲幕高：\t" + mCloud);
+
     }
 
     private void setIcon(String wx, String ceil)
@@ -107,7 +112,7 @@ public class WxFragment extends Fragment{
             ceilValue = Integer.valueOf(ceil);
         }
 
-        if(Integer.valueOf(hour) >= 18 || Integer.valueOf(hour) <= 6) {
+        if(Integer.valueOf(hour) >= 18 || Integer.valueOf(hour) < 6) {
             nightTag = "_night";
         }
 

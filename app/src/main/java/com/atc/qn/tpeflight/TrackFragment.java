@@ -62,7 +62,6 @@ public class TrackFragment extends Fragment {
 
         mAdapter = new FlightAdapter(mTrackList, "TRACKING", mContext);
 
-        QNLog.d(mTrackList.toString());
         mRecyclerView.setAdapter(mAdapter);
 
         if (mTrackList.size() != 0)
@@ -101,13 +100,10 @@ public class TrackFragment extends Fragment {
         int id = item.getItemId();
 
         if (id == R.id.track_refresh) {
-
             fetchTasker = (FlightAsyncTask) new FlightAsyncTask().execute(null, null, null);
-
             return true;
         }else if (id == R.id.track_deleteall) {
             mTrackList.clear();
-
             mAdapter = new FlightAdapter(mTrackList, "TRACKING", mContext);
             mRecyclerView.setAdapter(mAdapter);
         }

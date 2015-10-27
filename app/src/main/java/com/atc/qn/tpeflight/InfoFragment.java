@@ -18,8 +18,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 public class InfoFragment extends Fragment {
     private Activity mContext;
+    private ArrayList<Flight> mAlarmList;
     private Flight mInfo;
     private ImageView mStatusLogo;
     private ImageView mAirlinesLogo;    
@@ -28,7 +31,6 @@ public class InfoFragment extends Fragment {
     private TextView mGate, mStatus;
     private TextView mExpectTime, mActualTime;
     private TextView mDestinationTxt, mDestinationTW;
-    private TextView mType;
     private Button mPhone;
 
     private TypedArray arrayLogo;
@@ -57,7 +59,6 @@ public class InfoFragment extends Fragment {
         mActualTime = (TextView) view.findViewById(R.id.infoActualTime);
         mDestinationTxt = (TextView) view.findViewById(R.id.infoDestinationTxt);
         mDestinationTW = (TextView) view.findViewById(R.id.infoDestinationTW);
-        mType = (TextView) view.findViewById(R.id.infoType);
         mPhone = (Button) view.findViewById(R.id.infoPhone);
 
         arrayLogo = getResources().obtainTypedArray(R.array.arrayLogo);
@@ -75,6 +76,8 @@ public class InfoFragment extends Fragment {
         imm.hideSoftInputFromWindow(mContext.getCurrentFocus().getWindowToken(), 0);
 
         mInfo = getArguments().getParcelable("Flight");
+        mAlarmList = getArguments().getParcelableArrayList("ALARMLIST");
+
         if (mInfo == null)
             return;
 
@@ -133,7 +136,6 @@ public class InfoFragment extends Fragment {
 
     @Override
     public void onStop() {
-//        arrayLogo.recycle();
         super.onStop();
     }
 
@@ -144,7 +146,8 @@ public class InfoFragment extends Fragment {
         if (id == R.id.info_alarm) {
             AlarmDialog dialog = new AlarmDialog();
             Bundle infoArgs = new Bundle();
-            infoArgs.putParcelable("Flight", mInfo);
+            infoArgs.putParcelable("FLIGHT", mInfo);
+            infoArgs.putParcelableArrayList("ALARMLIST", mAlarmList);
             dialog.setArguments(infoArgs);
 
             dialog.show(getFragmentManager(), "AlarmDialog");

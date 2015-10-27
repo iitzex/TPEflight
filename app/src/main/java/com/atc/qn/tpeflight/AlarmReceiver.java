@@ -8,19 +8,21 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        String name = intent.getStringExtra("GETNAME");
-        Toast.makeText(context, name, Toast.LENGTH_SHORT).show();
-        QNLog.d("AlarmReceived");
+        String alarmMsg = intent.getStringExtra("ALARMMSG");
+        Toast.makeText(context, alarmMsg, Toast.LENGTH_SHORT).show();
+        QNLog.d("AlarmReceived, " + alarmMsg);
 
         Notification.Builder builder = new Notification.Builder(context);
         builder.setWhen(System.currentTimeMillis())
             .setSmallIcon(R.drawable.ic_alarm)
-            .setContentTitle("Basic Notification")
-            .setContentText("Demo for basic notification control.")
-            .setContentInfo("test");
+            .setContentTitle("航班提醒")
+            .setContentText(alarmMsg);
+//            .setContentInfo("test");
 
         long[] vibrate_effect = {1000, 500, 1000, 500, 1000, 500, 1000, 500, 1000, 500};
         builder.setVibrate(vibrate_effect)

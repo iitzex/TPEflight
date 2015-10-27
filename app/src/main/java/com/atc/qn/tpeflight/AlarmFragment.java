@@ -2,6 +2,7 @@ package com.atc.qn.tpeflight;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -35,6 +36,7 @@ public class AlarmFragment extends Fragment {
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         mAlarmList = getArguments().getParcelableArrayList("ALARMLIST");
 
         LinearLayoutManager mManager = new LinearLayoutManager(mContext);
@@ -46,12 +48,19 @@ public class AlarmFragment extends Fragment {
         RecyclerView.ItemDecoration itemDecoration = new Divider(mContext, Divider.VERTICAL_LIST);
         mRecyclerView.addItemDecoration(itemDecoration);
 
-        mAdapter = new AlarmAdapter(mAlarmList, getActivity());
-        mRecyclerView.setAdapter(mAdapter);
-        ItemTouchHelper touchHelper = new ItemTouchHelper(new ItemCallback(mAdapter));
-        touchHelper.attachToRecyclerView(mRecyclerView);
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                mAdapter = new AlarmAdapter(mAlarmList, mContext);
+                mRecyclerView.setAdapter(mAdapter);
+                ItemTouchHelper touchHelper = new ItemTouchHelper(new ItemCallback(mAdapter));
+                touchHelper.attachToRecyclerView(mRecyclerView);
+            }
+        };
 
-        super.onActivityCreated(savedInstanceState);
+        Handler mHandler = new Handler();
+        mHandler.postDelayed(r, 300);
+
     }
 
     @Override
@@ -64,7 +73,7 @@ public class AlarmFragment extends Fragment {
         int id = item.getItemId();
         if (id == R.id.alarm_deleteall) {
             mAlarmList.clear();
-            mAdapter = new AlarmAdapter(mAlarmList, getActivity());
+            mAdapter = new AlarmAdapter(mAlarmList, mContext);
             mRecyclerView.setAdapter(mAdapter);
             return true;
         }

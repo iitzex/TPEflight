@@ -47,7 +47,6 @@ public class DrawerFragment extends Fragment
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
     private String mOrigTitle = "";
-    private Fragment mFrag;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,7 +61,6 @@ public class DrawerFragment extends Fragment
             mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
             mFromSavedInstanceState = true;
         }
-        mFrag = this;
     }
 
     @Override

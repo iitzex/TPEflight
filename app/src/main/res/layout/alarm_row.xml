@@ -55,6 +55,40 @@
                 android:textSize="18sp"
                 android:textColor="@color/myAccentColor"
                 android:id="@+id/alarm_actualTime"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:paddingLeft="5dp"
+                android:id="@+id/destinationTW"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:paddingLeft="5dp"
+                android:id="@+id/terminal"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:paddingLeft="5dp"
+                android:id="@+id/counter"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:paddingLeft="5dp"
+                android:id="@+id/baggage"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:text="/"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:id="@+id/gate"/>
         </LinearLayout>
     </LinearLayout>
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -66,19 +100,20 @@
         android:paddingBottom="5dp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:textSize="18sp"
-            android:textColor="@color/myAccentColor"
-            android:layout_alignParentEnd="true"
-            android:id="@+id/alarm_ringTime"/>
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toStartOf="@id/alarm_ringTime"
-            android:src="@drawable/v_alarm"/>
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/v_alarm"
+            android:id="@+id/alarm_icon"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@id/alarm_icon"
+            android:textSize="18sp"
+            android:textColor="@color/md_red_600"
+            android:id="@+id/alarm_ringTime"/>
     </RelativeLayout>
 </RelativeLayout>
