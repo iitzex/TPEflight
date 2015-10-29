@@ -30,14 +30,14 @@ public class FlightFragment extends Fragment
         implements SearchView.OnQueryTextListener
 {
     private Activity mContext;
-    private static ArrayList<String> mFlightAll = new ArrayList<>();
+    private static ArrayList<String> sFlightAll = new ArrayList<>();
     private RecyclerView mRecyclerView;
     private FlightAdapter mAdapter;
     private LinearLayoutManager mManager;
     private ProgressBar mLoading;
     private TextView mUpdateTextView;
-    private static String mAction, mUpdateTime;
-    private static int mPositionDeparture = -1, mPositionArrival = -1, mPosition = -1;
+    private static String sAction, sUpdateTime;
+    private static int sPositionDeparture = -1, sPositionArrival = -1, sPosition = -1;
     private FlightAsyncTask mTask;
 
     @Override
@@ -45,11 +45,11 @@ public class FlightFragment extends Fragment
         mContext = getActivity();
         setHasOptionsMenu(true);
 
-        mAction = getArguments().getString("Action", "D");
-        if (mAction.equals("D")) {
-            mPosition = mPositionDeparture;
+        sAction = getArguments().getString("Action", "D");
+        if (sAction.equals("D")) {
+            sPosition = sPositionDeparture;
         }else {
-            mPosition = mPositionArrival;
+            sPosition = sPositionArrival;
         }
 
         View view =  inflater.inflate(R.layout.flight, container, false);
@@ -78,7 +78,7 @@ public class FlightFragment extends Fragment
     public void onStart() {
         super.onStart();
 
-        if (mFlightAll.size() == 0) { //fetch flight infomation while empty
+        if (sFlightAll.size() == 0) { //fetch flight infomation while empty
             fetchFlight();
         } else { //with information
             onFinishView(false);
@@ -89,7 +89,7 @@ public class FlightFragment extends Fragment
     public void onResume() {
         super.onResume();
 
-        if (mAction.equals("D"))
+        if (sAction.equals("D"))
             mContext.setTitle(mContext.getString(R.string.name_departure));
         else
             mContext.setTitle(mContext.getString(R.string.name_arrival));
@@ -101,23 +101,23 @@ public class FlightFragment extends Fragment
 
         Calendar timeInst = Calendar.getInstance();
         SimpleDateFormat day = new SimpleDateFormat("yyyy/MM/dd, HH:mm");
-        mUpdateTime = day.format(timeInst.getTime());
+        sUpdateTime = day.format(timeInst.getTime());
     }
 
     private void onFinishView(final boolean updated) {
         mLoading.setVisibility(View.INVISIBLE);
 
-        mUpdateTextView.setText("最近更新：" + mUpdateTime);
+        mUpdateTextView.setText("最近更新：" + sUpdateTime);
 
         Runnable r = new Runnable() {
             @Override
             public void run() {
-                mAdapter = new FlightAdapter(mFlightAll, updated, mAction, mContext);
+                mAdapter = new FlightAdapter(sFlightAll, updated, sAction, mContext);
 
-                if (mPosition == -1) {
+                if (sPosition == -1) {
                     mManager.scrollToPositionWithOffset(mAdapter.getTimePosition(), 0);
                 }else {
-                    mManager.scrollToPositionWithOffset(mPosition, 0);
+                    mManager.scrollToPositionWithOffset(sPosition, 0);
                 }
 
                 mRecyclerView.setAdapter(mAdapter);
@@ -152,7 +152,7 @@ public class FlightFragment extends Fragment
             mManager.scrollToPositionWithOffset(mAdapter.getTimePosition(), 0);
             return true;
         }else if (id == R.id.action_refresh) {
-            mPosition = mManager.findFirstVisibleItemPosition();
+            sPosition = mManager.findFirstVisibleItemPosition();
 
             fetchFlight();
             return true;
@@ -175,14 +175,14 @@ public class FlightFragment extends Fragment
 
     @Override
     public void onStop() {
-        mPosition = mManager.findFirstVisibleItemPosition();
+        sPosition = mManager.findFirstVisibleItemPosition();
         getArguments().putBoolean("Reloaded", false);
 
-        if (mPosition >= 0) {
-            if (mAction.equals("D")) {
-                mPositionDeparture = mPosition;
+        if (sPosition >= 0) {
+            if (sAction.equals("D")) {
+                sPositionDeparture = sPosition;
             } else {
-                mPositionArrival = mPosition;
+                sPositionArrival = sPosition;
             }
         }
 
@@ -199,7 +199,7 @@ public class FlightFragment extends Fragment
         protected void onPreExecute() {
             super.onPreExecute();
 
-            mFlightAll.clear();
+            sFlightAll.clear();
             mLoading.setVisibility(View.VISIBLE);
         }
 
@@ -228,7 +228,7 @@ public class FlightFragment extends Fragment
                 String[] info = StringBuffer.split(",");
 
                 if (info[6].trim().equals(dayStr)) { //filtered by day
-                    mFlightAll.add(StringBuffer);
+                    sFlightAll.add(StringBuffer);
                 }
             }
 

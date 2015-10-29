@@ -1,10 +1,5 @@
 package com.atc.qn.tpeflight;
 import com.atc.qn.tpeflight.DrawerAdapter.DrawerInterface;
-
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -13,13 +8,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.text.SimpleDateFormat;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 public class MainActivity extends AppCompatActivity
         implements DrawerInterface, FlightInterface
@@ -29,6 +22,17 @@ public class MainActivity extends AppCompatActivity
     private ArrayList<Flight> mTrackList = new ArrayList<>();
     private ArrayList<Flight> mAlarmList = new ArrayList<>();
     private SharedPreferences mPrefs;
+    private static MainActivity inst;
+
+    public static MainActivity instance() {
+        return inst;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        inst = this;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +42,8 @@ public class MainActivity extends AppCompatActivity
 //            //Restore the fragment's instance
 //            mContent = getSupportFragmentManager().getFragment(savedInstanceState, "mContent");
         }
+
+        mPrefs = getSharedPreferences("PREFERENCES", MODE_PRIVATE);
 
         setContentView(R.layout.activity_main);
 
@@ -52,6 +58,7 @@ public class MainActivity extends AppCompatActivity
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList("TRACKING", mTrackList);
+        outState.putParcelableArrayList("ALARMLIST", mAlarmList);
     }
 
     @Override
@@ -124,7 +131,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void restoreList() {
-        mPrefs = getSharedPreferences("PREFERENCES", MODE_PRIVATE);
 
         ArrayList<Flight> mList;
         Gson gson = new Gson();
@@ -220,17 +226,12 @@ public class MainActivity extends AppCompatActivity
         return mAlarmList.size();
     }
 
-    public ArrayList<Flight> getAlarmList(){
+    public ArrayList<Flight> getAlarmList() {
         return mAlarmList;
     }
 
     public void removeTrackList(int position) {
         mTrackList.remove(position);
-        saveList();
-    }
-
-    public void removeAlarmList(int position) {
-        mAlarmList.remove(position);
         saveList();
     }
 }

@@ -1,6 +1,10 @@
 package com.atc.qn.tpeflight;
 
+import android.app.AlarmManager;
+import android.app.Fragment;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,17 +12,18 @@ import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmHolder>
     implements ItemCallback.MoveInterface
 {
     private Context mContext;
+    private AlarmFragment mFragment;
     private ArrayList<Flight> mAlarmList;
 
-    public AlarmAdapter(ArrayList<Flight> mAlarmList, Context mContext) {
+    public AlarmAdapter(ArrayList<Flight> mAlarmList, Context mContext, AlarmFragment mFragment) {
         this.mContext = mContext;
+        this.mFragment = mFragment;
         this.mAlarmList = mAlarmList;
     }
 
@@ -31,9 +36,10 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmHolder>
 
     @Override
     public void onItemDismiss(int position) {
+        mFragment.removeAlarmList(position);
         notifyItemRemoved(position);
-        ((FlightInterface)mContext).removeAlarmList(position);
     }
+
 
     @Override
     public int getItemCount() {
@@ -45,23 +51,19 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmHolder>
         final Flight target = mAlarmList.get(position);
 
         setLogo(holder, target);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((FlightInterface) mContext).onFlightItemClick(target);
+            }
+        });
+
+
         holder.mAirlines_TW.setText(target.getAirlinesTW());
         holder.mFlightNO.setText(target.getFlightNO());
-        holder.mActualTime.setText(target.getActualTime());
+        holder.mActualTime.setText("實際時間 " + target.getActualTime());
 
-        String ringTime = target.getAlarm();
-        holder.mRingTime.setText(ringTime);
-
-//        if (mAction.equals("D")) {
-//            holder.mCounter.setText(target.getCounter());
-//            holder.mBaggage.setVisibility(View.GONE);
-//        }else if (mAction.equals("A")) {
-//            holder.mCounter.setVisibility(View.GONE);
-//            holder.mBaggage.setText(target.getBaggage());
-//        }
-
-        holder.mGate.setText(target.getGate());
-        holder.mTerminal.setText(target.getTerminal());
+        holder.mRingTime.setText(target.getAlarmTag());
 
     }
 
@@ -76,8 +78,6 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmHolder>
         ImageView mLogo;
         TextView mAirlines_TW, mFlightNO, mActualTime;
         TextView mRingTime;
-        TextView mGate, mTerminal, mDestinationTW;
-        TextView mCounter, mBaggage;
 
         AlarmHolder(View view) {
             super(view);
@@ -86,12 +86,6 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmHolder>
             mFlightNO = (TextView) view.findViewById(R.id.flightNO);
             mActualTime = (TextView) view.findViewById(R.id.alarm_actualTime);
             mRingTime = (TextView) view.findViewById(R.id.alarm_ringTime);
-
-            mDestinationTW = (TextView) view.findViewById(R.id.destinationTW);
-            mCounter = (TextView) view.findViewById(R.id.counter);
-            mBaggage = (TextView) view.findViewById(R.id.baggage);
-            mGate = (TextView) view.findViewById(R.id.gate);
-            mTerminal = (TextView) view.findViewById(R.id.terminal);
         }
     }
 }

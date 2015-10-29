@@ -49,6 +49,5 @@ public class ItemCallback extends ItemTouchHelper.Callback {
             ((FlightAdapter)mAdapter).onItemDismiss(viewHolder.getAdapterPosition());
         else if (mAdapter instanceof AlarmAdapter)
             ((AlarmAdapter)mAdapter).onItemDismiss(viewHolder.getAdapterPosition());
-
     }
 }

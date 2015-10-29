@@ -153,6 +153,7 @@ public class DrawerFragment extends Fragment
 
                 mOrigTitle = getActivity().getTitle().toString();
                 getActivity().setTitle(getActivity().getString(R.string.name_drawer));
+                
                 getActivity().invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
             }
         };

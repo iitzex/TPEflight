@@ -21,8 +21,8 @@ public class Flight implements Parcelable{
     private String type;
     private String counter;
     private String baggage;
-    private String alarm;
-    private long key;
+    private String alarmTag;
+    private int key;
 
     public Flight() {
         super();
@@ -46,7 +46,7 @@ public class Flight implements Parcelable{
         this.type = mInfo.type;
         this.counter= mInfo.counter;
         this.baggage = mInfo.baggage;
-        this.alarm = mInfo.alarm;
+        this.alarmTag = mInfo.alarmTag;
         this.key = key;
     }
 
@@ -106,11 +106,11 @@ public class Flight implements Parcelable{
         return baggage;
     }
 
-    public String getAlarm() {
-        return alarm;
+    public String getAlarmTag() {
+        return alarmTag;
     }
 
-    public long getKey() {
+    public int getKey() {
         return key;
     }
 
@@ -178,11 +178,11 @@ public class Flight implements Parcelable{
         this.baggage = baggage;
     }
 
-    public void setAlarm(String alarm) {
-        this.alarm = alarm;
+    public void setAlarmTag(String alarmTag) {
+        this.alarmTag = alarmTag;
     }
 
-    public void setKey(long key) {
+    public void setKey(int key) {
         this.key = key;
     }
 
@@ -209,7 +209,7 @@ public class Flight implements Parcelable{
         dest.writeString(status);
         dest.writeString(counter);
         dest.writeString(baggage);
-        dest.writeString(alarm);
+        dest.writeString(alarmTag);
     }
 
     public static final Parcelable.Creator<Flight> CREATOR = new Parcelable.Creator<Flight>() {
@@ -232,7 +232,7 @@ public class Flight implements Parcelable{
             mInfo.setStatus(source.readString());
             mInfo.setCounter(source.readString());
             mInfo.setBaggage(source.readString());
-            mInfo.setAlarm(source.readString());
+            mInfo.setAlarmTag(source.readString());
 
             return mInfo;
         }

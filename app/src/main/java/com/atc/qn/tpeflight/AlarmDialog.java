@@ -50,10 +50,12 @@ public class AlarmDialog extends DialogFragment {
             int timeDelta = 0;
             String msg = "準時呼叫";
             if (i == 1) {
-                timeDelta = -15;
+                timeDelta = -2;
+//                timeDelta = -15;
                 msg = "15分鐘前呼叫";
             }else if (i == 2) {
-                timeDelta = -30;
+                timeDelta = -5;
+//                timeDelta = -30;
                 msg = "30分鐘前呼叫";
             }else if (i == 3) {
                 timeDelta = -60;
@@ -73,6 +75,11 @@ public class AlarmDialog extends DialogFragment {
 
             Calendar now = Calendar.getInstance();
             setCheckBox(layout, mCal.after(now), msg, ringTime);
+//            // TODO: 2015/10/27
+//            //after testing delete from list
+//            boolean set = mCal.after(now);
+//            set = true;
+//            setCheckBox(layout, set, msg, ringTime);
         }
 
         builder.setView(view)
@@ -88,7 +95,7 @@ public class AlarmDialog extends DialogFragment {
 
     private void setCheckBox(LinearLayout layout, boolean show, String msg, String ringTime) {
         CheckBox item = new CheckBox(mContext);
-        item.setPadding(15, 7, 15, 7);
+        item.setPadding(15, 15, 15, 15);
         item.setTextSize(20);
         item.setText(msg + ", " + ringTime);
         if (show) {
@@ -108,20 +115,22 @@ public class AlarmDialog extends DialogFragment {
                 Calendar mCal = mCalendarList.get(i);
                 SimpleDateFormat format = new SimpleDateFormat("HH:mm");
                 String ringTime = format.format(mCal.getTime());
-                target.setAlarm(ringTime);
-                target.setKey(mCal.getTimeInMillis());
+                long triggerAtMillis = mCal.getTimeInMillis();
+                target.setAlarmTag(ringTime);
+                target.setKey((int)triggerAtMillis);
 
                 mAlarmList.add(target);
                 String alarmMsg = target.getAirlinesTW() + " " + target.getFlightNO() + ", " + ringTime;
-                addAlarm(alarmMsg, target.getKey());
+                setAlarm(alarmMsg, triggerAtMillis);
             }
         }
     }
 
-    public void addAlarm(String alarmMsg, long triggerAtMillis){
+    public void setAlarm(String alarmMsg, long triggerAtMillis){
         AlarmManager mAlarmMgr = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(mContext, AlarmReceiver.class);
-        intent.putExtra("ALARMMSG", alarmMsg);
+//        intent.putExtra("ALARMMSG", alarmMsg);
+        intent.setAction(alarmMsg);
 
         PendingIntent pending = PendingIntent.getBroadcast(mContext, (int)triggerAtMillis,
                                     intent, PendingIntent.FLAG_UPDATE_CURRENT);
