@@ -131,11 +131,11 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void restoreList() {
-
         ArrayList<Flight> mList;
         Gson gson = new Gson();
-        String mTrackJson = mPrefs.getString("TRACKING", null);
         Type listType = new TypeToken<ArrayList<Flight>>() {}.getType();
+
+        String mTrackJson = mPrefs.getString("TRACKING", null);
         if ((mList = gson.fromJson(mTrackJson, listType)) != null)
             mTrackList = mList;
 
