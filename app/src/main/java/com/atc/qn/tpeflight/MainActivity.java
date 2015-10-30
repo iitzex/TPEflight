@@ -9,7 +9,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 
 import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Iterator;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -193,18 +196,6 @@ public class MainActivity extends AppCompatActivity
                 .commit();
     }
 
-    @Override
-    public void onAlarmClick(Flight mInfo) {
-//        Calendar timeInst = Calendar.getInstance();
-//        timeInst.add(Calendar.SECOND, 10);
-//
-//        AlarmManager mAlarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-//        Intent intent = new Intent(this, AlarmReceiver.class);
-//        intent.putExtra("GETNAME", "TPEflight");
-//
-//        PendingIntent pending = PendingIntent.getBroadcast(this, 0, intent, 0);
-//        mAlarmMgr.set(AlarmManager.RTC_WAKEUP, timeInst.getTimeInMillis(), pending);
-    }
 
     @Override
     public void onStarClick(Flight mInfo) {
@@ -223,6 +214,26 @@ public class MainActivity extends AppCompatActivity
     }
 
     public int getAlarmListSize(){
+        Iterator<Flight> it = mAlarmList.iterator();
+        while (it.hasNext()) {
+            Calendar now = Calendar.getInstance();
+
+            Flight target = it.next();
+            String time = target.getActualDay() + ", " + target.getAlarmTag();
+
+            Calendar mCal = Calendar.getInstance();
+            SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd, HH:mm");
+            try {
+                mCal.setTime(format.parse(time));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            if (mCal.before(now)){
+                it.remove();
+            }
+        }
+
         return mAlarmList.size();
     }
 

@@ -75,7 +75,7 @@ public class AlarmFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        QNLog.d("resume alarm");
+        ((FlightInterface)mContext).getAlarmListSize();
     }
 
     @Override
