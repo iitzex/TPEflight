@@ -50,12 +50,10 @@ public class AlarmDialog extends DialogFragment {
             int timeDelta = 0;
             String msg = "準時呼叫";
             if (i == 1) {
-                timeDelta = -2;
-//                timeDelta = -15;
+                timeDelta = -15;
                 msg = "15分鐘前呼叫";
             }else if (i == 2) {
-                timeDelta = -5;
-//                timeDelta = -30;
+                timeDelta = -30;
                 msg = "30分鐘前呼叫";
             }else if (i == 3) {
                 timeDelta = -60;
@@ -75,11 +73,6 @@ public class AlarmDialog extends DialogFragment {
 
             Calendar now = Calendar.getInstance();
             setCheckBox(layout, mCal.after(now), msg, ringTime);
-//            // TODO: 2015/10/27
-//            //after testing delete from list
-//            boolean set = mCal.after(now);
-//            set = true;
-//            setCheckBox(layout, set, msg, ringTime);
         }
 
         builder.setView(view)
@@ -131,6 +124,9 @@ public class AlarmDialog extends DialogFragment {
         Intent intent = new Intent(mContext, AlarmReceiver.class);
 //        intent.putExtra("ALARMMSG", alarmMsg);
         intent.setAction(alarmMsg);
+
+        Calendar timeInst = Calendar.getInstance();
+        intent.putExtra("KEY", (int)timeInst.getTimeInMillis());
 
         PendingIntent pending = PendingIntent.getBroadcast(mContext, (int)triggerAtMillis,
                                     intent, PendingIntent.FLAG_UPDATE_CURRENT);

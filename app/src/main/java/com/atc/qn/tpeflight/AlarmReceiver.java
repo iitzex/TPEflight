@@ -13,6 +13,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         String msg = intent.getStringExtra("ALARMMSG");
+        int KEY = intent.getIntExtra("KEY", 0);
         String alarmMsg = intent.getAction();
         Toast.makeText(context, alarmMsg, Toast.LENGTH_SHORT).show();
         QNLog.d("AlarmReceived, " + alarmMsg);
@@ -26,14 +27,13 @@ public class AlarmReceiver extends BroadcastReceiver {
         Notification.Builder builder = new Notification.Builder(context);
         builder.setWhen(System.currentTimeMillis())
             .setSmallIcon(R.drawable.ic_airplane)
-            .setContentTitle(context.getString(R.string.name_alarm))
-            .setContentText(alarmMsg);
+                .setContentTitle(context.getString(R.string.name_alarm))
+                .setContentText(alarmMsg);
 
         long[] vibrate_effect = {1000, 500, 1000, 500, 1000, 500, 1000, 500, 1000, 500};
         builder.setVibrate(vibrate_effect)
             .setLights(Color.GREEN, 1000, 1000);
 
-        int BASIC_ID = 1;
         NotificationManager nNotificationMgr = (NotificationManager)
                 context.getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -45,7 +45,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                 context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pendingIntent);
         builder.setAutoCancel(true);
-        nNotificationMgr.notify(BASIC_ID, builder.build());
+        nNotificationMgr.notify(KEY, builder.build());
     }
 }
 
