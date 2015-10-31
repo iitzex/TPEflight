@@ -46,6 +46,8 @@ public class DrawerFragment extends Fragment
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
+    // TODO: 2015/10/31
+    // fix the title after drawer opened
     private String mOrigTitle = "";
 
     @Override

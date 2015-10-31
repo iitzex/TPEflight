@@ -18,7 +18,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 public class AirlinesFragment extends Fragment {
-    private LayoutInflater mInflater;
     private LinearLayout mLayout;
     private ProgressBar mLoading;
 
@@ -67,7 +66,7 @@ public class AirlinesFragment extends Fragment {
 
     private void getAirlines() {
         mViews = new ArrayList<>();
-        mInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater mInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         for (int i = 0; i < mAirlinesTWs.length; i++){
             LinearLayout airlines_row = (LinearLayout) mInflater.inflate(R.layout.airlines_row, null);
