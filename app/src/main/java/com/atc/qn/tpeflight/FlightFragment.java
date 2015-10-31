@@ -78,7 +78,7 @@ public class FlightFragment extends Fragment
     public void onStart() {
         super.onStart();
 
-        if (sFlightAll.size() == 0) { //fetch flight infomation while empty
+        if (sFlightAll.size() == 0) { //fetch flight information while empty
             fetchFlight();
         } else { //with information
             onFinishView(false);

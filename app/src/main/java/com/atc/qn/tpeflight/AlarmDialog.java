@@ -119,7 +119,7 @@ public class AlarmDialog extends DialogFragment {
         }
     }
 
-    public void setAlarm(String alarmMsg, long triggerAtMillis){
+    private void setAlarm(String alarmMsg, long triggerAtMillis){
         AlarmManager mAlarmMgr = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(mContext, AlarmReceiver.class);
 //        intent.putExtra("ALARMMSG", alarmMsg);

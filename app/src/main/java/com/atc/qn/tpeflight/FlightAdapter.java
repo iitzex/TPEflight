@@ -103,7 +103,7 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHold
         return new FlightHolder(v);
     }
 
-    public void setLogo(FlightHolder holder, Flight target) {
+    private void setLogo(FlightHolder holder, Flight target) {
         String iconName = "l_" + target.getAirlines().toLowerCase();
         int resId = mContext.getResources().getIdentifier(iconName, "drawable", mContext.getPackageName());
         holder.mLogo.setImageResource(resId);

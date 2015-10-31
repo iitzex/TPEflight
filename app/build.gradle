@@ -8,8 +8,8 @@ android {
         applicationId "com.atc.qn.tpeflight"
         minSdkVersion 17
         targetSdkVersion 22
-        versionCode 114
-        versionName "1.1.4"
+        versionCode 115
+        versionName "1.1.5"
     }
     buildTypes {
         release {

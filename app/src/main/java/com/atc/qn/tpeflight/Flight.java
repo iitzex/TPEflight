@@ -47,7 +47,7 @@ public class Flight implements Parcelable{
         this.counter= mInfo.counter;
         this.baggage = mInfo.baggage;
         this.alarmTag = mInfo.alarmTag;
-        this.key = key;
+        this.key = mInfo.key;
     }
 
     public String getAction() {

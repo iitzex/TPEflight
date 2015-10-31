@@ -126,7 +126,7 @@ public class AlarmFragment extends Fragment {
         mAlarmList.remove(position);
     }
 
-    public void cancelAlarm(int position) {
+    private void cancelAlarm(int position) {
         Flight target = mAlarmList.get(position);
         String alarmMsg = target.getAirlinesTW() + " " + target.getFlightNO() + ", " + target.getAlarmTag();
 

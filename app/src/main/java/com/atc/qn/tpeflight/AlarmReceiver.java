@@ -12,7 +12,7 @@ import android.widget.Toast;
 public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        String msg = intent.getStringExtra("ALARMMSG");
+//        String msg = intent.getStringExtra("ALARMMSG");
         int KEY = intent.getIntExtra("KEY", 0);
         String alarmMsg = intent.getAction();
         Toast.makeText(context, alarmMsg, Toast.LENGTH_SHORT).show();
@@ -26,7 +26,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         Notification.Builder builder = new Notification.Builder(context);
         builder.setWhen(System.currentTimeMillis())
-            .setSmallIcon(R.drawable.ic_airplane)
+                .setSmallIcon(R.drawable.ic_airplane)
                 .setContentTitle(context.getString(R.string.name_alarm))
                 .setContentText(alarmMsg);
 

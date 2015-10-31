@@ -18,7 +18,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 public class AirlinesFragment extends Fragment {
-    LayoutInflater mInflater;
+    private LayoutInflater mInflater;
     private LinearLayout mLayout;
     private ProgressBar mLoading;
 

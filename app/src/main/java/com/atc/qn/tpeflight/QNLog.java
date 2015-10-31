@@ -3,9 +3,9 @@ package com.atc.qn.tpeflight;
 import android.util.Log;
 
 public class QNLog{
-    static boolean DEBUG = true;
+    static final private boolean DEBUG = true;
 //    static boolean DEBUG = false;
-    static String TAG = "TPEflight";
+    static final private String TAG = "TPEFLIGHT";
 
     static public void d(String msg) {
         if(DEBUG)

@@ -171,16 +171,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-//        if (!mDrawerFragment.isDrawerOpen()) {
-////            getMenuInflater().inflate(R.menu.main_menu, menu);
-//            return true;
-//        }
-
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
     public void onFlightItemClick(Flight mInfo) {
         FragmentManager fragMgr = getSupportFragmentManager();
 
@@ -235,10 +225,6 @@ public class MainActivity extends AppCompatActivity
         }
 
         return mAlarmList.size();
-    }
-
-    public ArrayList<Flight> getAlarmList() {
-        return mAlarmList;
     }
 
     public void removeTrackList(int position) {

@@ -1,10 +1,6 @@
 package com.atc.qn.tpeflight;
 
-import android.app.AlarmManager;
-import android.app.Fragment;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,7 +63,7 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmHolder>
 
     }
 
-    public void setLogo(AlarmHolder holder, Flight target) {
+    private void setLogo(AlarmHolder holder, Flight target) {
         String iconName = "l_" + target.getAirlines().toLowerCase();
         int resId = mContext.getResources().getIdentifier(iconName, "drawable", mContext.getPackageName());
         holder.mLogo.setImageResource(resId);

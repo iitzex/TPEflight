@@ -61,7 +61,7 @@ public class WxFragment extends Fragment{
         mTask = (WxAsyncTask) new WxAsyncTask().execute(null, null, null);
     }
 
-    public void decode(String rawdata) {
+    private void decode(String rawdata) {
         String info = parse(rawdata, "<PRE>.*(" + "RCTP" + " .*)</PRE>");
         if (info.equals("EMPTY!!"))
             return;
@@ -233,7 +233,7 @@ public class WxFragment extends Fragment{
     }
 
     private class WxAsyncTask extends AsyncTask<Void , Void, Integer> {
-        String addr = "http://aoaws.caa.gov.tw/cgi-bin/wmds/aoaws_metars?metar_ids=" +
+        final String addr = "http://aoaws.caa.gov.tw/cgi-bin/wmds/aoaws_metars?metar_ids=" +
                 "RCTP" + "&NHOURS=Lastest&std_trans=";
 
         @Override
