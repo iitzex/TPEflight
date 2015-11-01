@@ -46,7 +46,7 @@ public class DrawerFragment extends Fragment
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
-    private String mOrigTitle = "";
+    private List<DrawerItem> items = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -98,9 +98,9 @@ public class DrawerFragment extends Fragment
 
     public List<DrawerItem> getMenu() {
         Activity mContext = getActivity();
-        List<DrawerItem> items = new ArrayList<>();
         String mTrackCount = "(" + ((FlightInterface)mContext).getTrackListSize() + ")";
         String mAlarmCount = "(" + ((FlightInterface)mContext).getAlarmListSize() + ")";
+        items.clear();
 
         items.add(new DrawerItem(mContext.getString(R.string.name_departure),
                 ContextCompat.getDrawable(mContext, R.drawable.v_takeoff)));
@@ -127,7 +127,6 @@ public class DrawerFragment extends Fragment
     public void setup(int fragmentId, DrawerLayout drawerLayout, Toolbar toolbar) {
         mFragmentContainerView = getActivity().findViewById(fragmentId);
         mDrawerLayout = drawerLayout;
-
         mDrawerLayout.setStatusBarBackgroundColor(getResources().getColor(R.color.myPrimaryDarkColor));
 
         mActionBarDrawerToggle = new ActionBarDrawerToggle(getActivity(), mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
@@ -136,6 +135,7 @@ public class DrawerFragment extends Fragment
                 super.onDrawerClosed(drawerView);
                 if (!isAdded()) return;
 
+                getActivity().setTitle(items.get(mCurrentSelectedPosition).getText());
                 getActivity().invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
             }
 
@@ -150,10 +150,7 @@ public class DrawerFragment extends Fragment
                 }
 
                 updateDrawerList();
-
-                mOrigTitle = getActivity().getTitle().toString();
                 getActivity().setTitle(getActivity().getString(R.string.name_drawer));
-                
                 getActivity().invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
             }
         };

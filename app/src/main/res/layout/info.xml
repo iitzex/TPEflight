@@ -52,7 +52,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="2dp">
+            android:padding="2dp"
+            android:baselineAligned="false">
 
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="0dp"
@@ -171,7 +172,7 @@
             <ImageView
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:src="@drawable/v_time" />
+                android:src="@drawable/ic_delay" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -200,7 +201,7 @@
             <ImageView
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:src="@drawable/v_time" />
+                android:src="@drawable/ic_delay" />
 
             <TextView
                 android:layout_width="wrap_content"
