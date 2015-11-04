@@ -3,7 +3,6 @@ package com.atc.qn.tpeflight;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
-import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -17,26 +16,18 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
 import android.os.Handler;
 
 public class FlightFragment extends Fragment
-        implements SearchView.OnQueryTextListener
+        implements SearchView.OnQueryTextListener, FlightAsyncTask.FetchListener
 {
     private Activity mContext;
-    private static ArrayList<String> sFlightAll = new ArrayList<>();
     private RecyclerView mRecyclerView;
     private FlightAdapter mAdapter;
     private LinearLayoutManager mManager;
     private ProgressBar mLoading;
     private TextView mUpdateTextView;
-    private static String sAction, sUpdateTime;
+    private static String sAction;
     private static int sPositionDeparture = -1, sPositionArrival = -1, sPosition = -1;
     private FlightAsyncTask mTask;
 
@@ -60,7 +51,6 @@ public class FlightFragment extends Fragment
     }
 
     public void onActivityCreated(Bundle savedInstanceState) {
-
         mManager = new LinearLayoutManager(mContext);
         mManager.setOrientation(LinearLayoutManager.VERTICAL);
 
@@ -78,7 +68,7 @@ public class FlightFragment extends Fragment
     public void onStart() {
         super.onStart();
 
-        if (sFlightAll.size() == 0) { //fetch flight information while empty
+        if (FlightAsyncTask.getFlightData().size() == 0) { //fetch flight information while empty
             fetchFlight();
         } else { //with information
             onFinishView(false);
@@ -97,22 +87,18 @@ public class FlightFragment extends Fragment
 
     private void fetchFlight() {
         getArguments().putBoolean("Reloaded", false);
-        mTask = (FlightAsyncTask) new FlightAsyncTask().execute(null, null, null);
+        mTask = (FlightAsyncTask) new FlightAsyncTask(this).execute(null, null, null);
 
-        Calendar timeInst = Calendar.getInstance();
-        SimpleDateFormat day = new SimpleDateFormat("yyyy/MM/dd, HH:mm");
-        sUpdateTime = day.format(timeInst.getTime());
     }
 
     private void onFinishView(final boolean updated) {
         mLoading.setVisibility(View.INVISIBLE);
-
-        mUpdateTextView.setText("最近更新：" + sUpdateTime);
+        mUpdateTextView.setText("最近更新：" + FlightAsyncTask.getUpdateTime());
 
         Runnable r = new Runnable() {
             @Override
             public void run() {
-                mAdapter = new FlightAdapter(sFlightAll, updated, sAction, mContext);
+                mAdapter = new FlightAdapter(FlightAsyncTask.getFlightData(), updated, sAction, mContext);
 
                 if (sPosition == -1) {
                     mManager.scrollToPositionWithOffset(mAdapter.getTimePosition(), 0);
@@ -194,54 +180,17 @@ public class FlightFragment extends Fragment
         super.onStop();
     }
 
-    private class FlightAsyncTask extends AsyncTask<Void, Void, Integer> {
-        final static String addr = "http://www.taoyuan-airport.com/uploads/flightx/a_flight_v4.txt";
+    @Override
+    public void filter() {}
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
+    @Override
+    public void onPreExecute() {
+        mLoading.setVisibility(View.VISIBLE);
+    }
 
-            sFlightAll.clear();
-            mLoading.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected Integer doInBackground(Void... params) {
-            try {
-                downloadData(addr);
-            } catch (IOException e) {
-                e.printStackTrace();
-                return 0;
-            }
-            return 1;
-        }
-
-        private void downloadData (String HttpAddr) throws IOException {
-            Calendar timeInst = Calendar.getInstance();
-            SimpleDateFormat day = new SimpleDateFormat("yyyy/MM/dd");
-            String dayStr = day.format(timeInst.getTime());
-
-            URL textUrl = new URL(HttpAddr);
-            BufferedReader bufferReader
-                = new BufferedReader(new InputStreamReader(textUrl.openStream(), "Big5"));
-
-            String StringBuffer;
-            while ((StringBuffer = bufferReader.readLine()) != null) {
-                String[] info = StringBuffer.split(",");
-
-                if (info[6].trim().equals(dayStr)) { //filtered by day
-                    sFlightAll.add(StringBuffer);
-                }
-            }
-
-            bufferReader.close();
-        }
-
-        @Override
-        protected void onPostExecute(Integer result) {
-            if(result == 1)
-                onFinishView(true);
-        }
+    @Override
+    public void onPostExecute() {
+        onFinishView(true);
     }
 }
 
