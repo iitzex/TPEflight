@@ -97,7 +97,8 @@ public class AlarmFragment extends Fragment {
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
-        mContext.getMenuInflater().inflate(R.menu.alarm_menu, menu);
+        if (!((FlightInterface)mContext).isDrawerOpen())
+            mContext.getMenuInflater().inflate(R.menu.alarm_menu, menu);
     }
 
     @Override

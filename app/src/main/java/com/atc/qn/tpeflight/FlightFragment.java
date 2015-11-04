@@ -130,8 +130,10 @@ public class FlightFragment extends Fragment
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
-        mContext.getMenuInflater().inflate(R.menu.main_menu, menu);
-        setupSearchView(menu);
+        if (!((FlightInterface)mContext).isDrawerOpen()) {
+            mContext.getMenuInflater().inflate(R.menu.flight_menu, menu);
+            setupSearchView(menu);
+        }
     }
 
     private void setupSearchView(Menu menu) {

@@ -161,6 +161,7 @@ public class InfoFragment extends Fragment {
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
-        mContext.getMenuInflater().inflate(R.menu.info_menu, menu);
+        if (!((FlightInterface)mContext).isDrawerOpen())
+            mContext.getMenuInflater().inflate(R.menu.info_menu, menu);
     }
 }

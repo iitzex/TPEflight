@@ -1,11 +1,16 @@
 package com.atc.qn.tpeflight;
 import com.atc.qn.tpeflight.DrawerAdapter.DrawerInterface;
+
+import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
@@ -226,9 +231,27 @@ public class MainActivity extends AppCompatActivity
         return mAlarmList.size();
     }
 
+    @Override
+    public boolean isDrawerOpen() {
+        return mDrawerFragment.isDrawerOpen();
+    }
+
     public void removeTrackList(int position) {
         mTrackList.remove(position);
         saveList();
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        QNLog.d("main option " + menu.size());
+        Fragment f = getFragmentManager().findFragmentById(R.id.container);
+//        if (f instanceof DrawerFragment) {
+//
+//        }
+        if (f != null)
+            QNLog.d(f.toString());
+
+        return super.onPrepareOptionsMenu(menu);
     }
 }
 

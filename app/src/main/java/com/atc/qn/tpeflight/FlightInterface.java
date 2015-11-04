@@ -6,4 +6,5 @@ public interface FlightInterface {
     void removeTrackList(int position);
     int getTrackListSize();
     int getAlarmListSize();
+    boolean isDrawerOpen();
 }

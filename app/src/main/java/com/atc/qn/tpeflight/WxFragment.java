@@ -1,5 +1,7 @@
 package com.atc.qn.tpeflight;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -22,6 +24,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class WxFragment extends Fragment{
+    private Activity mContext;
     private String mContent = "";
     private TextView wx_vis, wx_wind, wx_cloud, wx_temp, wx_dew;
     private ImageView wx_icon;
@@ -46,6 +49,7 @@ public class WxFragment extends Fragment{
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
+        mContext = getActivity();
         fetchData();
 
         super.onActivityCreated(savedInstanceState);
@@ -54,7 +58,7 @@ public class WxFragment extends Fragment{
     @Override
     public void onResume() {
         super.onResume();
-        getActivity().setTitle(getActivity().getString(R.string.name_wx));
+        mContext.setTitle(mContext.getString(R.string.name_wx));
     }
 
     private void fetchData() {
@@ -142,7 +146,7 @@ public class WxFragment extends Fragment{
             iconName += "sunny" + nightTag;
         }
 
-        int resId = getResources().getIdentifier(iconName, "drawable", getActivity().getPackageName());
+        int resId = getResources().getIdentifier(iconName, "drawable", mContext.getPackageName());
         wx_icon.setImageResource(resId);
     }
 
@@ -212,7 +216,8 @@ public class WxFragment extends Fragment{
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
-        getActivity().getMenuInflater().inflate(R.menu.wx_menu, menu);
+        if (!((FlightInterface)mContext).isDrawerOpen())
+            mContext.getMenuInflater().inflate(R.menu.wx_menu, menu);
     }
 
     @Override

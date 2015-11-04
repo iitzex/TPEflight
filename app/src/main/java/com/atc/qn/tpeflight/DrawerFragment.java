@@ -14,6 +14,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -66,6 +67,8 @@ public class DrawerFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        setHasOptionsMenu(false);
+
         View view = inflater.inflate(R.layout.drawer, container, false);
         mDrawerList = (RecyclerView) view.findViewById(R.id.drawerList);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -218,5 +221,13 @@ public class DrawerFragment extends Fragment
         super.onConfigurationChanged(newConfig);
         // Forward the new configuration the drawer toggle component.
         mActionBarDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        QNLog.d(menu.size());
+        getActivity().getMenuInflater().inflate(R.menu.main_menu, menu);
+        QNLog.d(menu.size());
+
     }
 }

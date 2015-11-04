@@ -92,7 +92,8 @@ public class TrackFragment extends Fragment {
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
-        mContext.getMenuInflater().inflate(R.menu.track_menu, menu);
+        if (!((FlightInterface)mContext).isDrawerOpen())
+            mContext.getMenuInflater().inflate(R.menu.track_menu, menu);
     }
 
     @Override
