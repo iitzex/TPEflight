@@ -9,8 +9,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
@@ -243,11 +241,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        QNLog.d("main option " + menu.size());
         Fragment f = getFragmentManager().findFragmentById(R.id.container);
-//        if (f instanceof DrawerFragment) {
-//
-//        }
+
         if (f != null)
             QNLog.d(f.toString());
 

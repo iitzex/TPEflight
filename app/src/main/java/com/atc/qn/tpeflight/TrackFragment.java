@@ -1,7 +1,6 @@
 package com.atc.qn.tpeflight;
 
 import android.app.Activity;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -16,15 +15,12 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class TrackFragment extends Fragment {
+public class TrackFragment extends Fragment
+    implements FlightAsyncTask.FetchListener{
     private Activity mContext;
     private RecyclerView mRecyclerView;
     private FlightAdapter mAdapter;
@@ -61,26 +57,13 @@ public class TrackFragment extends Fragment {
         mRecyclerView.addItemDecoration(itemDecoration);
 
         mAdapter = new FlightAdapter(mTrackList, "TRACKING", mContext);
-
         mRecyclerView.setAdapter(mAdapter);
 
-        if (mTrackList.size() != 0)
-            fetchTasker = (FlightAsyncTask) new FlightAsyncTask().execute(null, null, null);
-
+        if (mTrackList.size() != 0) {
+            fetchTasker = new FlightAsyncTask(this);
+            fetchTasker.execute(null, null, null);
+        }
         super.onActivityCreated(savedInstanceState);
-    }
-
-    private void onFinishView() {
-        Calendar timeInst = Calendar.getInstance();
-        SimpleDateFormat day = new SimpleDateFormat("yyyy/MM/dd, HH:mm");
-        String mUpdateTime = day.format(timeInst.getTime());
-        mUpdateTextView.setText("最近更新：" + mUpdateTime);
-        mLoading.setVisibility(View.INVISIBLE);
-
-        mAdapter = new FlightAdapter(mTrackList, "TRACKING", mContext);
-        mRecyclerView.setAdapter(mAdapter);
-        ItemTouchHelper touchHelper = new ItemTouchHelper(new ItemCallback(mAdapter));
-        touchHelper.attachToRecyclerView(mRecyclerView);
     }
 
     @Override
@@ -101,7 +84,8 @@ public class TrackFragment extends Fragment {
         int id = item.getItemId();
 
         if (id == R.id.track_refresh) {
-            fetchTasker = (FlightAsyncTask) new FlightAsyncTask().execute(null, null, null);
+            fetchTasker = new FlightAsyncTask(this);
+            fetchTasker.execute(null, null, null);
             return true;
         }else if (id == R.id.track_deleteall) {
             mTrackList.clear();
@@ -112,53 +96,16 @@ public class TrackFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    private class FlightAsyncTask extends AsyncTask<Void, Void, Integer> {
-        final static String addr = "http://www.taoyuan-airport.com/uploads/flightx/a_flight_v4.txt";
+    @Override
+    public void filter() {
+        ArrayList<String> flightRaw = FlightAsyncTask.getFlightData();
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            mLoading.setVisibility(View.VISIBLE);
-        }
+        for (String flight : flightRaw) {
+            String[] info = flight.split(",");
 
-        @Override
-        protected Integer doInBackground(Void... params) {
-            try {
-                downloadData(addr);
-            } catch (IOException e) {
-                e.printStackTrace();
-                return 0;
-            }
-            return 1;
-        }
-
-        private void downloadData (String HttpAddr) throws IOException {
-            URL textUrl = new URL(HttpAddr);
-            BufferedReader bufferReader
-                    = new BufferedReader(new InputStreamReader(textUrl.openStream(), "Big5"));
-
-            String StringBuffer;
-            while ((StringBuffer = bufferReader.readLine()) != null) {
-                String[] info = StringBuffer.split(",");
-
-                filter(info);
-            }
-
-            bufferReader.close();
-        }
-
-        private void filter(String[] info){
-            Calendar timeInst = Calendar.getInstance();
-            SimpleDateFormat day = new SimpleDateFormat("yyyy/MM/dd");
-            String dayStr = day.format(timeInst.getTime());
-
-            if (!info[6].trim().equals(dayStr)) { //filtered by day
-                return;
-            }
-
-            for (Flight item : mTrackList){
+            for (Flight item : mTrackList) {
                 if (item.getFlightNO().equals(info[2].trim() + info[4].trim())
-                        && item.getAction().equals(info[1].trim())){
+                        && item.getAction().equals(info[1].trim())) {
                     item.setTerminal("第" + info[0].trim() + "航廈");
                     item.setGate(info[5].trim());
                     item.setExpectDay(info[6].trim());
@@ -173,11 +120,21 @@ public class TrackFragment extends Fragment {
                 }
             }
         }
+    }
 
-        @Override
-        protected void onPostExecute(Integer result) {
-            if(result == 1)
-                onFinishView();
-        }
+    @Override
+    public void onPreExecute() {
+        mLoading.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onPostExecute() {
+        mUpdateTextView.setText("最近更新：" + FlightAsyncTask.getUpdateTime());
+        mLoading.setVisibility(View.INVISIBLE);
+
+        mAdapter = new FlightAdapter(mTrackList, "TRACKING", mContext);
+        mRecyclerView.setAdapter(mAdapter);
+        ItemTouchHelper touchHelper = new ItemTouchHelper(new ItemCallback(mAdapter));
+        touchHelper.attachToRecyclerView(mRecyclerView);
     }
 }
