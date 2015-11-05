@@ -1,7 +1,6 @@
 package com.atc.qn.tpeflight;
 import com.atc.qn.tpeflight.DrawerAdapter.DrawerInterface;
 
-import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -131,7 +130,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onPause() {
         super.onPause();
-
         saveList();
     }
 
@@ -241,11 +239,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        Fragment f = getFragmentManager().findFragmentById(R.id.container);
-
-        if (f != null)
-            QNLog.d(f.toString());
-
         return super.onPrepareOptionsMenu(menu);
     }
 }

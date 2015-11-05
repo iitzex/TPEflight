@@ -139,6 +139,7 @@ public class DrawerFragment extends Fragment
                 if (!isAdded()) return;
 
                 getActivity().setTitle(items.get(mCurrentSelectedPosition).getText());
+                QNLog.d(items.get(mCurrentSelectedPosition).getText());
                 getActivity().invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
             }
 

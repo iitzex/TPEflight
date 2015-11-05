@@ -1,5 +1,6 @@
 package com.atc.qn.tpeflight;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,8 +33,11 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmHolder>
 
     @Override
     public void onItemDismiss(int position) {
-        mFragment.removeAlarmList(position);
         notifyItemRemoved(position);
+        mFragment.removeAlarmList(position);
+
+        String countMsg = "(" + mAlarmList.size() + ")";
+        ((Activity)mContext).setTitle(mContext.getString(R.string.name_alarm) + countMsg);
     }
 
 

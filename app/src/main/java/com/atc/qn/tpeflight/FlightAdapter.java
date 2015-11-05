@@ -1,5 +1,6 @@
 package com.atc.qn.tpeflight;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
@@ -17,7 +18,7 @@ import java.util.Calendar;
 public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHolder>
         implements Filterable, ItemCallback.MoveInterface
 {
-    private static ArrayList<Flight> mFlightAll = new ArrayList<>();
+    private ArrayList<Flight> mFlightAll = new ArrayList<>();
     private static ArrayList<Flight> mFlightDeparture = new ArrayList<>();
     private static ArrayList<Flight> mFlightArrival = new ArrayList<>();
     private ArrayList<Flight> mOrig;
@@ -94,6 +95,9 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHold
     public void onItemDismiss(int position) {
         notifyItemRemoved(position);
         ((FlightInterface)mContext).removeTrackList(position);
+
+        String countMsg = "(" + mFlightAll.size() + ")";
+        ((Activity) mContext).setTitle(mContext.getString(R.string.name_track) + countMsg);
     }
 
     @Override

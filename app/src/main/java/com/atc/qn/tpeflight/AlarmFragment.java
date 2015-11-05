@@ -120,6 +120,9 @@ public class AlarmFragment extends Fragment {
 
         mAdapter = new AlarmAdapter(mAlarmList, mContext, this);
         mRecyclerView.setAdapter(mAdapter);
+
+        String countMsg = "(" + mAlarmList.size() + ")";
+        mContext.setTitle(mContext.getString(R.string.name_alarm) + countMsg);
     }
 
     public void removeAlarmList(int position) {

@@ -14,10 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 public class TrackFragment extends Fragment
     implements FlightAsyncTask.FetchListener{
@@ -56,13 +53,9 @@ public class TrackFragment extends Fragment
         RecyclerView.ItemDecoration itemDecoration = new Divider(mContext, Divider.VERTICAL_LIST);
         mRecyclerView.addItemDecoration(itemDecoration);
 
-        mAdapter = new FlightAdapter(mTrackList, "TRACKING", mContext);
-        mRecyclerView.setAdapter(mAdapter);
+        if (mTrackList.size() != 0)
+            fetchTasker = (FlightAsyncTask) new FlightAsyncTask(this).execute(null, null, null);
 
-        if (mTrackList.size() != 0) {
-            fetchTasker = new FlightAsyncTask(this);
-            fetchTasker.execute(null, null, null);
-        }
         super.onActivityCreated(savedInstanceState);
     }
 
@@ -70,6 +63,7 @@ public class TrackFragment extends Fragment
     public void onStop() {
         if (fetchTasker != null)
             fetchTasker.cancel(true);
+
         super.onStop();
     }
 
@@ -84,13 +78,15 @@ public class TrackFragment extends Fragment
         int id = item.getItemId();
 
         if (id == R.id.track_refresh) {
-            fetchTasker = new FlightAsyncTask(this);
-            fetchTasker.execute(null, null, null);
+            fetchTasker = (FlightAsyncTask) new FlightAsyncTask(this).execute(null, null, null);
             return true;
         }else if (id == R.id.track_deleteall) {
             mTrackList.clear();
             mAdapter = new FlightAdapter(mTrackList, "TRACKING", mContext);
             mRecyclerView.setAdapter(mAdapter);
+
+            String countMsg = "(" + mTrackList.size() + ")";
+            mContext.setTitle(mContext.getString(R.string.name_track) + countMsg);
         }
 
         return super.onOptionsItemSelected(item);

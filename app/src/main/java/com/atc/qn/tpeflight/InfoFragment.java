@@ -149,7 +149,7 @@ public class InfoFragment extends Fragment {
 
             return true;
         }else if (id == R.id.info_star) {
-            String msg = mInfo.getAirlinesTW() + " " + mInfo.getFlightNO() + "已加入追蹤名單";
+            String msg = mInfo.getAirlinesTW() + " " + mInfo.getFlightNO() + " 已加入追蹤名單";
             Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
             ((FlightInterface)mContext).onStarClick(mInfo);
 
