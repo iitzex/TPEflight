@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity
         }else if (position == 5) {
             AirlinesFragment airlinesFragment = new AirlinesFragment();
             mFragMgr.beginTransaction()
-                .replace(R.id.container, airlinesFragment)
+                .replace(R.id.container, airlinesFragment, "AirlinesFragment")
                 .commit();
         }
     }
@@ -189,6 +189,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onStarClick(Flight mInfo) {
+        //check if already set
         for (Flight item : mTrackList){
             if (item.getFlightNO().equals(mInfo.getFlightNO()) &&
                     item.getAction().equals(mInfo.getAction())) {

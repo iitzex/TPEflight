@@ -11,35 +11,35 @@
         android:contentDescription="Airlines Logo"
         android:src="@drawable/l_zv"/>
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="200dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="3"
+        android:layout_gravity="center_vertical"
         android:padding="5dp"
-        android:orientation="vertical">
+        android:orientation="horizontal">
         <TextView
             android:id="@+id/airlines_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_gravity="center_vertical"
             android:paddingStart="5dp"
             android:paddingEnd="5dp"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:textColor="@color/myPrimaryDarkColor"
             android:text="威航"/>
         <TextView
-            android:id="@+id/airlines_place"
+            android:id="@+id/airlines_IATA"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_gravity="center_vertical"
             android:textSize="18sp"
-            android:text="第一航廈1樓"/>
+            android:text="ZV"/>
     </LinearLayout>
     <Button
         android:id="@+id/airlines_phone"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_weight="2"
         android:layout_gravity="center_vertical|end"
         android:textSize="14sp"
         android:text="03-3834131"/>
