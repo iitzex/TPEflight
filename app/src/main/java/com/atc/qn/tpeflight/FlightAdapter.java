@@ -58,6 +58,7 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightHold
                 target.setActualDay(info[8].trim());
                 target.setActualTime(info[9].trim().substring(0, 5));
                 target.setDestination(info[11].trim());
+//                QNLog.d("flightadapter, " + target.getDestination());
                 target.setDestinationTW(info[12].trim());
                 target.setStatus(info[13].trim());
                 target.setBaggage(info[18].trim());

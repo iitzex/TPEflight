@@ -23,40 +23,104 @@
             android:layout_height="70dp"
             android:layout_margin="7dp"
             android:id="@+id/wx_icon"/>
-        <TextView
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textColor="@color/myPrimaryDarkColor"
-            android:layout_margin="7dp"
-            android:id="@+id/wx_vis"/>
-        <TextView
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="7dp"
+                android:src="@drawable/w_visiblity"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="@color/myPrimaryDarkColor"
+                android:layout_margin="7dp"
+                android:id="@+id/wx_vis"/>
+        </LinearLayout>
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textColor="@color/myPrimaryDarkColor" 
-            android:layout_margin="7dp"
-            android:id="@+id/wx_wind"/>
-        <TextView
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="7dp"
+                android:src="@drawable/w_windsock"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="@color/myPrimaryDarkColor"
+                android:layout_margin="7dp"
+                android:id="@+id/wx_wind"/>
+        </LinearLayout>
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textColor="@color/myPrimaryDarkColor" 
-            android:layout_margin="7dp"
-            android:id="@+id/wx_cloud"/>
-        <TextView
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="7dp"
+                android:src="@drawable/w_clouds"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="@color/myPrimaryDarkColor"
+                android:layout_margin="7dp"
+                android:id="@+id/wx_cloud"/>
+        </LinearLayout>
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textColor="@color/myPrimaryDarkColor" 
-            android:layout_margin="7dp"
-            android:id="@+id/wx_temperature"/>
-        <TextView
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="7dp"
+                android:src="@drawable/w_temperature"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="@color/myPrimaryDarkColor"
+                android:layout_margin="7dp"
+                android:id="@+id/wx_temperature"/>
+        </LinearLayout>
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textColor="@color/myPrimaryDarkColor" 
-            android:layout_margin="7dp"
-            android:id="@+id/wx_dewpoint"/>
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="7dp"
+                android:src="@drawable/w_dewpoint"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="@color/myPrimaryDarkColor"
+                android:layout_margin="7dp"
+                android:id="@+id/wx_dewpoint"/>
+        </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

@@ -90,6 +90,10 @@ public class Flight implements Parcelable{
         return airlinesTW;
     }
 
+    public String getDestination() {
+        return destination;
+    }
+
     public String getDestinationTW() {
         return destinationTW;
     }
