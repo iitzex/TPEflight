@@ -313,7 +313,7 @@ public class InfoFragment extends Fragment {
             if (i == 0) {
                 infoString += temp_day + "°";
             }else {
-                infoString += temp_min.toString() + "~";
+                infoString += temp_min.toString() + "/";
                 infoString += temp_max.toString() + "°";
             }
 

@@ -75,6 +75,8 @@
         <item>@drawable/l_aa</item>
         <item>@drawable/l_lh</item>
         <item>@drawable/l_xw</item>
+        <item>@drawable/l_8m</item>
+        <item>@drawable/l_tw</item>
 
     </string-array>
 
@@ -140,6 +142,9 @@
         <item>aa</item>
         <item>lh</item>
         <item>xw</item>
+
+        <item>8m</item>
+        <item>tw</item>
     </string-array>
 
     <string-array name="arrayAirlinesTW">
@@ -302,6 +307,8 @@
         <item>02-2756-0849</item>
         <item>03-3517621</item>
 
+        <item>0</item>
+        <item>0</item>
         <item>0</item>
         <item>0</item>
         <item>0</item>
