@@ -27,7 +27,7 @@ public class WxFragment extends Fragment{
     private Activity mContext;
     private String mContent = "";
     private TextView wx_vis, wx_wind, wx_cloud, wx_temp, wx_dew;
-    private ImageView wx_icon;
+    private ImageView wx_icon, w_cloud;
     private WxAsyncTask mTask;
     private ProgressBar mLoading;
 
@@ -43,6 +43,8 @@ public class WxFragment extends Fragment{
         wx_dew = (TextView) view.findViewById(R.id.wx_dewpoint);
         wx_icon = (ImageView) view.findViewById(R.id.wx_icon);
         mLoading = (ProgressBar) view.findViewById(R.id.wx_loading);
+
+        w_cloud = (ImageView) view.findViewById(R.id.w_cloud);
 
         return view;
     }
@@ -85,10 +87,13 @@ public class WxFragment extends Fragment{
         String mVis = vis.equals("") ? "" : translateVis(vis);
 //        String mWX = weather.equals("") ? "" : translateWX(weather);
         String mCloud = ceil.equals("") ? "" : ceil.replaceFirst("^0+(?!$)", "") + "00 呎";
+
         if (ceil.equals("")){
-            ImageView w_cloud = (ImageView) getView().findViewById(R.id.w_cloud);
             w_cloud.setVisibility(View.GONE);
+        }else {
+            w_cloud.setVisibility(View.VISIBLE);
         }
+
         String mTemp = temp + " °C";
         String mDew = dew + " °C";
 
