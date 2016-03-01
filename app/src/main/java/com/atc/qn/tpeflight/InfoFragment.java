@@ -247,17 +247,17 @@ public class InfoFragment extends Fragment {
     }
 
     private void decodeJSON(String mContent) throws JSONException {
-//        QNLog.d(mAirport + " " + mJSONdata);
+        QNLog.d(mAirport + " " + mJSONdata);
         LinearLayout mLayout = (LinearLayout) mView.findViewById(R.id.infoWX_layout);
 
         JSONArray list = new JSONObject(mContent).getJSONArray("list");
         for (int i = 0; i < list.length(); i++) {
             JSONObject daily = (JSONObject) list.get(i);
 
-            Long dt = daily.getLong("dt");
-            Date date = new Date(dt * 1000);
-            DateFormat df = new SimpleDateFormat("MM/dd");
-            String reportDate = df.format(date);
+//            Long dt = daily.getLong("dt");
+//            Date date = new Date(dt * 1000);
+//            DateFormat df = new SimpleDateFormat("MM/dd");
+//            String reportDate = df.format(date);
 
             JSONObject temp = daily.getJSONObject("temp");
             Integer temp_day = temp.getInt("day");
@@ -305,7 +305,7 @@ public class InfoFragment extends Fragment {
             if(icon.substring(2, 3).equals("n")){
                 iconName += "_night";
             }
-//            QNLog.d(mAirport + icon + " " + iconName);
+            QNLog.d("icon: " + icon + "," + iconName);
 
             String infoString = "";
 //            infoString = reportDate + "  ";

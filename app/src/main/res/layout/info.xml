@@ -34,7 +34,7 @@
                         android:layout_gravity="center_vertical"
                         android:contentDescription="Airlines Logo"
                         android:paddingRight="2dp"
-                        android:src="@drawable/l_ci" />
+                        android:src="@drawable/ic_airplane" />
 
                     <TextView
                         android:id="@+id/infoAirlinesTW"

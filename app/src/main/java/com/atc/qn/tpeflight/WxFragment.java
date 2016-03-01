@@ -85,6 +85,10 @@ public class WxFragment extends Fragment{
         String mVis = vis.equals("") ? "" : translateVis(vis);
 //        String mWX = weather.equals("") ? "" : translateWX(weather);
         String mCloud = ceil.equals("") ? "" : ceil.replaceFirst("^0+(?!$)", "") + "00 呎";
+        if (ceil.equals("")){
+            ImageView w_cloud = (ImageView) getView().findViewById(R.id.w_cloud);
+            w_cloud.setVisibility(View.GONE);
+        }
         String mTemp = temp + " °C";
         String mDew = dew + " °C";
 

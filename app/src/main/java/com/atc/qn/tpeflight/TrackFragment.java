@@ -16,8 +16,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import java.util.ArrayList;
 
-public class TrackFragment extends Fragment
-    implements FlightAsyncTask.FetchListener{
+public class TrackFragment extends Fragment implements FlightAsyncTask.FetchListener
+{
     private Activity mContext;
     private RecyclerView mRecyclerView;
     private FlightAdapter mAdapter;
