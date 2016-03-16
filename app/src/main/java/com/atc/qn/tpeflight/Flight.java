@@ -17,6 +17,8 @@ public class Flight implements Parcelable{
     private String destination;
     private String destinationIATA;
     private String destinationTW;
+    private String destinationPoint;
+    private String destinationPointTW;
     private String status;
     private String type;
     private String counter;
@@ -42,6 +44,8 @@ public class Flight implements Parcelable{
         this.destination = mInfo.destination;
         this.destinationIATA = mInfo.destinationIATA;
         this.destinationTW = mInfo.destinationTW;
+        this.destinationPoint = mInfo.destinationPoint;
+        this.destinationPointTW = mInfo.destinationPointTW;
         this.status = mInfo.status;
         this.type = mInfo.type;
         this.counter= mInfo.counter;
@@ -96,6 +100,18 @@ public class Flight implements Parcelable{
 
     public String getDestinationTW() {
         return destinationTW;
+    }
+
+    public String getDestinationIATA() {
+        return destinationIATA;
+    }
+
+    public String getDestinationPoint() {
+        return destinationPoint;
+    }
+
+    public String getDestinationPointTW() {
+        return destinationPointTW;
     }
 
     public String getStatus() {
@@ -164,6 +180,14 @@ public class Flight implements Parcelable{
 
     public void setDestinationTW(String destinationTW) {
         this.destinationTW = destinationTW;
+    }
+
+    public void setDestinationPointTW(String destinationPointTW) {
+        this.destinationPointTW = destinationPointTW;
+    }
+
+    public void setDestinationPoint(String destinationPoint) {
+        this.destinationPoint = destinationPoint;
     }
 
     public void setDestinationIATA(String destinationIATA) {

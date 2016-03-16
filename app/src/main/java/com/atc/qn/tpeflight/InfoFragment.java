@@ -49,9 +49,6 @@ public class InfoFragment extends Fragment {
     private TextView mExpectTime, mActualTime;
     private TextView mDestinationTxt, mDestinationTW, mWXAirport;
 
-    private ImageView mInfoWX_img0;
-    private TextView mInfoWX_text0;
-
     private Button mPhone;
     private ProgressBar mLoading;
 
@@ -127,6 +124,7 @@ public class InfoFragment extends Fragment {
         String ActualDay = mInfo.getActualDay();
         String ActualTime = mInfo.getActualTime();
         String DestinationTW = mInfo.getDestinationTW();
+        String DestinationPointTW = mInfo.getDestinationPointTW();
 
         mAirlinesTW.setText(AirlinesTW);
         mNO.setText(NO);
@@ -137,7 +135,12 @@ public class InfoFragment extends Fragment {
         mStatus.setText(Status);
         mExpectTime.setText(ExpectDay + " " + ExpectTime);
         mActualTime.setText(ActualDay + " " + ActualTime);
-        mDestinationTW.setText(DestinationTW);
+
+        String destinationStr = DestinationTW;
+        if (!DestinationPointTW.equals(""))
+            destinationStr += ", " + DestinationPointTW;
+        mDestinationTW.setText(destinationStr);
+        QNLog.d(destinationStr);
 
         if (Action.equals("A")) {
             mStatusLogo.setImageResource(R.drawable.v_landing);
@@ -173,7 +176,7 @@ public class InfoFragment extends Fragment {
                 "&mode=json&units=metric" +
 //                "&lang=zh_tw" +
                 "&cnt=5&" +
-                "appid=44db6a862fba0b067b1930da0d769e98";
+                "appid=d0b66861757b7eda30889dc573446c7e";
         
         new WxAsyncTask().execute(null, null, null);
     }
